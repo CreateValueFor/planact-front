@@ -1,0 +1,110 @@
+.fc-scrollgrid-sync-inner{
+  text-align: right;
+}
+.fc-col-header-cell-cushion {
+  font-family: Caros Soft;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1rem;
+  line-height: 8px;
+  text-decoration: none;
+  text-align: right;
+  margin-top:1rem;
+  margin-right:.3rem;
+/* identical to box height, or 75% */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #000000;
+}
+.fc-scrollgrid{
+  background: #FFFFFF;
+  border: 0.64px solid #E9E9E9 !important;
+  box-sizing: border-box;
+  border-radius: 12.16px;
+  .fc-theme-standard th{
+    border:none;
+  }
+  .fc-daygrid-day-number{
+    font-family: "Caros Soft";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1rem;
+    line-height: 8px;
+    margin-top:.2rem;
+    margin-right:.3rem;
+    /* or 75% */
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+  }
+}
+.fc-theme-standard td, .fc-theme-standard th{
+  border:1px solid transparent;
+}
+.fc-daygrid-day-number{
+  text-decoration: none;
+
+}
+.fc-scroller .fc-scroller-liquid-absolute{
+  display: none;
+}
+.fc-toolbar-chunk .fc-myCustomButton-button{
+  font-family: Noto Sans KR;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 26px;
+  line-height: 12px;
+  /* or 46% */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background-color: transparent;
+  border:none !important;
+  color: #000000;
+  outline: none;
+    &:hover{
+      background-color: auto;
+    }
+}
+.fc-toolbar-chunk:nth-child(2){
+  div{
+    min-width: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .fc-toolbar-title{
+      
+      font-family:" Noto Sans KR";
+      font-style: normal;
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 12px;
+      /* or 60% */
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #000000;
+    }
+    button{
+      color:#000000;
+      background-color: #fcfcfe;
+      border:none;
+      &:hover{
+        background-color: #fcfcfe;
+        color:#000000;
+      }
+      &:active{
+        
+        color:#000000;
+        background-color: #fcfcfe !important;
+      }
+    }
+  }
+}
