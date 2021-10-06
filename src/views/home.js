@@ -13,9 +13,9 @@ import PlanCategory from "../components/home/PlanCategory";
 import RegisterModal from "../components/login/Register";
 
 function Home() {
-  const [login, setLogin] = useState(true);
+  const [login, setLogin] = useState(false);
 
-  const [isLogin, setIsLogin] = useState(false);
+  const [register, setRegister] = useState(false);
 
   const [isSideBarExist, setIsSideBarExist] = useState(false);
   return (
@@ -27,20 +27,15 @@ function Home() {
             {/* <img src="../assets/img/Subtract.png" /> */}
           </Row>
           <Row>
-            <Col lg="3">
-              <RegisterModal />
-              {login ? (
-                <Login setLogin={setLogin} />
-              ) : !isLogin ? (
-                <LoginModal setLogin={setLogin} setIsLogin={setIsLogin} />
-              ) : (
-                <Profile setIsLogin={setIsLogin} />
-              )}
+            <Col lg="3" style={{ position: "relative" }}>
+              <Login setLogin={setLogin} setRegister={setRegister} />
+              {login && <LoginModal setLogin={setLogin} />}
+              {register && <RegisterModal setRegister={setRegister} />}
               <PlanCategory />
               {/* <PlanDisplay /> */}
             </Col>
             <Col lg="9">
-              <Search />
+              {/* <Search /> */}
               <FiltersAndShareBtn setIsSideBarExist={setIsSideBarExist} />
               <Calendar />
             </Col>

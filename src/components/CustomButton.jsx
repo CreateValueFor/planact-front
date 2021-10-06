@@ -27,9 +27,13 @@ const StyledButton = styled(Button)`
   }
 `;
 
-function CustomButton({ text, onClick, className }) {
+function CustomButton({ text, onClick, className, type }) {
   return (
-    <StyledButton className={`w-100 ${className}`} onClick={onClick}>
+    <StyledButton
+      className={`w-100 ${className}`}
+      onClick={onClick}
+      type={type}
+    >
       {text}
     </StyledButton>
   );

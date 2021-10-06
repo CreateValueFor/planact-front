@@ -4,12 +4,12 @@ import { Button, Card } from "react-bootstrap";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import "./login.scss";
 import RegisterModal from "../login/Register";
-function Login({ setLogin }) {
+function Login({ setLogin, setRegister }) {
   const [show, setShow] = useState(false);
 
   const handleModal = useCallback(
     () => {
-      setShow((prev) => !prev);
+      setRegister((prev) => !prev);
     },
     [setShow]
   );
@@ -35,7 +35,6 @@ function Login({ setLogin }) {
             회원가입
           </Button>
           <Button variant="white">비밀번호 찾기</Button>
-          <RegisterModal show={show} handleModal={handleModal} />
         </div>
       </Card.Body>
     </Card>

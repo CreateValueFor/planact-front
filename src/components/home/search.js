@@ -22,8 +22,8 @@ function Search() {
     //     <FontAwesomeIcon icon={faSearch} />
     //   </InputGroup>
     <div className="search">
-      <input />
-      <FontAwesomeIcon icon={faSearch} />
+      {/* <input />
+      <FontAwesomeIcon icon={faSearch} /> */}
     </div>
     // </div>
   );

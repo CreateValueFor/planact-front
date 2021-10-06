@@ -11,6 +11,12 @@ function userReducer(state = { user: {}, profile: {} }, action) {
         ...state,
         user: action.user,
       };
+    case REGISTER:
+      return {
+        ...state,
+        user: action.user,
+      };
+
     default:
       return state;
   }

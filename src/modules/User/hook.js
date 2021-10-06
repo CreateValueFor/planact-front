@@ -16,6 +16,14 @@ function useAuth() {
         nick,
         password,
       });
+      const {
+        data: { code },
+      } = res;
+      if (code === 400) {
+        window.alert("이미 존재하는 유저입니다.");
+      } else {
+        window.alert("회원가입 되었습니다.");
+      }
       dispatch({
         type: REGISTER,
         user: res.data.user,

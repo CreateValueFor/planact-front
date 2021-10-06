@@ -38,26 +38,36 @@ function FiltersAndShareBtn({ setIsSideBarExist }) {
   return (
     <Row className="my-3 ">
       <Col lg="6">
-        <Button
+        {/* <Button
           variant="outline-white"
           className="mainBtn w-100"
           onClick={onSideBarToggle}
         >
           필터
-        </Button>
+        </Button> */}
       </Col>
-      <Col lg="6">
+      <Col lg="6" style={{ display: "flex", justifyContent: "right" }}>
         <Button
-          className="mainBtn w-100"
+          className="mainBtn ml-auto"
           variant="outline-white"
           onClick={onClick}
+          style={{
+            textDecoration: "none",
+            color: "#FFF",
+            background: "#313340",
+            borderRadius: "100px",
+            width: 150,
+          }}
         >
           <a
             href={path}
             download={"download.ics"}
-            style={{ textDecoration: "none", color: "#000" }}
+            style={{
+              textDecoration: "none",
+              color: "#FFF",
+            }}
           >
-            공유하기
+            일정 다운로드
           </a>
         </Button>
       </Col>

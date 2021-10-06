@@ -20,7 +20,7 @@ function Calendar() {
         weekday: "short",
       }}
       headerToolbar={{
-        start: "myCustomButton",
+        start: "",
         center: "prev,title,next",
         end: "",
       }}
