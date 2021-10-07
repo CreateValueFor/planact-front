@@ -8,6 +8,7 @@ function useAuth() {
   const {
     user: { email, nick },
   } = useSelector((state) => state.user);
+  const { status } = useSelector((state) => state.user);
 
   const register = async ({ email, nick, password }) => {
     try {
@@ -16,6 +17,8 @@ function useAuth() {
         nick,
         password,
       });
+      console.log(res);
+      return;
       const {
         data: { code },
       } = res;
@@ -24,10 +27,10 @@ function useAuth() {
       } else {
         window.alert("회원가입 되었습니다.");
       }
-      dispatch({
-        type: REGISTER,
-        user: res.data.user,
-      });
+      // dispatch({
+      //   type: REGISTER,
+      //   user: res.data.user,
+      // });
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -39,16 +42,17 @@ function useAuth() {
         email,
         password,
       });
-      dispatch({
-        type: LOGIN,
-        user: res.data.user,
-      });
+      // dispatch({
+      //   type: LOGIN,
+      //   user: res.data.user,
+      //   status: true,
+      // });
       console.log(res);
     } catch (err) {
       console.log(err);
     }
   };
-  return { register, login, email, nick };
+  return { register, login, email, nick, status };
 }
 
 export default useAuth;

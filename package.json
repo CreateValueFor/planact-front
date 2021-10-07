@@ -1,5 +1,6 @@
 {
   "name": "planact-schedule",
+  "proxy":"http://15.165.198.246",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -59,5 +60,6 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://CreateValueFor.github.io/planact_renewal"
+  "homepage": "."
+  
 }

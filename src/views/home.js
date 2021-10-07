@@ -11,10 +11,11 @@ import LoginModal from "../components/login/Login";
 import Profile from "../components/login/Profile";
 import PlanCategory from "../components/home/PlanCategory";
 import RegisterModal from "../components/login/Register";
+import useAuth from "../modules/User/hook";
 
 function Home() {
   const [login, setLogin] = useState(false);
-
+  const { status } = useAuth();
   const [register, setRegister] = useState(false);
 
   const [isSideBarExist, setIsSideBarExist] = useState(false);
@@ -28,7 +29,11 @@ function Home() {
           </Row>
           <Row>
             <Col lg="3" style={{ position: "relative" }}>
-              <Login setLogin={setLogin} setRegister={setRegister} />
+              {!status ? (
+                <Login setLogin={setLogin} setRegister={setRegister} />
+              ) : (
+                <Profile />
+              )}
               {login && <LoginModal setLogin={setLogin} />}
               {register && <RegisterModal setRegister={setRegister} />}
               <PlanCategory />
