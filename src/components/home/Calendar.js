@@ -9,7 +9,7 @@ import { usePlans } from "../../modules/Plans/hook";
 function Calendar() {
   const { plans } = usePlans();
   const calendar = useRef();
-  // console.log(calendar.current.getApi());
+  console.log("fuck", calendar.current);
   return (
     <FullCalendar
       plugins={[dayGridPlugin]}

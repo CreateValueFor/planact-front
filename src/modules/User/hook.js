@@ -42,12 +42,12 @@ function useAuth() {
         email,
         password,
       });
-      // dispatch({
-      //   type: LOGIN,
-      //   user: res.data.user,
-      //   status: true,
-      // });
-      console.log(res);
+      console.log(res.data.user);
+      dispatch({
+        type: LOGIN,
+        user: res.data.user,
+        status: true,
+      });
     } catch (err) {
       console.log(err);
     }

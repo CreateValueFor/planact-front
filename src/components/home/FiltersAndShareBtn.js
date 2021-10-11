@@ -12,7 +12,7 @@ function FiltersAndShareBtn({ setIsSideBarExist }) {
   const { error, value } = ics.createEvents([
     {
       title: "test",
-      start: [2018, 1, 15, 12, 15],
+      start: [2018, 1, 15, 9, 0],
       duration: { minutes: 45 },
       description: "TEst",
     },

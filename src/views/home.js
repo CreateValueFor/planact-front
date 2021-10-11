@@ -22,13 +22,22 @@ function Home() {
   return (
     <Container fluid>
       <Row>
-        <Col lg="9">
+        <Col lg="12">
+          <img src={Logo} style={{ width: 24, height: 24 }} alt="logo" />
+        </Col>
+      </Row>
+      <Row>
+        <Col lg="12">
           <Row>
-            <img src={Logo} style={{ width: 24, height: 24 }} alt="logo" />
-            {/* <img src="../assets/img/Subtract.png" /> */}
-          </Row>
-          <Row>
-            <Col lg="3" style={{ position: "relative" }}>
+            <Col
+              lg="2"
+              style={{
+                position: "relative",
+                width: "19.16666%",
+                marginLeft: "1rem",
+                marginRight: "2rem",
+              }}
+            >
               {!status ? (
                 <Login setLogin={setLogin} setRegister={setRegister} />
               ) : (
@@ -36,10 +45,13 @@ function Home() {
               )}
               {login && <LoginModal setLogin={setLogin} />}
               {register && <RegisterModal setRegister={setRegister} />}
-              <PlanCategory />
-              {/* <PlanDisplay /> */}
+              <PlanCategory setIsSideBarExist={setIsSideBarExist} />
             </Col>
-            <Col lg="9">
+            <Col
+              lg="10"
+              className="pl-lg-4"
+              style={{ width: "73%", paddingLeft: "0.33333%" }}
+            >
               {/* <Search /> */}
               <FiltersAndShareBtn setIsSideBarExist={setIsSideBarExist} />
               <Calendar />
