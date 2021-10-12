@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import useAuth from "../../modules/User/hook";
 import DefaultPorfile from "../../assets/img/Default Profile.png";
+
 function Profile({ setIsLogin }) {
   const { nick } = useAuth();
   console.log(nick);

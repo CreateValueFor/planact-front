@@ -31,10 +31,14 @@ function Login({ setLogin, setRegister }) {
           로그인
         </Button>
         <div className="d-flex justify-content-between">
-          <Button variant="white" onClick={handleModal}>
-            회원가입
+          <Button
+            variant="white"
+            onClick={handleModal}
+            className="d-flex justify-content-center w-100"
+          >
+            <div className="text-muted register mr-2">계정이 없으신가요?</div>
+            <div className="register ml-2">회원가입</div>
           </Button>
-          <Button variant="white">비밀번호 찾기</Button>
         </div>
       </Card.Body>
     </Card>

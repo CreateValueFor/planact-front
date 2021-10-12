@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { ListGroupItem } from "react-bootstrap";
 import { usePlans } from "../modules/Plans/hook";
 
-function CategoryItem({ event, idx, setIsSideBarExist }) {
+function CategoryItem({ event, idx, setIsSideBarExist, category }) {
   const [checked, setChecked] = useState(false);
 
   const { getPlans, removePlans } = usePlans();
@@ -12,9 +12,9 @@ function CategoryItem({ event, idx, setIsSideBarExist }) {
     (e) => {
       setChecked((prev) => {
         if (prev == true) {
-          removePlans(event);
+          removePlans(category);
         } else {
-          getPlans(event);
+          getPlans(category);
         }
         return !prev;
       });
@@ -25,29 +25,28 @@ function CategoryItem({ event, idx, setIsSideBarExist }) {
     <ListGroupItem
       action
       key={idx}
-      className="d-flex justify-content-between"
+      className="d-flex justify-content-between px-2 custom-list-item"
       onClick={onClick}
+      style={{ border: "none" }}
     >
-      <div
-        className="d-flex align-items-center justify-content-center"
-        style={{
-          border: "3px solid black",
-          width: 22,
-          height: 22,
-          borderRadius: "50%",
-          backgroundColor: checked ? "#313340" : "#fff",
-        }}
-      >
-        <FontAwesomeIcon
-          icon={faCheck}
+      <div className="d-flex">
+        <div
+          className="d-flex align-items-center justify-content-center mr-2 check-circle"
           style={{
-            color: "#fff",
-            height: 13,
-            width: 13,
+            backgroundColor: checked ? "#313340" : "#fff",
           }}
-        />
+        >
+          <FontAwesomeIcon
+            icon={faCheck}
+            style={{
+              color: "#fff",
+              height: 13,
+              width: 13,
+            }}
+          />
+        </div>
+        <div>{event}</div>
       </div>
-      <div>{event}</div>
       <FontAwesomeIcon
         icon={faBars}
         className="ml-auto filter-btn"

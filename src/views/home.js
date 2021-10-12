@@ -21,14 +21,27 @@ function Home() {
   const [isSideBarExist, setIsSideBarExist] = useState(false);
   return (
     <Container fluid>
-      <Row>
-        <Col lg="12">
-          <img src={Logo} style={{ width: 24, height: 24 }} alt="logo" />
+      <Row style={{ height: "100px" }}>
+        <Col lg="12" style={{ paddingLeft: "2rem", paddingTop: "2rem" }}>
+          <img src={Logo} style={{ width: 30, height: 45 }} alt="logo" />
+          <span
+            style={{
+              fontFamily: "Montserrat",
+              fontStyle: "normal",
+              fontWeight: 600,
+              fontSize: "20px",
+              lineHeight: "12px",
+              color: "#3882EB",
+              verticalAlign: "bottom",
+            }}
+          >
+            PLANACT
+          </span>
         </Col>
       </Row>
-      <Row>
+      <Row style={{ minHeight: "calc(100vh - 100px)" }}>
         <Col lg="12">
-          <Row>
+          <Row style={{ height: "100%" }}>
             <Col
               lg="2"
               style={{
@@ -36,6 +49,8 @@ function Home() {
                 width: "19.16666%",
                 marginLeft: "1rem",
                 marginRight: "2rem",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
               {!status ? (
@@ -50,19 +65,26 @@ function Home() {
             <Col
               lg="10"
               className="pl-lg-4"
-              style={{ width: "73%", paddingLeft: "0.33333%" }}
+              style={{
+                flex: 1,
+                paddingLeft: "0.33333%",
+                paddingRight: 0,
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
               {/* <Search /> */}
-              <FiltersAndShareBtn setIsSideBarExist={setIsSideBarExist} />
+              {/* <FiltersAndShareBtn setIsSideBarExist={setIsSideBarExist} /> */}
               <Calendar />
             </Col>
+            {isSideBarExist && (
+              <Col lg="3" style={{ width: "20%", marginTop: -10 }}>
+                <Filter />
+              </Col>
+            )}
           </Row>
         </Col>
-        {isSideBarExist && (
-          <Col lg="3">
-            <Filter />
-          </Col>
-        )}
       </Row>
     </Container>
   );

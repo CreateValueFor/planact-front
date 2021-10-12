@@ -3,6 +3,7 @@ import { Button, Card, Form, Modal } from "react-bootstrap";
 import useAuth from "../../modules/User/hook";
 import InputForm from "../InputForm";
 import CustomButton from "../CustomButton";
+import "./login.scss";
 function RegisterModal({ setRegister }) {
   const { register, login } = useAuth();
 
@@ -39,6 +40,7 @@ function RegisterModal({ setRegister }) {
 
   return (
     <Card
+      className="auth-modal"
       style={{
         left: "100%",
         position: "absolute",

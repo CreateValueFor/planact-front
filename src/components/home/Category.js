@@ -8,7 +8,7 @@ function Category() {
   return (
     <div>
       <h2>분야</h2>
-      <ListGroup>
+      <ListGroup variant="flush">
         {filters.map((filter, idx) => (
           <ListGroupItem key={idx}>
             <Button variant="white">{filter}</Button>

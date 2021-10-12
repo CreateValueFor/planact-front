@@ -1,3 +1,13 @@
+table{
+  thead{
+    tr.fc-scrollgrid-section{
+      table.fc-col-header {
+        height: 53px;
+      }
+    }
+  }
+}
+
 .fc-scrollgrid-sync-inner{
   text-align: right;
 }
@@ -10,7 +20,7 @@
   text-decoration: none;
   text-align: right;
   margin-top:1rem;
-  margin-right:.3rem;
+  margin-right:.75rem;
 /* identical to box height, or 75% */
 
   display: flex;
@@ -18,6 +28,20 @@
   text-align: center;
 
   color: #000000;
+}
+.fc-share-button.fc-button{
+  background: #313340;
+border-radius: 100px;
+  width:150px;
+}
+th .fc-scrollgrid-sync-inner{
+  height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+th.fc-col-header-cell.fc-day{
+  border-right:1px solid transparent;
 }
 .fc-scrollgrid{
   background: #FFFFFF;
@@ -33,8 +57,8 @@
     font-weight: normal;
     font-size: 1rem;
     line-height: 8px;
-    margin-top:.2rem;
-    margin-right:.3rem;
+    margin-top:.75rem;
+    margin-right:.75rem;
     /* or 75% */
 
     display: flex;
@@ -45,7 +69,7 @@
   }
 }
 .fc-theme-standard td, .fc-theme-standard th{
-  border:1px solid transparent;
+  border:1px solid #e9e9e9;
 }
 .fc-daygrid-day-number{
   text-decoration: none;
@@ -106,5 +130,16 @@
         background-color: #fcfcfe !important;
       }
     }
+  }
+}
+
+@media (min-width: 1280px) {
+  .fc-header-toolbar.fc-toolbar{
+    position: absolute;
+    width:100%;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%,0%);
+    padding-right: 3rem;
   }
 }

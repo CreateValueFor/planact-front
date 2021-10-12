@@ -7,7 +7,7 @@ import axios from "axios";
 import BASE_URL from "./modules/host";
 function App() {
   return (
-    <div style={{ backgroundColor: "#fcfcfe" }}>
+    <div style={{ backgroundColor: "#fcfcfe", minHeight: "100vh" }}>
       <Route path="/" component={Home} />
       <Route path="/login" component={Login} />
     </div>
