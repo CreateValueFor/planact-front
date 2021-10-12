@@ -78,6 +78,15 @@ th.fc-col-header-cell.fc-day{
 .fc-scroller .fc-scroller-liquid-absolute{
   display: none;
 }
+.fc-scroller.fc-scroller-liquid-absolute{
+
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+}
 .fc-toolbar-chunk .fc-myCustomButton-button{
   font-family: Noto Sans KR;
   font-style: normal;

@@ -79,7 +79,15 @@ function Home() {
               <Calendar />
             </Col>
             {isSideBarExist && (
-              <Col lg="3" style={{ width: "20%", marginTop: -10 }}>
+              <Col
+                lg="3"
+                style={{
+                  width: "20%",
+                  marginTop: -100,
+                  paddingTop: 110,
+                  backgroundColor: "#Fff",
+                }}
+              >
                 <Filter />
               </Col>
             )}
