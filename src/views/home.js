@@ -12,6 +12,7 @@ import Profile from "../components/login/Profile";
 import PlanCategory from "../components/home/PlanCategory";
 import RegisterModal from "../components/login/Register";
 import useAuth from "../modules/User/hook";
+import "./Home.scss";
 
 function Home() {
   const [login, setLogin] = useState(false);
