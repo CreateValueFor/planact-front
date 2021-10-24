@@ -142,13 +142,3 @@ th.fc-col-header-cell.fc-day{
   }
 }
 
-@media (min-width: 1280px) {
-  .fc-header-toolbar.fc-toolbar{
-    position: absolute;
-    width:100%;
-    bottom: 100%;
-    left: 50%;
-    transform: translate(-50%,0%);
-    padding-right: 3rem;
-  }
-}

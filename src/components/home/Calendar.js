@@ -46,7 +46,7 @@ function renderEventContent(eventInfo) {
   );
 }
 
-function Calendar() {
+function Calendar(style) {
   const { plans } = usePlans();
   const calendar = useRef();
 

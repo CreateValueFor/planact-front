@@ -3,6 +3,8 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import "./search.scss";
+import { DropdownButton, FormControl, InputGroup } from "react-bootstrap";
+import Dropdown from "@restart/ui/esm/Dropdown";
 function Search() {
   return (
     // <div>
@@ -20,10 +22,10 @@ function Search() {
     //     </DropdownButton>
     //     <FormControl aria-label="Text input with dropdown button" />
     //     <FontAwesomeIcon icon={faSearch} />
-    //   </InputGroup>
+    // </InputGroup>
     <div className="search">
-      {/* <input />
-      <FontAwesomeIcon icon={faSearch} /> */}
+      <input />
+      <FontAwesomeIcon icon={faSearch} />
     </div>
     // </div>
   );

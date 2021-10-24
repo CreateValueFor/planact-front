@@ -1,0 +1,13 @@
+.fc-scrollgrid.fc-scrollgrid-liquid{
+  border:none !important;
+}
+
+
+
+@media (min-width: 1280px) {
+  .fc-header-toolbar.fc-toolbar{
+    position: static;
+    transform: translate(0%,0%);
+    padding-right: 0rem;
+  }
+}
