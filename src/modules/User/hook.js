@@ -42,7 +42,11 @@ function useAuth() {
         email,
         password,
       });
-      console.log(res.data.user);
+      console.log(res);
+      if (res.data.code !== 200) {
+        window.alert("문제가 발생하였습니다.");
+        return;
+      }
       dispatch({
         type: LOGIN,
         user: res.data.user,
@@ -52,7 +56,23 @@ function useAuth() {
       console.log(err);
     }
   };
-  return { register, login, email, nick, status };
+
+  const logout = async () => {
+    try {
+      const res = await axios.get(BASE_URL + "/auth/logout");
+      console.log(res);
+      dispatch({
+        type: LOGOUT,
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: LOGOUT,
+      });
+    }
+  };
+
+  return { register, login, logout, email, nick, status };
 }
 
 export default useAuth;

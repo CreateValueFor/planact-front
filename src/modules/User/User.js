@@ -17,7 +17,12 @@ function userReducer(state = { user: {}, profile: {}, status: false }, action) {
         ...state,
         user: action.user,
       };
-
+    case LOGOUT:
+      return {
+        user: {},
+        profile: {},
+        status: false,
+      };
     default:
       return state;
   }
