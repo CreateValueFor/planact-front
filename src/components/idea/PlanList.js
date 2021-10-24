@@ -1,5 +1,6 @@
 import { useCallback } from "preact/hooks";
 import React, { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
 import styled from "styled-components";
 
 const dummyList = [
@@ -42,6 +43,13 @@ const StyledItem = styled.div`
   border-radius: 20px;
   display: flex;
   align-items: center;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    background: #eff7f9;
+    box-shadow: 0px 10px 33px rgba(54, 57, 70, 0.2);
+    border-radius: 20px;
+  }
   .item-image {
     width: 78px;
     height: 55px;
@@ -137,22 +145,42 @@ const StyledItem = styled.div`
 
 function PlanItem({ index, contents }) {
   const [select, setSelect] = useState(true);
-  const onClick = () => {
+  const [open, setOpen] = useState(false);
+  const togglePlan = (e) => {
+    e.stopPropagation();
     setSelect((prev) => !prev);
   };
+  const toggleDetail = () => {
+    console.log("hhasdf");
+    setOpen((prev) => !prev);
+  };
   return (
-    <StyledItem key={index} className="mb-3">
-      <div className="item-image"> image</div>
-      <div className="item-summary">
-        <div className="item-title mb-1">{contents.title}</div>
-        <div className="item-sub-title">{contents.location}</div>
-      </div>
-      <div
-        onClick={onClick}
-        className={select ? "item-btn add" : "item-btn delete"}
-      />
-      <div className="item-date">{contents.date}</div>
-    </StyledItem>
+    <>
+      <StyledItem key={index} className="mb-3" onClick={toggleDetail}>
+        <div className="item-image"> image</div>
+        <div className="item-summary">
+          <div className="item-title mb-1">{contents.title}</div>
+          <div className="item-sub-title">{contents.location}</div>
+        </div>
+        <div
+          onClick={togglePlan}
+          className={select ? "item-btn add" : "item-btn delete"}
+        />
+        <div className="item-date">{contents.date}</div>
+      </StyledItem>
+      <Modal show={open} onHide={toggleDetail} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{contents.title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Sample Sample Sample</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary">Close</Button>
+          <Button variant="primary">Save changes</Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }
 
