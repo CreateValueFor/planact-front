@@ -43,6 +43,7 @@ const StyledLink = styled(Link)`
 
 function LeftTabBar({ location }) {
   const [selectedTab, setSelectedTab] = useState("calendar");
+  const [authTab, setAuthTab] = useState(false);
   useEffect(() => {
     const currentPath = location.pathname.split("/")[2];
     switch (currentPath) {
@@ -63,6 +64,11 @@ function LeftTabBar({ location }) {
       setSelectedTab("calendar");
     }
   }, []);
+
+  const clickProfile = useCallback(() => {
+    setAuthTab((prev) => !prev);
+  }, []);
+
   return (
     <div
       style={{
@@ -126,6 +132,7 @@ function LeftTabBar({ location }) {
         className="mb-5"
         style={{ width: 50, height: 50 }}
         alt="logo"
+        onClick={clickProfile}
       />
     </div>
   );

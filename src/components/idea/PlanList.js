@@ -151,7 +151,6 @@ function PlanItem({ index, contents }) {
     setSelect((prev) => !prev);
   };
   const toggleDetail = () => {
-    console.log("hhasdf");
     setOpen((prev) => !prev);
   };
   return (
