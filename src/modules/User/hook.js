@@ -17,6 +17,9 @@ function useAuth() {
         nick,
         password,
       });
+      if (res.status === 202) {
+        window.alert("이미 존재하는 유저입니다.");
+      }
       console.log(res);
       return;
       const {
@@ -43,6 +46,7 @@ function useAuth() {
         password,
       });
       console.log(res);
+
       if (res.data.code !== 200) {
         window.alert("문제가 발생하였습니다.");
         return;
