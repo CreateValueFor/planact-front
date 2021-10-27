@@ -41,10 +41,18 @@ function useAuth() {
   };
   const login = async ({ email, password }) => {
     try {
-      const res = await axios.post(BASE_URL + "/auth/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        BASE_URL + "/auth/login",
+        {
+          email,
+          password,
+        },
+        {
+          hedaers: {
+            "Content-Type": "text/plain",
+          },
+        }
+      );
       console.log(res);
 
       if (res.data.code !== 200) {
