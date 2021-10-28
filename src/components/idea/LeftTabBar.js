@@ -12,6 +12,9 @@ import RegisterModal from "../login/Register";
 import CalenarLogo from "../../assets/img/Calendar.svg";
 import AuthorizeButton from "./AuthorizeButton";
 import AuthTab from "../login/AuthTab";
+import SearchLogo from "../../assets/img/Search.svg";
+import ColoredSearch from "../../assets/img/coloredSearch.png";
+import ColoredCalendar from "../../assets/img/coloredCalendar.png";
 
 export const StyledTabItem = styled.div`
   z-index: 2;
@@ -27,6 +30,12 @@ export const StyledTabItem = styled.div`
   background: transparent;
 `;
 
+const StyledBackgroundTab = styled(StyledTabItem)`
+  z-index: 1;
+  position: absolute;
+  background: #ffffff;
+`;
+
 const StyledLink = styled(Link)`
   z-index: 10;
   width: 100%;
@@ -34,6 +43,7 @@ const StyledLink = styled(Link)`
   text-align: center;
   vertical-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-decoration: none;
@@ -44,18 +54,85 @@ const StyledLink = styled(Link)`
   &.active {
     color: #089bab;
   }
+  img {
+    margin-bottom: 1rem;
+    width: 24px;
+    height: 24px;
+  }
 `;
 
 const StyledLoginModal = styled(LoginModal)``;
 
 // function LeftTabBar
 
+const RouterButtons = (props) => {
+  const { selectedTab, setSelectedTab } = props;
+  const selectTab = useCallback((string) => {
+    if (string === "calendar") {
+      setSelectedTab(false);
+    } else {
+      setSelectedTab(true);
+    }
+  }, []);
+  return (
+    <div className="mt-5" style={{ flex: 1, position: "relative" }}>
+      <div style={{ position: "relative" }}>
+        <StyledBackgroundTab
+          selectedTab={selectedTab}
+          style={
+            selectedTab
+              ? {
+                  top: "100%",
+                  transform: "translate(0, -100%)",
+                }
+              : {
+                  top: "0",
+                }
+          }
+        />
+        <StyledTabItem
+          name="calendar"
+          onClick={() => {
+            selectTab("calendar");
+          }}
+        >
+          <StyledLink
+            name="calendar"
+            className={!selectedTab && "active"}
+            to="/idea/calendar"
+          >
+            <img
+              src={!selectedTab ? ColoredCalendar : CalenarLogo}
+              alt="calendarLogo"
+            />
+            <div>달력</div>
+          </StyledLink>
+        </StyledTabItem>
+        <StyledTabItem
+          name="list"
+          onClick={() => {
+            selectTab("list");
+          }}
+        >
+          <StyledLink className={selectedTab && "active"} to="/idea/list">
+            <img
+              src={selectedTab ? ColoredSearch : SearchLogo}
+              alt="searchLogo"
+            />
+            <div>검색</div>
+          </StyledLink>
+        </StyledTabItem>
+      </div>
+    </div>
+  );
+};
+
 function LeftTabBar({ location }) {
-  const [selectedTab, setSelectedTab] = useState("calendar");
+  const [selectCalendar, setSelectCalendar] = useState(true);
   const [authTab, setAuthTab] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
-  console.log(openLogin);
+
   const popUpStyle = {
     position: "absolute",
     bottom: "10px",
@@ -77,26 +154,16 @@ function LeftTabBar({ location }) {
 
     switch (currentPath) {
       case "calendar":
-        setSelectedTab("calendar");
+        setSelectCalendar(false);
         break;
       case "list":
-        setSelectedTab("list");
+        setSelectCalendar(true);
         break;
     }
     window.addEventListener("click", clickOutsidePopup);
     return () => {
       window.removeEventListener("click", clickOutsidePopup);
     };
-  }, []);
-
-  const selectTab = useCallback((e) => {
-    const selected = e.target.innerHTML;
-
-    if (selected === "리스트") {
-      setSelectedTab("list");
-    } else {
-      setSelectedTab("calendar");
-    }
   }, []);
 
   const clickProfile = useCallback(() => {
@@ -106,7 +173,7 @@ function LeftTabBar({ location }) {
   const clickAuth = useCallback((e) => {
     const type = e.target.innerText;
     e.stopPropagation();
-    console.log(type);
+
     if (type === "로그인") {
       setOpenLogin((prev) => !prev);
       setOpenRegister(false);
@@ -135,67 +202,10 @@ function LeftTabBar({ location }) {
         style={{ width: 42, height: 62 }}
         alt="logo"
       />
-      <div className="mt-5" style={{ flex: 1, position: "relative" }}>
-        <div style={{ position: "relative" }}>
-          <StyledTabItem
-            style={
-              selectedTab === "list"
-                ? {
-                    zIndex: 1,
-                    position: "absolute",
-                    background: "#ffffff",
-                    top: "100%",
-                    transform: "translate(0, -100%)",
-                  }
-                : {
-                    zIndex: 1,
-                    position: "absolute",
-                    background: "#ffffff",
-                    top: "0",
-                  }
-            }
-          />
-          <StyledTabItem name="calendar" onClick={selectTab}>
-            <StyledLink
-              className={selectedTab === "calendar" && "active"}
-              to="/idea/calendar"
-              style={{ zIndex: 10 }}
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M10.5159 21.0319C13.0398 21.0319 15.3533 20.138 17.1725 18.6553L22.2097 23.6924C22.6198 24.1025 23.2823 24.1025 23.6924 23.6924C24.1025 23.2823 24.1025 22.6198 23.6924 22.2097L18.6553 17.1725C20.138 15.3638 21.0319 13.0398 21.0319 10.5159C21.0319 4.71114 16.3207 0 10.5159 0C4.71114 0 0 4.71114 0 10.5159C0 16.3207 4.71114 21.0319 10.5159 21.0319ZM10.5159 18.9287C15.164 18.9287 18.9287 15.164 18.9287 10.5159C18.9287 5.86789 15.164 2.10319 10.5159 2.10319C5.86789 2.10319 2.10319 5.86789 2.10319 10.5159C2.10319 15.164 5.86789 18.9287 10.5159 18.9287Z"
-                  fill="white"
-                />
-              </svg>
-              <img
-                src={CalenarLogo}
-                className="mb-5"
-                style={{ width: 50, height: 50, color: "rgb(8, 155, 171)" }}
-                alt="logo"
-                onClick={clickProfile}
-              />
-              달력
-            </StyledLink>
-          </StyledTabItem>
-          <StyledTabItem name="list" onClick={selectTab}>
-            <StyledLink
-              className={selectedTab === "list" && "active"}
-              to="/idea/list"
-              style={{}}
-            >
-              리스트
-            </StyledLink>
-          </StyledTabItem>
-        </div>
-      </div>
+      <RouterButtons
+        selectedTab={selectCalendar}
+        setSelectedTab={setSelectCalendar}
+      />
       <AuthorizeButton
         clickAuth={clickAuth}
         openLogin={openLogin}

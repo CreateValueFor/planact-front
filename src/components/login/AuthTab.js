@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Card, Form, ListGroup, Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Profile from "../../assets/img/Default Profile.png";
 const StyledListGroup = styled(ListGroup)`
@@ -104,7 +105,9 @@ function AuthTab({ open, style }) {
         <StyledListGroup>
           <h2>PLANACT</h2>
           <ListGroup clasName="flush" variant="flush">
-            <ListGroup.Item action>문의</ListGroup.Item>
+            <ListGroup.Item action>
+              <Link to="/idea/inquiry">문의</Link>
+            </ListGroup.Item>
             <ListGroup.Item action>개인정보처리방침</ListGroup.Item>
             <ListGroup.Item action>이용약관</ListGroup.Item>
           </ListGroup>

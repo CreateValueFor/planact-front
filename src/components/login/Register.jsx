@@ -10,13 +10,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
-const DetailAgreement = ({ text }) => {
+const DetailAgreement = ({ text, clickDetail, type }) => {
   return (
     <Card style={{ width: "100%", height: "100%", position: "absolute" }}>
       <Card.Body className="d-flex flex-column">
-        <div className="d-flex justify-content-start align-items-center">
+        <div
+          className="d-flex justify-content-start align-items-center mb-3"
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            clickDetail("close");
+          }}
+        >
           <FontAwesomeIcon icon={faChevronLeft} />
-          <div>플랜액트 이용약관</div>
+          <div>플랜액트 {type}</div>
         </div>
         <div
           style={{
@@ -24,6 +30,7 @@ const DetailAgreement = ({ text }) => {
             flex: 1,
             background: "#F1F6F9",
             borderRadius: 30,
+            padding: "14px",
           }}
         >
           {text}
@@ -71,8 +78,22 @@ function RegisterModal({ setRegister, style, open }) {
     setRegister(false);
   }, []);
 
-  const clickDetail = useCallback((e) => {
-    console.log(e.target.name);
+  const clickDetail = useCallback((string) => {
+    switch (string) {
+      case "usage":
+        setOpenUsage(true);
+        break;
+      case "collect":
+        setOpenCollect(true);
+        break;
+      case "close":
+        setOpenCollect(false);
+        setOpenUsage(false);
+        break;
+      default:
+        console.log("something wrong");
+        break;
+    }
   }, []);
 
   if (!open) {
@@ -84,7 +105,20 @@ function RegisterModal({ setRegister, style, open }) {
       style={{ ...{ position: "relative" }, ...style }}
       onClick={stopPropagation}
     >
-      <DetailAgreement />
+      {openUsage && (
+        <DetailAgreement
+          text={"asdfadf"}
+          type="이용약관"
+          clickDetail={clickDetail}
+        />
+      )}
+      {openCollect && (
+        <DetailAgreement
+          text={"asdfadf"}
+          type="개인정보수집동의"
+          clickDetail={clickDetail}
+        />
+      )}
       <Card.Body>
         <div
           className="d-flex justify-content-between"
@@ -116,13 +150,10 @@ function RegisterModal({ setRegister, style, open }) {
             />
             <div
               name="usage"
-              onClick={clickDetail}
-              style={{
-                width: 30,
-                height: 30,
-                background: "black",
-                cursor: "pointer",
+              onClick={() => {
+                clickDetail("usage");
               }}
+              style={{ cursor: "pointer" }}
             >
               <FontAwesomeIcon icon={faChevronRight} />
             </div>
@@ -135,7 +166,13 @@ function RegisterModal({ setRegister, style, open }) {
               className="mb-3"
               style={{ flex: 1 }}
             />
-            <div name="collect" onClick={clickDetail}>
+            <div
+              name="collect"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                clickDetail("collect");
+              }}
+            >
               <FontAwesomeIcon icon={faChevronRight} />
             </div>
           </div>
