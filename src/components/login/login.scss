@@ -1,3 +1,48 @@
 .auth-modal{
   box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.25), 0px 0px 16px rgba(0, 0, 0, 0.15);
 }
+
+
+small.form-text{
+  font-family: Noto Sans KR;
+  font-style: normal;
+  font-weight: normal;
+  font-size: .5rem;
+  line-height: .875rem;
+  /* or 158% */
+  
+  display: flex;
+  align-items: center;
+  margin-left:21px;
+  /* PIVO GREY/Light/01 */
+  
+  color: #5A5B66;
+  
+}
+
+.form-check{
+  .input{
+    
+  }
+  label{
+  font-family: Noto Sans KR;
+  font-style: normal;
+  font-weight: normal;
+  font-size: .75rem;
+  line-height: 1.5rem;
+  /* identical to box height, or 200% */
+  
+  display: flex;
+  align-items: center;
+  
+  color: #000000;
+  
+  
+  /* Inside Auto Layout */
+  
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  margin: 0px 16px;
+  }
+}

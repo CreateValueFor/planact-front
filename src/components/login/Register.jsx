@@ -2,10 +2,43 @@ import React, { useCallback, useRef, useState } from "react";
 import { Button, Card, Form, Modal } from "react-bootstrap";
 import useAuth from "../../modules/User/hook";
 import InputForm from "../InputForm";
-import CustomButton from "../CustomButton";
+import Logo from "../../assets/img/Subtract.png";
+import CustomButton, { CustomeCloseButton } from "../CustomButton";
 import "./login.scss";
-function RegisterModal({ setRegister }) {
+import eventFunction from "../../modules/customHooks/eventFunction";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+
+const DetailAgreement = ({ text }) => {
+  return (
+    <Card style={{ width: "100%", height: "100%", position: "absolute" }}>
+      <Card.Body className="d-flex flex-column">
+        <div className="d-flex justify-content-start align-items-center">
+          <FontAwesomeIcon icon={faChevronLeft} />
+          <div>플랜액트 이용약관</div>
+        </div>
+        <div
+          style={{
+            width: "100%",
+            flex: 1,
+            background: "#F1F6F9",
+            borderRadius: 30,
+          }}
+        >
+          {text}
+        </div>
+      </Card.Body>
+    </Card>
+  );
+};
+
+function RegisterModal({ setRegister, style, open }) {
   const { register, login } = useAuth();
+  const { stopPropagation } = eventFunction();
+
+  const [openUsage, setOpenUsage] = useState(false);
+  const [openCollect, setOpenCollect] = useState(false);
 
   const onSubmit = useCallback((e) => {
     e.preventDefault();
@@ -38,19 +71,33 @@ function RegisterModal({ setRegister }) {
     setRegister(false);
   }, []);
 
+  const clickDetail = useCallback((e) => {
+    console.log(e.target.name);
+  }, []);
+
+  if (!open) {
+    return <></>;
+  }
   return (
     <Card
       className="auth-modal"
-      style={{
-        left: "100%",
-        position: "absolute",
-        top: 0,
-        width: 330,
-        zIndex: 10,
-        marginLeft: ".75rem",
-      }}
+      style={{ ...{ position: "relative" }, ...style }}
+      onClick={stopPropagation}
     >
+      <DetailAgreement />
       <Card.Body>
+        <div
+          className="d-flex justify-content-between"
+          style={{ marginBottom: 22, marginTop: 4 }}
+        >
+          <div style={{ width: 20 }} />
+          <img src={Logo} />
+          <CustomeCloseButton
+            onClick={() => {
+              setRegister(false);
+            }}
+          />
+        </div>
         <Form onSubmit={onSubmit}>
           <InputForm placeholder="닉네임" type="text" />
           <InputForm placeholder="이메일" type="email" />
@@ -59,21 +106,44 @@ function RegisterModal({ setRegister }) {
             text="영문자+숫자 조합 6~12자리"
             type="password"
           />
-          <Form.Check
-            type={"checkbox"}
-            label={`플랜액트 이용약관 동의(필수)`}
-            id="usage-agreement"
-            className="mb-1"
-            name="usage"
+          <div className="d-flex">
+            <Form.Check
+              type={"checkbox"}
+              label={`플랜액트 이용약관 동의(필수)`}
+              id="usage-agreement"
+              className="mb-1"
+              style={{ flex: 1 }}
+            />
+            <div
+              name="usage"
+              onClick={clickDetail}
+              style={{
+                width: 30,
+                height: 30,
+                background: "black",
+                cursor: "pointer",
+              }}
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </div>
+          </div>
+          <div className="d-flex">
+            <Form.Check
+              type={"checkbox"}
+              label={`플랜액트 개인정보 수집 동의(필수)`}
+              id="privacy-agreement"
+              className="mb-3"
+              style={{ flex: 1 }}
+            />
+            <div name="collect" onClick={clickDetail}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </div>
+          </div>
+          <CustomButton
+            text="회원가입"
+            type="submit"
+            style={{ marginBottom: 28 }}
           />
-          <Form.Check
-            type={"checkbox"}
-            label={`플랜액트 개인정보 수집 동의(필수)`}
-            id="privacy-agreement"
-            className="mb-3"
-            name="collect"
-          />
-          <CustomButton text="회원가입" className="mb-3" type="submit" />
         </Form>
       </Card.Body>
     </Card>
