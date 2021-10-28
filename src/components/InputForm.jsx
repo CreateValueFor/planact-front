@@ -4,12 +4,13 @@ import styled from "styled-components";
 
 const StyledInputForm = styled(Form.Group)`
   input {
-    background: #ffffff;
     /* PIVO GREY/Light/04 */
 
     border: 1.42029px solid #d5d6d8;
     box-sizing: border-box;
-    border-radius: 0.75rem;
+    border-radius: 30px;
+    background: #ffffff;
+    /* PIVO GREY/Light/04 */
   }
 `;
 
