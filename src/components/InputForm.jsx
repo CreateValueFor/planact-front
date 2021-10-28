@@ -14,11 +14,12 @@ const StyledInputForm = styled(Form.Group)`
   }
 `;
 
-function InputForm({ placeholder, text, type, className }) {
+function InputForm({ placeholder, text, type, className, style }) {
   return (
     <StyledInputForm
       className={`mb-3 ${className}`}
       controlId={`formBasic${type}`}
+      style={style}
     >
       <Form.Control type={type} placeholder={placeholder} name={type} />
       {text && <Form.Text>{text}</Form.Text>}
