@@ -3,6 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { Route } from "react-router";
 import styled from "styled-components";
 import Calendar from "../components/home/Calendar";
+import Inquiry from "../components/idea/Inquiry";
 import LeftTabBar from "../components/idea/LeftTabBar";
 import List from "../components/idea/List";
 import "./Idea.scss";
@@ -28,6 +29,7 @@ function Idea({ location }) {
           <StyledMainTemplate className="pt-5 pl-5">
             <Route path="/idea/calendar" exact component={Calendar} />
             <Route path="/idea/list" component={List} />
+            <Route path="/idea/inquiry" component={Inquiry} />
           </StyledMainTemplate>
         </Col>
       </Row>
