@@ -3,7 +3,7 @@ module.exports = function(app) {
   app.use(
     "/api",
     createProxyMiddleware({
-      target: "http://3.38.102.201:80",
+      target: "https://api.planact.shop",
       changeOrigin: true,
     })
   );

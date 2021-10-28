@@ -59,8 +59,32 @@ function Home() {
               ) : (
                 <Profile />
               )}
-              {login && <LoginModal setLogin={setLogin} />}
-              {register && <RegisterModal setRegister={setRegister} />}
+              {login && (
+                <LoginModal
+                  setLogin={setLogin}
+                  style={{
+                    left: "100%",
+                    position: "absolute",
+                    top: 0,
+                    width: 330,
+                    marginLeft: ".75rem",
+                    zIndex: 10,
+                  }}
+                />
+              )}
+              {register && (
+                <RegisterModal
+                  setRegister={setRegister}
+                  style={{
+                    left: "100%",
+                    position: "absolute",
+                    top: 0,
+                    width: 330,
+                    zIndex: 10,
+                    marginLeft: ".75rem",
+                  }}
+                />
+              )}
               <PlanCategory setIsSideBarExist={setIsSideBarExist} />
             </Col>
             <Col
