@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
+import { ListGroup } from "react-bootstrap";
 
 const StyledButton = styled(Button)`
   /* background: #313340; */
@@ -35,6 +36,13 @@ const StyledCloseButton = styled.div`
   cursor: pointer;
 `;
 
+const StyledCustomTabButton = styled(ListGroup.Item)`
+  cursor: pointer;
+  &.active {
+    background: #ffffff !important;
+  }
+`;
+
 function CustomButton({ text, onClick, className, type, style }) {
   return (
     <StyledButton
@@ -53,6 +61,21 @@ export const CustomeCloseButton = ({ onClick, style }) => {
     <StyledCloseButton style={style} onClick={onClick}>
       &times;
     </StyledCloseButton>
+  );
+};
+
+export const CustomTabButton = (props) => {
+  const { focus, text, style, onClick } = props;
+  console.log(props);
+  const computedClassName = focus ? "active" : "muted";
+  return (
+    <StyledCustomTabButton
+      className={computedClassName}
+      onClick={onClick}
+      style={{ style }}
+    >
+      {text}
+    </StyledCustomTabButton>
   );
 };
 

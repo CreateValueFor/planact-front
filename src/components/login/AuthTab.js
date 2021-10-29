@@ -97,14 +97,14 @@ function AuthTab({ open, style }) {
         </StyledProfileBox>
         <StyledListGroup>
           <h2>내 계정</h2>
-          <ListGroup clasName="flush" variant="flush">
+          <ListGroup variant="flush">
             <ListGroup.Item action>계정 설정</ListGroup.Item>
             <ListGroup.Item action>로그아웃</ListGroup.Item>
           </ListGroup>
         </StyledListGroup>
         <StyledListGroup>
           <h2>PLANACT</h2>
-          <ListGroup clasName="flush" variant="flush">
+          <ListGroup variant="flush">
             <ListGroup.Item action>
               <Link to="/idea/inquiry">문의</Link>
             </ListGroup.Item>
