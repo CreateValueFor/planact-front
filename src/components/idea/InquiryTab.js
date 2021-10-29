@@ -65,7 +65,7 @@ function InquiryTab() {
       <ListGroup variant={"flush"}>
         <CustomLabelText text={"내 계정"} />
         <CustomTabButton focus action id="1" onClick={onTabClick}>
-          <Link to="/idea/inquiry/profile">개인정보처리방침</Link>
+          <Link to="/idea/inquiry/profile">계정설정</Link>
         </CustomTabButton>
         <CustomTabButton action id="2" text={"로그아웃"} onClick={onTabClick} />
       </ListGroup>

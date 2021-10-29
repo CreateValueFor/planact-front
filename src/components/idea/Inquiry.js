@@ -6,6 +6,9 @@ import CustomText, { CustomLabelText } from "../CustomText";
 import InputForm from "../InputForm";
 import { Route } from "react-router-dom";
 import Kakao from "../../assets/img/KakaoChannelBg.png";
+import ReactHtmlParser from "react-html-parser";
+import usage from "../../assets/docs/usage";
+import collect from "../../assets/docs/collect";
 
 const StyledContainer = styled.div`
   padding: 120px 90px;
@@ -22,6 +25,7 @@ const CollectRoutes = () => {
       <CustomContainer
         style={{ marginTop: 50, width: "80%", alignItems: "center" }}
       />
+      <div>{ReactHtmlParser(collect)}</div>
     </>
   );
 };
@@ -36,6 +40,7 @@ const UsageRoutes = () => {
       <CustomContainer
         style={{ marginTop: 50, width: "80%", alignItems: "center" }}
       />
+      <div>{ReactHtmlParser(usage)}</div>
     </>
   );
 };
