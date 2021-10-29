@@ -65,7 +65,7 @@ export const CustomeCloseButton = ({ onClick, style }) => {
 };
 
 export const CustomTabButton = (props) => {
-  const { focus, text, style, onClick } = props;
+  const { focus, text, style, onClick, children } = props;
   console.log(props);
   const computedClassName = focus ? "active" : "muted";
   return (
@@ -75,6 +75,7 @@ export const CustomTabButton = (props) => {
       style={{ style }}
     >
       {text}
+      {children}
     </StyledCustomTabButton>
   );
 };
