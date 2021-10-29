@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { ListGroup } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { CustomTabButton } from "../CustomButton";
 import CustomText, { CustomLabelText } from "../CustomText";
@@ -63,25 +64,22 @@ function InquiryTab() {
     <StyledTabBox>
       <ListGroup variant={"flush"}>
         <CustomLabelText text={"내 계정"} />
-        <CustomTabButton
-          focus
-          action
-          id="1"
-          text={"계정 설정"}
-          onClick={onTabClick}
-        />
+        <CustomTabButton focus action id="1" onClick={onTabClick}>
+          <Link to="/idea/inquiry/profile">개인정보처리방침</Link>
+        </CustomTabButton>
         <CustomTabButton action id="2" text={"로그아웃"} onClick={onTabClick} />
       </ListGroup>
       <ListGroup>
         <CustomLabelText text="PLANACT" />
-        <CustomTabButton action id="3" text={"문의"} onClick={onTabClick} />
-        <CustomTabButton
-          action
-          id="4"
-          text={"개인정보처리방침"}
-          onClick={onTabClick}
-        />
-        <CustomTabButton action id="5" text={"이용약관"} onClick={onTabClick} />
+        <CustomTabButton action id="3" onClick={onTabClick}>
+          <Link to="/idea/inquiry/ask">문의</Link>
+        </CustomTabButton>
+        <CustomTabButton action id="4" onClick={onTabClick}>
+          <Link to="/idea/inquiry/collect">개인정보처리방침</Link>
+        </CustomTabButton>
+        <CustomTabButton action id="5" onClick={onTabClick}>
+          <Link to="/idea/inquiry/usage">이용약관</Link>
+        </CustomTabButton>
       </ListGroup>
     </StyledTabBox>
   );
