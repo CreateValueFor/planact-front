@@ -64,6 +64,17 @@ const StyledLink = styled(Link)`
 const StyledLoginModal = styled(LoginModal)``;
 
 // function LeftTabBar
+const popUpStyle = {
+  position: "absolute",
+  bottom: "10px",
+  left: "calc(100% + 10px)",
+  width: "300px",
+  zIndex: 10,
+  background: "#FFFFFF",
+  boxShadow:
+    "0px 0px 1px rgba(0, 0, 0, 0.25), 0px 0px 16px rgba(0, 0, 0, 0.15)",
+  borderRadius: "12px",
+};
 
 const RouterButtons = (props) => {
   const { selectedTab, setSelectedTab } = props;
@@ -127,48 +138,13 @@ const RouterButtons = (props) => {
   );
 };
 
-function LeftTabBar({ location }) {
-  const [selectCalendar, setSelectCalendar] = useState(true);
-  const [authTab, setAuthTab] = useState(false);
+const AuthMethodContainer = () => {
   const [openLogin, setOpenLogin] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
-
-  const popUpStyle = {
-    position: "absolute",
-    bottom: "10px",
-    left: "calc(100% + 10px)",
-    width: "300px",
-    zIndex: 10,
-    background: "#FFFFFF",
-    boxShadow:
-      "0px 0px 1px rgba(0, 0, 0, 0.25), 0px 0px 16px rgba(0, 0, 0, 0.15)",
-    borderRadius: "12px",
-  };
   const clickOutsidePopup = () => {
     setOpenLogin(false);
     setOpenRegister(false);
   };
-
-  useEffect(() => {
-    const currentPath = location.pathname.split("/")[2];
-
-    switch (currentPath) {
-      case "calendar":
-        setSelectCalendar(false);
-        break;
-      case "list":
-        setSelectCalendar(true);
-        break;
-    }
-    window.addEventListener("click", clickOutsidePopup);
-    return () => {
-      window.removeEventListener("click", clickOutsidePopup);
-    };
-  }, []);
-
-  const clickProfile = useCallback(() => {
-    setAuthTab((prev) => !prev);
-  }, []);
 
   const clickAuth = useCallback((e) => {
     const type = e.target.innerText;
@@ -181,6 +157,55 @@ function LeftTabBar({ location }) {
       setOpenRegister((prev) => !prev);
       setOpenLogin(false);
     }
+  }, []);
+  useEffect(() => {
+    window.addEventListener("click", clickOutsidePopup);
+    return () => {
+      window.removeEventListener("click", clickOutsidePopup);
+    };
+  }, []);
+  return (
+    <>
+      <AuthorizeButton
+        clickAuth={clickAuth}
+        openLogin={openLogin}
+        openRegister={openRegister}
+      />
+
+      <StyledLoginModal
+        style={popUpStyle}
+        open={openLogin}
+        setLogin={setOpenLogin}
+      />
+
+      <RegisterModal
+        style={popUpStyle}
+        open={openRegister}
+        setRegister={setOpenRegister}
+      />
+    </>
+  );
+};
+
+function LeftTabBar({ location }) {
+  const [selectCalendar, setSelectCalendar] = useState(true);
+  const [authTab, setAuthTab] = useState(false);
+
+  useEffect(() => {
+    const currentPath = location.pathname.split("/")[2];
+
+    switch (currentPath) {
+      case "calendar":
+        setSelectCalendar(false);
+        break;
+      case "list":
+        setSelectCalendar(true);
+        break;
+    }
+  }, []);
+
+  const clickProfile = useCallback(() => {
+    setAuthTab((prev) => !prev);
   }, []);
 
   return (
@@ -206,24 +231,8 @@ function LeftTabBar({ location }) {
         selectedTab={selectCalendar}
         setSelectedTab={setSelectCalendar}
       />
-      <AuthorizeButton
-        clickAuth={clickAuth}
-        openLogin={openLogin}
-        openRegister={openRegister}
-      />
 
-      <StyledLoginModal
-        style={popUpStyle}
-        open={openLogin}
-        setLogin={setOpenLogin}
-      />
-
-      <RegisterModal
-        style={popUpStyle}
-        open={openRegister}
-        setRegister={setOpenRegister}
-      />
-
+      <AuthMethodContainer />
       <img
         src={Profile}
         className="mb-5"

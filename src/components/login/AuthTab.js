@@ -98,7 +98,9 @@ function AuthTab({ open, style }) {
         <StyledListGroup>
           <h2>내 계정</h2>
           <ListGroup variant="flush">
-            <ListGroup.Item action>계정 설정</ListGroup.Item>
+            <ListGroup.Item action>
+              <Link to="/idea/inquiry/profile">계정 설정</Link>
+            </ListGroup.Item>
             <ListGroup.Item action>로그아웃</ListGroup.Item>
           </ListGroup>
         </StyledListGroup>
@@ -106,10 +108,14 @@ function AuthTab({ open, style }) {
           <h2>PLANACT</h2>
           <ListGroup variant="flush">
             <ListGroup.Item action>
-              <Link to="/idea/inquiry">문의</Link>
+              <Link to="/idea/inquiry/usage">문의</Link>
             </ListGroup.Item>
-            <ListGroup.Item action>개인정보처리방침</ListGroup.Item>
-            <ListGroup.Item action>이용약관</ListGroup.Item>
+            <ListGroup.Item action>
+              <Link to="/idea/inquiry/collect">개인정보처리방침</Link>
+            </ListGroup.Item>
+            <ListGroup.Item action>
+              <Link to="/idea/inquiry/usage">이용약관</Link>
+            </ListGroup.Item>
           </ListGroup>
         </StyledListGroup>
       </Card.Body>

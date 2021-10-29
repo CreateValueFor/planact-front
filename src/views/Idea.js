@@ -19,6 +19,14 @@ const StyledMainTemplate = styled.div`
   border-radius: 136px 0px 0px 0px;
 `;
 
+const InquiryMenu = () => {
+  return (
+    <Col lg="2">
+      <InquiryTab />
+    </Col>
+  );
+};
+
 function Idea({ location }) {
   return (
     <Container fluid style={{ minHeight: "100vh", backgroundColor: "#F1F6F9" }}>
@@ -26,9 +34,7 @@ function Idea({ location }) {
         <Col lg="1" style={{ paddingLeft: "0px" }}>
           <LeftTabBar location={location} />
         </Col>
-        <Col lg="2">
-          <InquiryTab />
-        </Col>
+        <Route path="/idea/inquiry" component={InquiryMenu} />
         <Col lg="10" style={{ display: "flex", flex: 1 }}>
           <StyledMainTemplate className="pt-5 pl-5">
             <Route path="/idea/calendar" exact component={Calendar} />
