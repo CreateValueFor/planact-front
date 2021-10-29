@@ -4,6 +4,7 @@ import { Route } from "react-router";
 import styled from "styled-components";
 import Calendar from "../components/home/Calendar";
 import Inquiry from "../components/idea/Inquiry";
+import InquiryTab from "../components/idea/InquiryTab";
 import LeftTabBar from "../components/idea/LeftTabBar";
 import List from "../components/idea/List";
 import "./Idea.scss";
@@ -25,7 +26,10 @@ function Idea({ location }) {
         <Col lg="1" style={{ paddingLeft: "0px" }}>
           <LeftTabBar location={location} />
         </Col>
-        <Col lg="11" style={{ display: "flex", flex: 1 }}>
+        <Col lg="2">
+          <InquiryTab />
+        </Col>
+        <Col lg="10" style={{ display: "flex", flex: 1 }}>
           <StyledMainTemplate className="pt-5 pl-5">
             <Route path="/idea/calendar" exact component={Calendar} />
             <Route path="/idea/list" component={List} />
