@@ -7,14 +7,20 @@ import { createStore, applyMiddleware } from "redux";
 import rootReducer from "./modules";
 import { Provider } from "react-redux";
 import logger from "redux-logger";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
 const store = createStore(rootReducer, applyMiddleware(logger));
+const persister = persistStore(store);
+
 // console.log(store.getState());
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <PersistGate loading={null} persistor={persister}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </PersistGate>
   </Provider>,
   document.getElementById("root")
 );
