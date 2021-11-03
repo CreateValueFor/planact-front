@@ -14,6 +14,22 @@ const StyledLabel = styled.label`
   color: #909090;
 `;
 
+const StyledLink = styled.a`
+  font-family: Noto Sans KR;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 24px;
+  /* identical to box height, or 185% */
+
+  display: flex;
+  align-items: center;
+
+  /* PIVO GREY/PIVO GREY */
+  text-decoration: none;
+  color: #313340;
+`;
+
 const StyledText = styled.h2`
   font-family: Noto Sans KR;
   font-style: normal;
@@ -33,6 +49,14 @@ export const CustomLabelText = ({ text, fontSize, style }) => {
 
 function CustomText({ text, fontSize, style }) {
   return <StyledText style={{ fontSize, ...style }}>{text}</StyledText>;
+}
+
+export function CustomLinkText({ text, fontSize, style, href }) {
+  return (
+    <StyledLink target="_blank" href={href} style={{ fontSize, ...style }}>
+      {text}
+    </StyledLink>
+  );
 }
 
 export default CustomText;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Form } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -14,14 +14,30 @@ const StyledInputForm = styled(Form.Group)`
   }
 `;
 
-function InputForm({ placeholder, text, type, className, style }) {
+function InputForm({ setValue, placeholder, text, type, className, style }) {
+  const onChange = useCallback(
+    (e) => {
+      const {
+        target: { value },
+      } = e;
+
+      setValue(value);
+    },
+    [setValue]
+  );
+
   return (
     <StyledInputForm
       className={`mb-3 ${className}`}
       controlId={`formBasic${type}`}
       style={style}
     >
-      <Form.Control type={type} placeholder={placeholder} name={type} />
+      <Form.Control
+        onChange={onChange}
+        type={type}
+        placeholder={placeholder}
+        name={type}
+      />
       {text && <Form.Text>{text}</Form.Text>}
     </StyledInputForm>
   );

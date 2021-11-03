@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
 import { ListGroup } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const StyledButton = styled(Button)`
   /* background: #313340; */
@@ -36,10 +37,39 @@ const StyledCloseButton = styled.div`
   cursor: pointer;
 `;
 
-const StyledCustomTabButton = styled(ListGroup.Item)`
+const StyledCustomTabButton = styled(Link)`
   cursor: pointer;
+  font-family: Noto Sans KR;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 24px;
+  /* identical to box height, or 185% */
+
+  display: flex;
+  align-items: center;
+
+  /* PIVO GREY/PIVO GREY */
+
+  color: #313340;
+
+  /* Inside Auto Layout */
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  margin: 0px 7px;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 15px;
   &.active {
     background: #ffffff !important;
+  }
+  &:hover {
+    background: #ffffff;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    color: #313340;
   }
 `;
 
@@ -65,16 +95,17 @@ export const CustomeCloseButton = ({ onClick, style }) => {
 };
 
 export const CustomTabButton = (props) => {
-  const { focus, text, style, onClick, children } = props;
+  const { focus, text, style, onClick, children, id, to, selectedId } = props;
   console.log(props);
-  const computedClassName = focus ? "active" : "muted";
+  const computedClassName = selectedId === id ? "active" : "muted";
   return (
     <StyledCustomTabButton
+      id={id}
       className={computedClassName}
       onClick={onClick}
       style={{ style }}
+      to={to}
     >
-      {text}
       {children}
     </StyledCustomTabButton>
   );
