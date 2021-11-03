@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import useAuth from "../../modules/User/hook";
 import CustomButton from "../CustomButton";
@@ -10,12 +10,14 @@ import eventFunction from "../../modules/customHooks/eventFunction";
 function LoginModal({ setLogin, style, open }) {
   const { login } = useAuth();
   const { stopPropagation } = eventFunction();
+  const [email, setEmail] = useState();
+  const [passsword, setPassword] = useState();
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     const data = new FormData(e.target);
     console.log(data.get("email"));
     const email = data.get("email");
-    const nick = "test";
+
     const password = data.get("password");
     login({ email, password });
     setLogin(false);
@@ -43,8 +45,13 @@ function LoginModal({ setLogin, style, open }) {
           />
         </div>
         <Form onSubmit={onSubmit}>
-          <InputForm placeholder="이메일" type="email" />
-          <InputForm placeholder="비밀번호" type="password" className="mb-5" />
+          <InputForm placeholder="이메일" type="email" setValue={setEmail} />
+          <InputForm
+            placeholder="비밀번호"
+            type="password"
+            className="mb-5"
+            setValue={setPassword}
+          />
           <CustomButton
             text="로그인"
             type="submit"

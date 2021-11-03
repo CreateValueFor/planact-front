@@ -9,8 +9,10 @@ import eventFunction from "../../modules/customHooks/eventFunction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-
-const DetailAgreement = ({ text, clickDetail, type }) => {
+import ReactHtmlParser from "react-html-parser";
+import collect from "../../assets/docs/collect";
+import usage from "../../assets/docs/usage";
+const DetailAgreement = ({ children, clickDetail, type }) => {
   return (
     <Card style={{ width: "100%", height: "100%", position: "absolute" }}>
       <Card.Body className="d-flex flex-column">
@@ -26,14 +28,16 @@ const DetailAgreement = ({ text, clickDetail, type }) => {
         </div>
         <div
           style={{
+            maxHeight: "100%",
             width: "100%",
             flex: 1,
             background: "#F1F6F9",
             borderRadius: 30,
+            overflowY: "scroll",
             padding: "14px",
           }}
         >
-          {text}
+          {children}
         </div>
       </Card.Body>
     </Card>
@@ -41,16 +45,21 @@ const DetailAgreement = ({ text, clickDetail, type }) => {
 };
 
 function RegisterModal({ setRegister, style, open }) {
-  const { register, login } = useAuth();
+  const { register } = useAuth();
   const { stopPropagation } = eventFunction();
 
   const [openUsage, setOpenUsage] = useState(false);
   const [openCollect, setOpenCollect] = useState(false);
+  const [nick, setNick] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const onSubmit = useCallback((e) => {
     e.preventDefault();
+
     const data = new FormData(e.target);
-    console.log(data.get("collect"));
+    console.log(data);
+    console.log(data.get("nick"));
     if (data.get("nick") == "") {
       window.alert("닉네임을 입력해주세요.");
       return;
@@ -72,7 +81,7 @@ function RegisterModal({ setRegister, style, open }) {
       return;
     }
     const email = data.get("email");
-    const nick = "test";
+    const nick = data.get("nick");
     const password = data.get("password");
     register({ email, nick, password });
     setRegister(false);
@@ -110,14 +119,18 @@ function RegisterModal({ setRegister, style, open }) {
           text={"asdfadf"}
           type="이용약관"
           clickDetail={clickDetail}
-        />
+        >
+          {ReactHtmlParser(usage)}
+        </DetailAgreement>
       )}
       {openCollect && (
         <DetailAgreement
           text={"asdfadf"}
           type="개인정보수집동의"
           clickDetail={clickDetail}
-        />
+        >
+          {ReactHtmlParser(collect)}
+        </DetailAgreement>
       )}
       <Card.Body>
         <div
@@ -133,18 +146,20 @@ function RegisterModal({ setRegister, style, open }) {
           />
         </div>
         <Form onSubmit={onSubmit}>
-          <InputForm placeholder="닉네임" type="text" />
-          <InputForm placeholder="이메일" type="email" />
+          <InputForm placeholder="닉네임" type="nick" setValue={setNick} />
+          <InputForm placeholder="이메일" type="email" setValue={setEmail} />
           <InputForm
             placeholder="비밀번호"
             text="영문자+숫자 조합 6~12자리"
             type="password"
+            setValue={setPassword}
           />
           <div className="d-flex">
             <Form.Check
-              type={"checkbox"}
+              type="checkbox"
               label={`플랜액트 이용약관 동의(필수)`}
               id="usage-agreement"
+              name="usage"
               className="mb-1"
               style={{ flex: 1 }}
             />
@@ -163,6 +178,7 @@ function RegisterModal({ setRegister, style, open }) {
               type={"checkbox"}
               label={`플랜액트 개인정보 수집 동의(필수)`}
               id="privacy-agreement"
+              name="collect"
               className="mb-3"
               style={{ flex: 1 }}
             />
