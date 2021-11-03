@@ -5,8 +5,8 @@ import styled from "styled-components";
 
 const StyledSearchContainer = styled.div`
   height: 36px;
-  width: 240px;
-  border: 1px solid #000000;
+  /* width: 240px; */
+  border: 1px solid #d5d6d8;
   box-sizing: border-box;
   border-radius: 100px;
   display: flex;
@@ -20,14 +20,30 @@ const StyledSearchContainer = styled.div`
     display: inline-block;
     outline: none;
     margin-left: 0.25rem;
+    &::placeholder {
+      /* Subheading/Extra Small */
+      font-family: Caros Soft;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 22px;
+      /* identical to box height, or 137% */
+      /* PIVO GREY/Light/03 */
+      color: #acadb2;
+    }
   }
 `;
 
 function Search() {
+  const onKeyPress = (e) => {
+    if (e.key == "Enter") {
+      console.log("asdfasdf");
+    }
+  };
   return (
     <StyledSearchContainer className="mr-3">
-      <FontAwesomeIcon icon={faSearch} />
-      <input />
+      <FontAwesomeIcon icon={faSearch} style={{ color: "#d5d6d8" }} />
+      <input placeholder="Search" onKeyPress={onKeyPress} />
     </StyledSearchContainer>
   );
 }

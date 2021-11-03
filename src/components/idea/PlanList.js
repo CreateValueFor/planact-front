@@ -117,7 +117,7 @@ const StyledItem = styled.div`
       z-index: 1;
       width: 24px;
       height: 2px;
-      background: rgb(8, 155, 171);
+      background: #ffb350;
     }
     &::after {
       position: absolute;
@@ -125,7 +125,7 @@ const StyledItem = styled.div`
       z-index: 1;
       width: 2px;
       height: 24px;
-      background: rgb(8, 155, 171);
+      background: #ffb350;
     }
   }
   .item-date {

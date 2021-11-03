@@ -29,8 +29,8 @@ const InquiryMenu = () => {
 
 function Idea({ location }) {
   return (
-    <Container fluid style={{ minHeight: "100vh", backgroundColor: "#F1F6F9" }}>
-      <Row style={{ minHeight: "100vh" }}>
+    <Container fluid style={{ maxHeight: "100vh", backgroundColor: "#F1F6F9" }}>
+      <Row style={{ maxHeight: "100vh" }}>
         <Col lg="1" style={{ paddingLeft: "0px" }}>
           <LeftTabBar location={location} />
         </Col>
