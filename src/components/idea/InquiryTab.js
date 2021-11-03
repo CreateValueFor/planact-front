@@ -51,34 +51,69 @@ const StyledTabBox = styled.div`
     &:active {
       background: #ffffff;
     }
+    a {
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      color: #313340;
+    }
   }
 `;
 
 function InquiryTab() {
   const [selected, setSelected] = useState(1);
   const onTabClick = useCallback((e) => {
-    console.log(e);
+    console.log(e.target.id);
+    setSelected(e.target.id);
   }, []);
 
   return (
     <StyledTabBox>
       <ListGroup variant={"flush"}>
         <CustomLabelText text={"내 계정"} />
-        <CustomTabButton focus action id="1" onClick={onTabClick}>
-          <Link to="/idea/inquiry/profile">계정설정</Link>
+        <CustomTabButton
+          to="/idea/inquiry/profile"
+          focus
+          selectedId={selected}
+          id="1"
+          onClick={onTabClick}
+        >
+          계정설정
         </CustomTabButton>
-        <CustomTabButton action id="2" text={"로그아웃"} onClick={onTabClick} />
+        <CustomTabButton
+          to="/"
+          selectedId={selected}
+          id="2"
+          onClick={onTabClick}
+        >
+          로그아웃
+        </CustomTabButton>
       </ListGroup>
       <ListGroup>
         <CustomLabelText text="PLANACT" />
-        <CustomTabButton action id="3" onClick={onTabClick}>
-          <Link to="/idea/inquiry/ask">문의</Link>
+        <CustomTabButton
+          to="/idea/inquiry/ask"
+          selectedId={selected}
+          id="3"
+          onClick={onTabClick}
+        >
+          문의
         </CustomTabButton>
-        <CustomTabButton action id="4" onClick={onTabClick}>
-          <Link to="/idea/inquiry/collect">개인정보처리방침</Link>
+        <CustomTabButton
+          to="/idea/inquiry/collect"
+          selectedId={selected}
+          id="4"
+          onClick={onTabClick}
+        >
+          개인정보처리방침
         </CustomTabButton>
-        <CustomTabButton action id="5" onClick={onTabClick}>
-          <Link to="/idea/inquiry/usage">이용약관</Link>
+        <CustomTabButton
+          to="/idea/inquiry/usage"
+          selectedId={selected}
+          id="5"
+          onClick={onTabClick}
+        >
+          이용약관
         </CustomTabButton>
       </ListGroup>
     </StyledTabBox>

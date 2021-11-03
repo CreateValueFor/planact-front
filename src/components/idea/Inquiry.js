@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Profile from "../../assets/img/Default Profile.png";
 import CustomContainer from "../CustomContainer";
-import CustomText, { CustomLabelText } from "../CustomText";
+import CustomText, { CustomLabelText, CustomLinkText } from "../CustomText";
 import InputForm from "../InputForm";
 import { Route } from "react-router-dom";
 import Kakao from "../../assets/img/KakaoChannelBg.png";
@@ -15,18 +15,35 @@ const StyledContainer = styled.div`
   width: 100%;
 `;
 
+const StyledAgreementContainer = styled.div`
+  /* height: 100vh; */
+  height: 65vh;
+  overflow-y: scroll;
+`;
+
+const StyledInquiryMethodContainer = styled.div`
+  display: flex;
+`;
+
 const CollectRoutes = () => {
   return (
-    <>
+    <div style={{}}>
       <InquiryContentsText
         title="개인정보처리방침"
         subTitle="PLANACT 개인정보처리방침입니다."
       />
       <CustomContainer
-        style={{ marginTop: 50, width: "80%", alignItems: "center" }}
+        style={{
+          marginTop: 50,
+
+          width: "80%",
+          alignItems: "center",
+        }}
       />
-      <div>{ReactHtmlParser(collect)}</div>
-    </>
+      <StyledAgreementContainer>
+        {ReactHtmlParser(collect)}
+      </StyledAgreementContainer>
+    </div>
   );
 };
 
@@ -40,7 +57,9 @@ const UsageRoutes = () => {
       <CustomContainer
         style={{ marginTop: 50, width: "80%", alignItems: "center" }}
       />
-      <div>{ReactHtmlParser(usage)}</div>
+      <StyledAgreementContainer>
+        {ReactHtmlParser(usage)}
+      </StyledAgreementContainer>
     </>
   );
 };
@@ -63,17 +82,22 @@ const AskRoutes = () => {
         style={{ marginTop: 50, width: "80%", alignItems: "center" }}
       >
         <div>
-          <div style={{ marginBottom: "1rem" }}>
+          <StyledInquiryMethodContainer style={{ marginBottom: "1rem" }}>
             <img src={Kakao} />
-            <CustomLabelText
+            <CustomLinkText
               text="카카오톡 채널: plan_act"
               style={methodStyle}
+              href="http://pf.kakao.com/_cuVqb"
             />
-          </div>
-          <div>
+          </StyledInquiryMethodContainer>
+          <StyledInquiryMethodContainer>
             <img src={Kakao} />
-            <CustomLabelText text="인스타그램: plan_act" style={methodStyle} />
-          </div>
+            <CustomLinkText
+              text="인스타그램: planact.official"
+              style={methodStyle}
+              href="https://www.instagram.com/planact.official/"
+            />
+          </StyledInquiryMethodContainer>
         </div>
       </CustomContainer>
     </>
