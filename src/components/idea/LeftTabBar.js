@@ -8,7 +8,7 @@ import { translateRect } from "@fullcalendar/common";
 import { Link } from "react-router-dom";
 import LoginModal from "../login/Login";
 import RegisterModal from "../login/Register";
-
+import useAuth from "../../modules/User/hook";
 import CalenarLogo from "../../assets/img/Calendar.svg";
 import AuthorizeButton from "./AuthorizeButton";
 import AuthTab from "../login/AuthTab";
@@ -165,7 +165,7 @@ const AuthMethodContainer = () => {
     };
   }, []);
   return (
-    <>
+    <div className="mb-5">
       <AuthorizeButton
         clickAuth={clickAuth}
         openLogin={openLogin}
@@ -183,13 +183,33 @@ const AuthMethodContainer = () => {
         open={openRegister}
         setRegister={setOpenRegister}
       />
+    </div>
+  );
+};
+
+const ProfileContainer = () => {
+  const [authTab, setAuthTab] = useState(false);
+  const clickProfile = useCallback(() => {
+    setAuthTab((prev) => !prev);
+  }, []);
+  return (
+    <>
+      <img
+        src={Profile}
+        className="mb-5"
+        style={{ width: 50, height: 50, cursor: "pointer" }}
+        alt="logo"
+        onClick={clickProfile}
+      />
+
+      <AuthTab open={authTab} style={popUpStyle} />
     </>
   );
 };
 
 function LeftTabBar({ location }) {
+  const { status } = useAuth();
   const [selectCalendar, setSelectCalendar] = useState(true);
-  const [authTab, setAuthTab] = useState(false);
 
   useEffect(() => {
     const currentPath = location.pathname.split("/")[2];
@@ -204,14 +224,10 @@ function LeftTabBar({ location }) {
     }
   }, []);
 
-  const clickProfile = useCallback(() => {
-    setAuthTab((prev) => !prev);
-  }, []);
-
   return (
     <div
       style={{
-        height: "100%",
+        height: "100vh",
         backgroundColor: "#089BAB",
         display: "flex",
         flexDirection: "column",
@@ -231,17 +247,7 @@ function LeftTabBar({ location }) {
         selectedTab={selectCalendar}
         setSelectedTab={setSelectCalendar}
       />
-
-      <AuthMethodContainer />
-      <img
-        src={Profile}
-        className="mb-5"
-        style={{ width: 50, height: 50, cursor: "pointer" }}
-        alt="logo"
-        onClick={clickProfile}
-      />
-
-      <AuthTab open={authTab} style={popUpStyle} />
+      {status ? <ProfileContainer /> : <AuthMethodContainer />}
     </div>
   );
 }

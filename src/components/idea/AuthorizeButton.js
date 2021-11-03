@@ -18,6 +18,7 @@ const StyledTabItem = styled.div`
 const StyledAuthButton = styled(StyledTabItem)`
   width: 85px;
   height: 42px;
+  transition: 0s;
 `;
 
 function AuthorizeButton({ clickAuth, openLogin, openRegister }) {
