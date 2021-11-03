@@ -30,9 +30,20 @@ table{
   color: #000000;
 }
 .fc-share-button.fc-button{
-  background: #313340;
+  background: #FFB350;
+  border:none;
 border-radius: 100px;
   width:150px;
+  &:hover{
+    background: #FFB350;
+    filter:brightness(70%);
+  }
+  &:active{
+    background: #FFB350 !important;
+  }
+  &:focus{
+    background: #FFB350;
+  }
 }
 th .fc-scrollgrid-sync-inner{
   height: 100%;

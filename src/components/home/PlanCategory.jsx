@@ -35,6 +35,7 @@ function PlanCategory({ setIsSideBarExist }) {
         <ListGroup variant="flush">
           {categories.map((event, idx) => (
             <CategoryItem
+              key={idx}
               event={event.name}
               category={event.category}
               idx={idx}
