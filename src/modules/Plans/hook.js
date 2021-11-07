@@ -69,5 +69,26 @@ export const usePlans = () => {
     });
   };
 
-  return { plans, filters, currentPlans, getPlans, makefilters, removePlans };
+  const uploadDailyPlan = async (dailyplan) => {
+    try {
+      const res = await axios.post(BASE_URL + "/plan/uploads", { dailyplan });
+      console.log(res);
+      // dispatch({
+      //   type: GET_PLANS,
+      //   plans: res.data.plan,
+      // });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return {
+    plans,
+    filters,
+    currentPlans,
+    getPlans,
+    makefilters,
+    removePlans,
+    uploadDailyPlan,
+  };
 };
