@@ -1,47 +1,91 @@
-import React, { useRef, useState } from "react";
-import { Button, Col, Form, Image, Row } from "react-bootstrap";
-import sampleData from "../../dummy/oh.a_sis";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Button,
+  Col,
+  Form,
+  FormControl,
+  Image,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
+
 import { usePlans } from "../../modules/Plans/hook";
 
-function DailyUpload() {
+function DailyUpload({ location }) {
+  //plan json file
+  const [planList, setPlanList] = useState([]);
+
   //plan daily inputs
+  const [dayTitle, setDayTitle] = useState("");
   let nextId = useRef(0);
-  const [daySummary, setDaySummary] = useState([]);
+  let nextJsonId = useRef(0);
+  const [daySummary, setDaySummary] = useState({ title: "", events: [] });
   const [theme, setTheme] = useState("");
   const [contents, setContents] = useState("");
   const [dailythumb, setDailyThumb] = useState("#");
   const [dailyThumbFile, setDailyThumbFile] = useState();
   const dailyThumbInput = useRef();
   //dummydata
-  const data = sampleData();
-  const { uploadDailyPlan } = usePlans();
+
+  const planId = location.search.split("=")[1];
+  const { uploadDailyPlan, getUploadedPlansJson } = usePlans();
 
   //usePlans
-  const uploadDaily = (e) => {
-    e.preventDefault();
-    uploadDailyPlan(daySummary);
-  };
+  const uploadDaily = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (!daySummary.events.length) {
+        window.alert("루틴을 입력해주세요");
+        return;
+      }
+      nextJsonId.current += 1;
+      setDaySummary({
+        ...daySummary,
+        id: nextJsonId.current,
+        title: dayTitle,
+      });
+      uploadDailyPlan(daySummary, planId);
+      getUploadedPlansJson(planId).then((data) => setPlanList(data));
+      setDayTitle("");
+      setTheme("");
+      setContents("");
+      console.log(planList.length);
+    },
+    [nextJsonId, dayTitle, daySummary, planId]
+  );
 
-  const onThemeSubmit = (e) => {
-    e.preventDefault();
-    nextId.current += 1;
-    setDaySummary([
-      ...daySummary,
-      {
-        id: nextId.current,
-        title: theme,
-        contents: contents,
-        thumb: dailyThumbFile,
-      },
-    ]);
-    dailyThumbInput.current.value = null;
-    setDailyThumb("#");
-    console.log("daysummary is ", daySummary);
+  const onThemeSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      nextId.current += 1;
+      setDaySummary({
+        title: dayTitle,
+
+        events: [
+          ...daySummary.events,
+          {
+            id: nextId.current,
+            title: theme,
+            contents: contents,
+            thumb: dailyThumbFile,
+          },
+        ],
+      });
+      dailyThumbInput.current.value = null;
+      setDailyThumb("#");
+      console.log("daysummary is ", daySummary);
+    },
+    [planList, dayTitle, nextId, theme, contents, dailyThumbFile]
+  );
+
+  const handleDayTitleInput = (e) => {
+    const { name, value } = e.target;
+    setDayTitle(value);
   };
 
   const handleDailyInput = (e) => {
     const { name, value } = e.target;
-    console.log(name);
+
     switch (name) {
       case "theme":
         setTheme(value);
@@ -58,12 +102,28 @@ function DailyUpload() {
     }
   };
 
+  useEffect(() => {
+    getUploadedPlansJson(planId).then((data) => {
+      if (!data) {
+        nextJsonId.current = 0;
+      } else {
+        nextJsonId.current = data.length;
+        setPlanList(data);
+      }
+      setDaySummary({
+        ...daySummary,
+        id: nextJsonId.current,
+        title: dayTitle,
+      });
+    });
+  }, []);
+
   return (
     <Row>
       <Col lg="6">
         <h3>플랜 개요</h3>
-        <div style={{ display: "flex" }}>
-          {data.map((day, index) => (
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {planList.map((day, index) => (
             <div
               key={index}
               style={{
@@ -80,8 +140,18 @@ function DailyUpload() {
       </Col>
       <Col lg="6">
         <h3>하루 업로드</h3>
+        <h4>하루 대제목</h4>
+        <InputGroup className="mb-3">
+          <FormControl
+            placeholder="하루 약칭"
+            aria-label="Username"
+            onChange={handleDayTitleInput}
+            value={dayTitle}
+            aria-describedby="basic-addon1"
+          />
+        </InputGroup>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {daySummary.map((day) => (
+          {daySummary.events.map((day) => (
             <div
               key={day.id}
               style={{

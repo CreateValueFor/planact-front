@@ -3,7 +3,7 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { usePlans } from "../../modules/Plans/hook";
 
-function Index() {
+function Index({ location }) {
   const [planList, setPlanList] = useState([
     {
       id: 0,
@@ -43,7 +43,10 @@ function Index() {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  background: "#089BAB",
+                  background:
+                    plan.id == location.search.split("=")[1]
+                      ? "#FFB350"
+                      : "#089BAB",
                   borderRadius: "15px",
                   color: "black",
                 }}
@@ -55,22 +58,6 @@ function Index() {
               </Link>
             ))}
           </div>
-          <Link
-            to="/uploads/summary"
-            style={{
-              width: 200,
-              height: 30,
-              backgroundColor: "#000000",
-              color: "#fff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textDecoration: "none",
-              borderRadius: 10,
-            }}
-          >
-            추가하기
-          </Link>
         </div>
       </Col>
     </Row>

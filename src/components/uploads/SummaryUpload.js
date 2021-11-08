@@ -143,9 +143,11 @@ function SummaryUpload({ location, history }) {
           <Button variant="primary" type="submit">
             플랜 등록
           </Button>
-          <Button variant="primary" type="button" onClick={openDetailPlan}>
-            세부 추가
-          </Button>
+          {location.search && (
+            <Button variant="primary" type="button" onClick={openDetailPlan}>
+              세부 추가
+            </Button>
+          )}
         </Form>
       </Col>
     </Row>
