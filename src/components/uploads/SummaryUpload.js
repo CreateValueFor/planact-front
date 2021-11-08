@@ -1,18 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import sample from "../../assets/img/sample.jpg";
+import { usePlans } from "../../modules/Plans/hook";
+import queryString from "querystring";
+import useAuth from "../../modules/User/hook";
 
-function SummaryUpload() {
+function SummaryUpload({ location, history }) {
   //plan summary inputs
   const [title, setTitle] = useState("");
   const [sns, setSns] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
   const [thumb, setThumb] = useState();
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+  const {
+    getUplaodedPlansByID,
+    uploadSummaryPlans,
+    getUploadedPlans,
+  } = usePlans();
+  const { email } = useAuth();
+
+  const openDetailPlan = () => {
+    const id = location.search.split("=")[1];
+    history.push(`/uploads/daily?id=${id}`);
+  };
+
   const onSummarySubmit = (e) => {
     e.preventDefault();
+    const summaryPlans = new FormData();
+    summaryPlans.append("title", title);
+    summaryPlans.append("sns", sns);
+    summaryPlans.append("author", author);
+    summaryPlans.append("category", category);
+    summaryPlans.append("thumb", thumb);
+    summaryPlans.append("email", email);
+    uploadSummaryPlans(summaryPlans).then(() => {
+      getUploadedPlans();
+    });
   };
+
   const handleInput = (e) => {
     const { name, value } = e.target;
     //input control function
@@ -37,6 +65,24 @@ function SummaryUpload() {
       console.log(e.target.files[0]);
     }
   };
+
+  useEffect(
+    () => {
+      if (location.search) {
+        const id = location.search.split("=")[1];
+        getUplaodedPlansByID(id).then((res) => {
+          console.log(res);
+          const { title, author, category, sns } = res;
+          setTitle(title);
+          setSns(sns);
+          setAuthor(author);
+          setCategory(category);
+        });
+      }
+    },
+    [location]
+  );
+
   return (
     <Row className="mt-3">
       <Col lg="6">
@@ -59,6 +105,7 @@ function SummaryUpload() {
             <Form.Control
               type="text"
               name="title"
+              value={title}
               placeholder="제목을 입력해주세요"
               onChange={handleInput}
             />
@@ -67,6 +114,7 @@ function SummaryUpload() {
             onChange={handleInput}
             name="sns"
             aria-label="Default select example"
+            value={sns}
           >
             <option>SNS 출처를 선택해주세요</option>
             <option value="instagram">인스타그램</option>
@@ -77,6 +125,7 @@ function SummaryUpload() {
             <Form.Control
               onChange={handleInput}
               name="author"
+              value={author}
               type="text"
               placeholder="게시자"
             />
@@ -85,13 +134,17 @@ function SummaryUpload() {
             onChange={handleInput}
             name="category"
             aria-label="Default select example"
+            value={category}
           >
             <option>카테고리를 선택해주세요</option>
             <option value="health">운동 루틴</option>
             <option value="diet">식단</option>
           </Form.Select>
           <Button variant="primary" type="submit">
-            Submit
+            플랜 등록
+          </Button>
+          <Button variant="primary" type="button" onClick={openDetailPlan}>
+            세부 추가
           </Button>
         </Form>
       </Col>

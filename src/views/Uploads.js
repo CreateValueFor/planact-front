@@ -6,14 +6,11 @@ import Index from "../components/uploads/Index";
 import SummaryUpload from "../components/uploads/SummaryUpload";
 
 function Uploads() {
-  //plan Total
-
   return (
     <Container>
+      <Route path="/uploads" exact component={SummaryUpload} />
       <Route path="/uploads" exact component={Index} />
-      <Route path="/uploads/summary" component={SummaryUpload} />
-      <hr />
-      <Route path="/uploads/summary" component={DailyUpload} />
+      <Route path="/uploads/daily" component={DailyUpload} />
     </Container>
   );
 }

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import Calendar from "../components/home/Calendar";
 import Filter from "../components/home/filter";
-import PlanDisplay from "../components/home/planDisplay";
-import Search from "../components/home/search";
+
 import Logo from "../assets/img/Subtract.png";
 import Login from "../components/home/login";
-import FiltersAndShareBtn from "../components/home/FiltersAndShareBtn";
+
 import LoginModal from "../components/login/Login";
 import Profile from "../components/login/Profile";
 import PlanCategory from "../components/home/PlanCategory";
