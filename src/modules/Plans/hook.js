@@ -89,6 +89,42 @@ export const usePlans = () => {
     }
   };
 
+  const uploadDailyPlanImg = async (imageForm) => {
+    try {
+      const res = await axios.post(BASE_URL + "/plan/daily/img", imageForm);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteDailyPlan = async (planID, dailyID) => {
+    try {
+      const res = await axios.delete(
+        `${BASE_URL}/plan/daily?id=${planID}&dailyId=${dailyID}`,
+        {
+          id: dailyID,
+        }
+      );
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getDailyPlanImg = async (img) => {
+    try {
+      const data = {
+        img,
+      };
+      const res = await axios.post(BASE_URL + "/plan/daily/images", data);
+      console.log(res.data.list);
+      return res.data.list;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const getUploadedPlans = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/plan/summary?email=${email}`);
@@ -138,8 +174,11 @@ export const usePlans = () => {
     uploads,
     getPlans,
     makefilters,
+    getDailyPlanImg,
     removePlans,
+    uploadDailyPlanImg,
     uploadDailyPlan,
+    deleteDailyPlan,
     getUploadedPlans,
     getUplaodedPlansByID,
     uploadSummaryPlans,

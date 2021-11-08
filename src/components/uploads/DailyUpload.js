@@ -6,12 +6,85 @@ import {
   FormControl,
   Image,
   InputGroup,
+  Modal,
   Row,
 } from "react-bootstrap";
-
+import uniqueString from "unique-string";
+import { Link } from "react-router-dom";
 import { usePlans } from "../../modules/Plans/hook";
 
+function imageBase64(base64) {
+  const imageString = `data:image; base64,${base64.img}`;
+  return imageString;
+}
+
+function DetailModal({ modalContents, show, setShow }) {
+  const { getDailyPlanImg, deleteDailyPlan } = usePlans();
+  const [imageBuffers, setImageBuffers] = useState([]);
+  const handleClose = () => setShow(false);
+  const { title, events } = modalContents;
+  let imageList = [];
+  useEffect(
+    () => {
+      events.map((data) => {
+        imageList.push(data.thumb);
+      });
+      getDailyPlanImg(imageList).then((data) => {
+        console.log(data);
+        setImageBuffers(data);
+      });
+    },
+    [modalContents]
+  );
+  const deletePlans = () => {
+    const planID = window.location.search.split("=")[1];
+    const dailyID = modalContents.id;
+    deleteDailyPlan(planID, dailyID);
+    setShow(false);
+  };
+  return (
+    <>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {events.map((data, index) => (
+            <div key={index}>
+              <h5>{data.title}</h5>
+              <div>{data.contents}</div>
+              {imageBuffers.map((base64, idx) => {
+                if (base64.name == data.thumb) {
+                  return (
+                    <img
+                      style={{ width: 160, height: 90 }}
+                      key={idx}
+                      src={imageBase64(base64)}
+                      alt=""
+                    />
+                  );
+                }
+              })}
+            </div>
+          ))}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={deletePlans}>
+            삭제
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+
 function DailyUpload({ location }) {
+  //Modal conrol
+  const [show, setShow] = useState(false);
+  const [modalContents, setModalContents] = useState({ title: "", events: [] });
+  const [imageBuffers, setImageBuffers] = useState([]);
+  const handleShow = () => setShow(true);
+
   //plan json file
   const [planList, setPlanList] = useState([]);
 
@@ -24,11 +97,16 @@ function DailyUpload({ location }) {
   const [contents, setContents] = useState("");
   const [dailythumb, setDailyThumb] = useState("#");
   const [dailyThumbFile, setDailyThumbFile] = useState();
+  const [imageList, setImageList] = useState([]);
   const dailyThumbInput = useRef();
   //dummydata
 
   const planId = location.search.split("=")[1];
-  const { uploadDailyPlan, getUploadedPlansJson } = usePlans();
+  const {
+    uploadDailyPlan,
+    getUploadedPlansJson,
+    uploadDailyPlanImg,
+  } = usePlans();
 
   //usePlans
   const uploadDaily = useCallback(
@@ -38,6 +116,13 @@ function DailyUpload({ location }) {
         window.alert("루틴을 입력해주세요");
         return;
       }
+
+      const ImageForm = new FormData();
+      imageList.map((data) => {
+        ImageForm.append(data.name, data.img);
+      });
+      ImageForm.append("thumb", imageList);
+      uploadDailyPlanImg(ImageForm);
       nextJsonId.current += 1;
       setDaySummary({
         ...daySummary,
@@ -49,7 +134,6 @@ function DailyUpload({ location }) {
       setDayTitle("");
       setTheme("");
       setContents("");
-      console.log(planList.length);
     },
     [nextJsonId, dayTitle, daySummary, planId]
   );
@@ -58,21 +142,25 @@ function DailyUpload({ location }) {
     (e) => {
       e.preventDefault();
       nextId.current += 1;
+      const uuid = uniqueString();
+      const ext = dailyThumbFile.name.split(".")[1];
+      setImageList([...imageList, { name: uuid, img: dailyThumbFile }]);
       setDaySummary({
         title: dayTitle,
-
+        id: nextJsonId.current,
         events: [
           ...daySummary.events,
           {
             id: nextId.current,
             title: theme,
             contents: contents,
-            thumb: dailyThumbFile,
+            thumb: uuid + "." + ext,
           },
         ],
       });
       dailyThumbInput.current.value = null;
       setDailyThumb("#");
+      console.log("image list is ", imageList);
       console.log("daysummary is ", daySummary);
     },
     [planList, dayTitle, nextId, theme, contents, dailyThumbFile]
@@ -102,38 +190,64 @@ function DailyUpload({ location }) {
     }
   };
 
-  useEffect(() => {
-    getUploadedPlansJson(planId).then((data) => {
-      if (!data) {
-        nextJsonId.current = 0;
-      } else {
-        nextJsonId.current = data.length;
-        setPlanList(data);
-      }
-      setDaySummary({
-        ...daySummary,
-        id: nextJsonId.current,
-        title: dayTitle,
+  useEffect(
+    () => {
+      getUploadedPlansJson(planId).then((data) => {
+        if (!data) {
+          nextJsonId.current = 0;
+        } else {
+          nextJsonId.current = data.length;
+          setPlanList(data);
+        }
+        setDaySummary({
+          ...daySummary,
+          id: nextJsonId.current,
+          title: dayTitle,
+        });
       });
-    });
-  }, []);
+    },
+    [nextJsonId]
+  );
 
   return (
     <Row>
+      <DetailModal
+        show={show}
+        setShow={setShow}
+        modalContents={modalContents}
+      />
       <Col lg="6">
+        <Link
+          to="/uploads"
+          style={{
+            display: "inline-block",
+            color: "blue",
+            textDecoration: "none",
+            fontSize: "20px",
+            fontWeight: "bold",
+          }}
+        >
+          뒤로가기
+        </Link>
         <h3>플랜 개요</h3>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {planList.map((day, index) => (
             <div
               key={index}
+              onClick={() => {
+                handleShow();
+                setModalContents(day);
+                console.log(day);
+              }}
               style={{
                 width: 100,
                 height: 100,
                 margin: 10,
                 background: "red",
+                cursor: "pointer",
               }}
             >
-              <p>제목 {day.title}</p>
+              <p>{day.title}</p>
             </div>
           ))}
         </div>
