@@ -3,13 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import getStockData from "../../dummy/stock";
 import { getStocks } from "../../dummy/stocks";
 import BASE_URL from "../host";
-import { GET_PLANS, MAKE_FILTERS, REMOVE_PLANS } from "./Plans";
+import { GET_PLANS, GET_UPLOADS, MAKE_FILTERS, REMOVE_PLANS } from "./Plans";
 
 //axios
 
 export const usePlans = () => {
   const dispatch = useDispatch();
-  const { plans, filters, currentPlans } = useSelector((state) => state.plan);
+  const { plans, filters, currentPlans, uploads } = useSelector(
+    (state) => state.plan
+  );
+  const { email, nick } = useSelector((state) => state.user.user);
+
   const getPlans = async (category) => {
     try {
       const res = await axios.post(BASE_URL + "/plan/load", { category });
@@ -82,13 +86,49 @@ export const usePlans = () => {
     }
   };
 
+  const getUploadedPlans = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/plan/summary?email=${email}`);
+      console.log(res.data.plans);
+      dispatch({
+        type: GET_UPLOADS,
+        uploads: res.data.plans,
+      });
+      return res.data.plans;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUplaodedPlansByID = async (id) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/plan/summary?id=${id}`);
+      return res.data.plans;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const uploadSummaryPlans = async (plans) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/plan/summary`, plans);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     plans,
     filters,
     currentPlans,
+    uploads,
     getPlans,
     makefilters,
     removePlans,
     uploadDailyPlan,
+    getUploadedPlans,
+    getUplaodedPlansByID,
+    uploadSummaryPlans,
   };
 };

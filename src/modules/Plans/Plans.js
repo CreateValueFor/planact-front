@@ -2,6 +2,8 @@ export const GET_PLANS = "plans/GET_PLANS";
 export const REMOVE_PLANS = "plans/REMOVE_PLANS";
 export const MAKE_FILTERS = "plans/MAKE_FILTERS";
 export const DISPLAY_CURRENT_PLANS = "plans/DISPLAY_CURRENT_PLANS";
+export const GET_UPLOADS = "plans/GET_UPLOADS";
+
 const initialState = {
   plans: {
     events: [
@@ -16,6 +18,7 @@ const initialState = {
   },
   currentPlans: [],
   filters: [],
+  uploads: [],
 };
 
 export default function planReducer(state = initialState, action) {
@@ -42,6 +45,11 @@ export default function planReducer(state = initialState, action) {
       return {
         ...state,
         currentPlans: action.plans,
+      };
+    case GET_UPLOADS:
+      return {
+        ...state,
+        uploads: action.uploads,
       };
     default:
       return state;
