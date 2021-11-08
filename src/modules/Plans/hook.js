@@ -73,9 +73,12 @@ export const usePlans = () => {
     });
   };
 
-  const uploadDailyPlan = async (dailyplan) => {
+  const uploadDailyPlan = async (dailyplan, planId) => {
     try {
-      const res = await axios.post(BASE_URL + "/plan/uploads", { dailyplan });
+      const res = await axios.post(BASE_URL + "/plan/daily", {
+        dailyplan,
+        planId,
+      });
       console.log(res);
       // dispatch({
       //   type: GET_PLANS,
@@ -118,6 +121,16 @@ export const usePlans = () => {
     }
   };
 
+  const getUploadedPlansJson = async (id) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/plan/daily?id=${id}`);
+
+      return res.data.plans;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     plans,
     filters,
@@ -130,5 +143,6 @@ export const usePlans = () => {
     getUploadedPlans,
     getUplaodedPlansByID,
     uploadSummaryPlans,
+    getUploadedPlansJson,
   };
 };
