@@ -1,26 +1,31 @@
 @font-face {
   font-family: "Caros Soft";
-  src:url("assets/fonts/CarosSoft.eot");
   src: 
-  url("assets/fonts/CarosSoft.woff") format('woff'),
-  url("assets/fonts/CarosSoft.woff2") format('woff2'),
-  url("assets/fonts/CarosSoft.ttf") format('truetype'),
-  url("assets/fonts/CarosSoft.otf") format('truetype'),
+  url("./assets/fonts/CarosSoft.otf") format('truetype'),
+  url("./assets/fonts/CarosSoft.ttf") format('truetype'),
+  url("./assets/fonts/CarosSoft.woff") format('woff'),
+  url("./assets/fonts/CarosSoft.woff2") format('woff2'),
+  url("./assets/fonts/CarosSoft.eot");
+  
 }
 @font-face {
   font-family: "Noto Sans KR";
-  src: url("assets/fonts/NotoSansKR-Medium.woff") format('woff'),
-  url("assets/fonts/NotoSansKR-Medium.woff2") format('woff2'),
-  url("assets/fonts/NotoSansKR-Medium.otf") format('truetype'),
+  src: url("./assets/fonts/NotoSansKR-Medium.otf") format('truetype'),
+  url("./assets/fonts/NotoSansKR-Medium.woff2") format('woff2'),
+  url("./assets/fonts/NotoSansKR-Medium.woff") format('woff');
 }
 @font-face{
   font-family: "Montserrat";
-  src: url("assets/fonts/Montserrat-Medium.eot");
-  src : url("assets/fonts/Montserrat-Medium.woff") format('woff'),
-  url("assets/fonts/Montserrat-Medium.woff2") format('woff2'),
-  url("assets/fonts/Montserrat-Medium.ttf") format('truetype'),
-
+  src : 
+  url("./assets/fonts/Montserrat-Medium.ttf") format('truetype'),
+  url("./assets/fonts/Montserrat-Medium.woff") format('woff'),
+  url("./assets/fonts/Montserrat-Medium.woff2") format('woff2'),
+  url("./assets/fonts/Montserrat-Medium.eot");
+  
 }
 .card{
   border: none;
+}
+*{
+  font-family: 'Noto Sans KR';
 }
