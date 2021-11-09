@@ -143,8 +143,11 @@ function DailyUpload({ location }) {
       e.preventDefault();
       nextId.current += 1;
       const uuid = uniqueString();
-      const ext = dailyThumbFile.name.split(".")[1];
-      setImageList([...imageList, { name: uuid, img: dailyThumbFile }]);
+      let ext;
+      if (dailyThumbFile) {
+        ext = dailyThumbFile.name.split(".")[1];
+        setImageList([...imageList, { name: uuid, img: dailyThumbFile }]);
+      }
       setDaySummary({
         title: dayTitle,
         id: nextJsonId.current,
@@ -190,24 +193,25 @@ function DailyUpload({ location }) {
     }
   };
 
-  useEffect(
-    () => {
-      getUploadedPlansJson(planId).then((data) => {
-        if (!data) {
-          nextJsonId.current = 0;
-        } else {
-          nextJsonId.current = data.length;
-          setPlanList(data);
-        }
-        setDaySummary({
-          ...daySummary,
-          id: nextJsonId.current,
-          title: dayTitle,
-        });
+  const updateUploadedJson = () => {
+    getUploadedPlansJson(planId).then((data) => {
+      if (!data) {
+        nextJsonId.current = 0;
+      } else {
+        nextJsonId.current = data.length;
+        setPlanList(data);
+      }
+      setDaySummary({
+        ...daySummary,
+        id: nextJsonId.current,
+        title: dayTitle,
       });
-    },
-    [nextJsonId]
-  );
+    });
+  };
+
+  useEffect(() => {
+    updateUploadedJson();
+  }, []);
 
   return (
     <Row>
