@@ -19,7 +19,7 @@ function imageBase64(base64) {
 }
 
 function DetailModal({ modalContents, show, setShow }) {
-  const { getDailyPlanImg, deleteDailyPlan } = usePlans();
+  const { getDailyPlanImg, deleteDailyPlan, updateDailyPlan } = usePlans();
   const [imageBuffers, setImageBuffers] = useState([]);
   const handleClose = () => setShow(false);
   const { title, events } = modalContents;
@@ -42,6 +42,17 @@ function DetailModal({ modalContents, show, setShow }) {
     deleteDailyPlan(planID, dailyID);
     setShow(false);
   };
+
+  const handleInputs = (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      default:
+        return;
+    }
+  };
+
+  const updateDailyJson = () => {};
+
   return (
     <>
       <Modal show={show} onHide={handleClose}>
@@ -49,24 +60,64 @@ function DetailModal({ modalContents, show, setShow }) {
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {events.map((data, index) => (
-            <div key={index}>
-              <h5>{data.title}</h5>
-              <div>{data.contents}</div>
-              {imageBuffers.map((base64, idx) => {
-                if (base64.name == data.thumb) {
-                  return (
-                    <img
-                      style={{ width: 160, height: 90 }}
-                      key={idx}
-                      src={imageBase64(base64)}
-                      alt=""
-                    />
-                  );
-                }
-              })}
-            </div>
-          ))}
+          <Form onSubmit={updateDailyJson}>
+            {events.map((data, index) => (
+              <div key={index}>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <div>{data.id}</div>
+                  <Form.Label>소주제</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="제목"
+                    name={`title-${data.id}`}
+                    value={data.title}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>내용</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    placeholder="내용"
+                    name={`contents-${data.id}`}
+                    value={data.contents}
+                  />
+                </Form.Group>
+                <div className="d-flex">
+                  {imageBuffers.map((base64, idx) => {
+                    if (base64.name == data.thumb) {
+                      return (
+                        <img
+                          style={{ width: 160, height: 90, marginRight: 16 }}
+                          key={idx}
+                          src={imageBase64(base64)}
+                          alt=""
+                        />
+                      );
+                    } else {
+                      return (
+                        <div
+                          className="d-flex align-items-center justify-content-center"
+                          style={{
+                            width: 160,
+                            height: 90,
+                            background: "#e2e2e2",
+                            marginRight: 16,
+                          }}
+                        >
+                          미리보기
+                        </div>
+                      );
+                    }
+                  })}
+                  <Form.Group controlId="formFile" className="mb-3">
+                    <Form.Label>사진</Form.Label>
+                    <Form.Control type="file" />
+                  </Form.Group>
+                </div>
+              </div>
+            ))}
+            <Button type="submit">수정하기</Button>
+          </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={deletePlans}>
@@ -157,7 +208,7 @@ function DailyUpload({ location }) {
             id: nextId.current,
             title: theme,
             contents: contents,
-            thumb: uuid + "." + ext,
+            thumb: ext ? uuid + "." + ext : "",
           },
         ],
       });

@@ -89,6 +89,18 @@ export const usePlans = () => {
     }
   };
 
+  const updateDailyPlan = async (dailyplan, planId) => {
+    try {
+      const res = await axios.patch(BASE_URL + "/plan/daily", {
+        dailyplan,
+        planId,
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const uploadDailyPlanImg = async (imageForm) => {
     try {
       const res = await axios.post(BASE_URL + "/plan/daily/img", imageForm);
@@ -180,6 +192,7 @@ export const usePlans = () => {
     uploadDailyPlan,
     deleteDailyPlan,
     getUploadedPlans,
+    updateDailyPlan,
     getUplaodedPlansByID,
     uploadSummaryPlans,
     getUploadedPlansJson,
