@@ -6,159 +6,34 @@ import {
   FormControl,
   Image,
   InputGroup,
-  Modal,
   Row,
 } from "react-bootstrap";
-import uniqueString from "unique-string";
 import { Link } from "react-router-dom";
 import { usePlans } from "../../modules/Plans/hook";
 
-function imageBase64(base64) {
-  const imageString = `data:image; base64,${base64.img}`;
-  return imageString;
-}
-
-function DetailModal({ modalContents, show, setShow }) {
-  const { getDailyPlanImg, deleteDailyPlan, updateDailyPlan } = usePlans();
-  const [imageBuffers, setImageBuffers] = useState([]);
-  const handleClose = () => setShow(false);
-  const { title, events } = modalContents;
-  let imageList = [];
-  useEffect(
-    () => {
-      events.map((data) => {
-        imageList.push(data.thumb);
-      });
-      getDailyPlanImg(imageList).then((data) => {
-        console.log(data);
-        setImageBuffers(data);
-      });
-    },
-    [modalContents]
-  );
-  const deletePlans = () => {
-    const planID = window.location.search.split("=")[1];
-    const dailyID = modalContents.id;
-    deleteDailyPlan(planID, dailyID);
-    setShow(false);
-  };
-
-  const handleInputs = (e) => {
-    const { name, value } = e.target;
-    switch (name) {
-      default:
-        return;
-    }
-  };
-
-  const updateDailyJson = () => {};
-
-  return (
-    <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={updateDailyJson}>
-            {events.map((data, index) => (
-              <div key={index}>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <div>{data.id}</div>
-                  <Form.Label>소주제</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="제목"
-                    name={`title-${data.id}`}
-                    value={data.title}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>내용</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    placeholder="내용"
-                    name={`contents-${data.id}`}
-                    value={data.contents}
-                  />
-                </Form.Group>
-                <div className="d-flex">
-                  {imageBuffers.map((base64, idx) => {
-                    if (base64.name == data.thumb) {
-                      return (
-                        <img
-                          style={{ width: 160, height: 90, marginRight: 16 }}
-                          key={idx}
-                          src={imageBase64(base64)}
-                          alt=""
-                        />
-                      );
-                    } else {
-                      return (
-                        <div
-                          className="d-flex align-items-center justify-content-center"
-                          style={{
-                            width: 160,
-                            height: 90,
-                            background: "#e2e2e2",
-                            marginRight: 16,
-                          }}
-                        >
-                          미리보기
-                        </div>
-                      );
-                    }
-                  })}
-                  <Form.Group controlId="formFile" className="mb-3">
-                    <Form.Label>사진</Form.Label>
-                    <Form.Control type="file" />
-                  </Form.Group>
-                </div>
-              </div>
-            ))}
-            <Button type="submit">수정하기</Button>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={deletePlans}>
-            삭제
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
-}
-
-function DailyUpload({ location }) {
-  //Modal conrol
-  const [show, setShow] = useState(false);
-  const [modalContents, setModalContents] = useState({ title: "", events: [] });
-  const [imageBuffers, setImageBuffers] = useState([]);
-  const handleShow = () => setShow(true);
-
+function DailyUpload({ location, history }) {
   //plan json file
   const [planList, setPlanList] = useState([]);
+  const [selectedPlan, setSelectedPlan] = useState(-1);
 
   //plan daily inputs
+  const [editMode, setEditMode] = useState(0);
   const [dayTitle, setDayTitle] = useState("");
   let nextId = useRef(0);
   let nextJsonId = useRef(0);
   const [daySummary, setDaySummary] = useState({ title: "", events: [] });
   const [theme, setTheme] = useState("");
   const [contents, setContents] = useState("");
-  const [dailythumb, setDailyThumb] = useState("#");
-  const [dailyThumbFile, setDailyThumbFile] = useState();
-  const [imageList, setImageList] = useState([]);
+  const [dailythumb, setDailyThumb] = useState("");
+  const [confirmUpload, setConfirmUpload] = useState(0);
+
   const dailyThumbInput = useRef();
-  //dummydata
 
   const planId = location.search.split("=")[1];
-  const {
-    uploadDailyPlan,
-    getUploadedPlansJson,
-    uploadDailyPlanImg,
-  } = usePlans();
+  const { uploadDailyPlan, getUploadedPlansJson, updateDailyPlan } = usePlans();
 
+  //데일리 플랜 클릭 시 수정 창 보여줌
+  const clickDailyPlan = () => {};
   //usePlans
   const uploadDaily = useCallback(
     (e) => {
@@ -168,56 +43,52 @@ function DailyUpload({ location }) {
         return;
       }
 
-      const ImageForm = new FormData();
-      imageList.map((data) => {
-        ImageForm.append(data.name, data.img);
-      });
-      ImageForm.append("thumb", imageList);
-      uploadDailyPlanImg(ImageForm);
       nextJsonId.current += 1;
       setDaySummary({
         ...daySummary,
-        id: nextJsonId.current,
         title: dayTitle,
+        id: nextJsonId.current,
       });
-      uploadDailyPlan(daySummary, planId);
-      getUploadedPlansJson(planId).then((data) => setPlanList(data));
-      setDayTitle("");
-      setTheme("");
-      setContents("");
+      setConfirmUpload((prev) => ++prev);
     },
-    [nextJsonId, dayTitle, daySummary, planId]
+    [nextJsonId, daySummary, planId]
+  );
+
+  useEffect(
+    () => {
+      if (daySummary.id && confirmUpload !== 0) {
+        uploadDailyPlan(daySummary, planId).then(() => {
+          updateUploadedJson();
+        });
+        setDayTitle("");
+        setTheme("");
+        setContents("");
+        setDaySummary({ title: "", events: [] });
+      }
+    },
+    [confirmUpload]
   );
 
   const onThemeSubmit = useCallback(
     (e) => {
       e.preventDefault();
       nextId.current += 1;
-      const uuid = uniqueString();
-      let ext;
-      if (dailyThumbFile) {
-        ext = dailyThumbFile.name.split(".")[1];
-        setImageList([...imageList, { name: uuid, img: dailyThumbFile }]);
-      }
       setDaySummary({
-        title: dayTitle,
-        id: nextJsonId.current,
+        ...daySummary,
         events: [
           ...daySummary.events,
           {
             id: nextId.current,
             title: theme,
             contents: contents,
-            thumb: ext ? uuid + "." + ext : "",
+            thumb: dailythumb,
           },
         ],
       });
       dailyThumbInput.current.value = null;
-      setDailyThumb("#");
-      console.log("image list is ", imageList);
-      console.log("daysummary is ", daySummary);
+      setDailyThumb("");
     },
-    [planList, dayTitle, nextId, theme, contents, dailyThumbFile]
+    [planList, dayTitle, nextId, theme, contents]
   );
 
   const handleDayTitleInput = (e) => {
@@ -237,9 +108,17 @@ function DailyUpload({ location }) {
         break;
       case "dailythumb":
         const file = e.target.files[0];
-        setDailyThumbFile(file);
-        console.log(file);
-        setDailyThumb(URL.createObjectURL(file));
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          setDailyThumb(reader.result);
+        };
+        reader.onerror = function(error) {
+          console.log("Error", error);
+        };
+
+        dailyThumbInput.current.value = "";
+
         break;
     }
   };
@@ -252,25 +131,39 @@ function DailyUpload({ location }) {
         nextJsonId.current = data.length;
         setPlanList(data);
       }
-      setDaySummary({
-        ...daySummary,
-        id: nextJsonId.current,
-        title: dayTitle,
-      });
     });
+  };
+
+  const clickDailyTheme = (theme) => {
+    console.log(theme.id);
+    if (editMode) {
+      if (editMode != theme.id) {
+        setTheme(theme.title);
+        setContents(theme.contents);
+        setDailyThumb(theme.thumb);
+        setEditMode(theme.id);
+        return;
+      }
+      setTheme("");
+      setContents("");
+      setDailyThumb("");
+      setEditMode(false);
+    } else {
+      setTheme(theme.title);
+      setContents(theme.contents);
+      setDailyThumb(theme.thumb);
+      setEditMode(theme.id);
+    }
   };
 
   useEffect(() => {
     updateUploadedJson();
   }, []);
-
+  if (!daySummary) {
+    return <div>버그...로딩중</div>;
+  }
   return (
     <Row>
-      <DetailModal
-        show={show}
-        setShow={setShow}
-        modalContents={modalContents}
-      />
       <Col lg="6">
         <Link
           to="/uploads"
@@ -290,19 +183,37 @@ function DailyUpload({ location }) {
             <div
               key={index}
               onClick={() => {
-                handleShow();
-                setModalContents(day);
+                if (selectedPlan == day.id) {
+                  setSelectedPlan(-1);
+                  setDaySummary({ title: "", events: [] });
+                  setEditMode(0);
+                  dailyThumbInput.current.value = "";
+                  setDailyThumb("");
+                  setTheme("");
+                  setContents("");
+                } else {
+                  setSelectedPlan(day.id);
+                  setDaySummary(day);
+                  setEditMode(0);
+                  dailyThumbInput.current.value = "";
+                  setDailyThumb("");
+                  setTheme("");
+                  setContents("");
+                }
                 console.log(day);
               }}
               style={{
                 width: 100,
                 height: 100,
                 margin: 10,
-                background: "red",
+                padding: ".5rem",
+                background: day.id == selectedPlan ? "#FFB350" : "#089BAB",
+                borderRadius: 15,
                 cursor: "pointer",
               }}
             >
               <p>{day.title}</p>
+              <div>주제 갯수 : {day.events.length}</div>
             </div>
           ))}
         </div>
@@ -330,9 +241,10 @@ function DailyUpload({ location }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: "#adc3fe",
+                background: editMode == day.id ? "#FFB350" : "#adc3fe",
                 borderRadius: "15px",
               }}
+              onClick={() => clickDailyTheme(day)}
             >
               {day.title}
             </div>
@@ -341,11 +253,26 @@ function DailyUpload({ location }) {
 
         <Form onSubmit={onThemeSubmit}>
           <div className="d-flex justify-content-around">
-            <Image
-              src={dailythumb}
-              rounded
-              style={{ width: "160px", height: "90px" }}
-            />
+            {dailythumb ? (
+              <Image
+                src={dailythumb}
+                rounded
+                style={{ width: "160px", height: "90px" }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: "160px",
+                  height: "90px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "#e2e2e2",
+                }}
+              >
+                미리보기
+              </div>
+            )}
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>썸네일 업로드</Form.Label>
               <Form.Control
@@ -362,6 +289,7 @@ function DailyUpload({ location }) {
               onChange={handleDailyInput}
               type="text"
               name="theme"
+              value={theme}
               placeholder="주제를 입력해주세요(시간 or 부위)"
             />
           </Form.Group>
@@ -373,16 +301,110 @@ function DailyUpload({ location }) {
               onChange={handleDailyInput}
               name="contents"
               rows={8}
+              value={contents}
               placeholder="내용을 입력해주세요"
             />
           </Form.Group>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button variant="primary" type="submit" style={{ marginRight: 30 }}>
-              소주제 추가
-            </Button>
-            <Button variant="primary" type="button" onClick={uploadDaily}>
-              날짜 업로드
-            </Button>
+            {editMode || selectedPlan >= 0 ? (
+              <Button
+                variant="primary"
+                type="button"
+                style={{ marginRight: 30 }}
+                onClick={() => {
+                  if (selectedPlan >= 0) {
+                    if (editMode) {
+                      //daySummary 수정
+                      setDaySummary((prev) => {});
+                      // daySummary에서 수정하려 하는 이벤트 삭제
+                      const events = daySummary.events.filter(
+                        (theme) => editMode !== theme.id
+                      );
+                      const newEvent = {
+                        id: editMode,
+                        title: theme,
+                        contents,
+                        thumb: dailythumb,
+                      };
+                      events.push(newEvent);
+                      const newDaySummary = {
+                        ...daySummary,
+                        events,
+                      };
+
+                      // planList 수정
+                      console.log(
+                        selectedPlan,
+                        planList.filter((plans) => plans.id !== selectedPlan)
+                      );
+
+                      console.log("daySUmmary", daySummary);
+                      setPlanList((prev) => {
+                        const planList = prev.filter(
+                          (plans) => plans.id !== selectedPlan
+                        );
+                        // const newPlan = daySummary;
+                        planList.push(newDaySummary);
+                        console.log(planList);
+
+                        updateDailyPlan(planList, planId);
+                        return planList;
+                      });
+
+                      console.log(
+                        "플랜 날짜에 루틴을 수정하여 업데이트합니다."
+                      );
+                      console.log(planList);
+                    } else {
+                      //수정할 플랜만비워두기
+                      setPlanList((prev) => {
+                        let planList = prev.filter(
+                          (plans) => plans.id !== selectedPlan
+                        );
+                        nextId.current = daySummary.events.length + 1;
+                        //daySummary 이벤트에 추가
+                        const newPlan = {
+                          id: nextId.current,
+                          title: theme,
+                          contents,
+                          thumb: dailythumb,
+                        };
+                        const events = daySummary.events.push(newPlan);
+                        const nextDaySummary = {
+                          ...daySummary,
+                          events,
+                        };
+                        console.log(daySummary);
+                        planList.push(daySummary);
+                        console.log(planList);
+                        updateDailyPlan(planList, planId);
+                        return planList;
+                      });
+                      console.log(
+                        "플랜 날짜에 루틴을 추가하여 업데이트합니다."
+                      );
+                    }
+                  }
+
+                  console.log(daySummary);
+                }}
+              >
+                수정하기
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  style={{ marginRight: 30 }}
+                >
+                  소주제 추가
+                </Button>
+                <Button variant="primary" type="button" onClick={uploadDaily}>
+                  날짜 업로드
+                </Button>
+              </>
+            )}
           </div>
         </Form>
       </Col>
