@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Image, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import sample from "../../assets/img/sample.jpg";
 import { usePlans } from "../../modules/Plans/hook";
-import queryString from "querystring";
 import useAuth from "../../modules/User/hook";
+import imageBase64 from "../../modules/customHooks/BufferToBase64";
+import { Link } from "react-router-dom";
 
 function SummaryUpload({ location, history }) {
   //plan summary inputs
@@ -13,18 +13,43 @@ function SummaryUpload({ location, history }) {
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
   const [thumb, setThumb] = useState();
-  const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
+  const [thumbPreview, setThumbPreview] = useState("");
+  const imgRef = useRef();
+  const resetInputField = () => {
+    setTitle("");
+    setSns("");
+    setAuthor("");
+    setCategory("");
+    setThumb();
+    setThumbPreview("");
+    imgRef.current.value = "";
+  };
+
   const {
     getUplaodedPlansByID,
     uploadSummaryPlans,
     getUploadedPlans,
+    updateSummaryPlans,
   } = usePlans();
   const { email } = useAuth();
 
   const openDetailPlan = () => {
     const id = location.search.split("=")[1];
     history.push(`/uploads/daily?id=${id}`);
+  };
+
+  const updateSummaryPlan = () => {
+    const summaryPlans = new FormData();
+    const id = location.search.split("=")[1];
+    summaryPlans.append("title", title);
+    summaryPlans.append("sns", sns);
+    summaryPlans.append("author", author);
+    summaryPlans.append("category", category);
+    summaryPlans.append("thumb", thumb);
+    summaryPlans.append("email", email);
+    updateSummaryPlans(summaryPlans, id).then(() => {
+      getUploadedPlans();
+    });
   };
 
   const onSummarySubmit = (e) => {
@@ -36,9 +61,12 @@ function SummaryUpload({ location, history }) {
     summaryPlans.append("category", category);
     summaryPlans.append("thumb", thumb);
     summaryPlans.append("email", email);
+
     uploadSummaryPlans(summaryPlans).then(() => {
       getUploadedPlans();
     });
+    e.target.reset();
+    resetInputField();
   };
 
   const handleInput = (e) => {
@@ -58,11 +86,10 @@ function SummaryUpload({ location, history }) {
         setCategory(value);
         break;
       case "thumb":
-        setThumb(e.target.files[0]);
+        const file = e.target.files[0];
+        setThumb(file);
+        setThumbPreview(URL.createObjectURL(file));
         break;
-    }
-    if (name === "thumb") {
-      console.log(e.target.files[0]);
     }
   };
 
@@ -72,11 +99,19 @@ function SummaryUpload({ location, history }) {
         const id = location.search.split("=")[1];
         getUplaodedPlansByID(id).then((res) => {
           console.log(res);
-          const { title, author, category, sns } = res;
+          const { title, author, category, sns } = res.plans;
+
+          if (res.img) {
+            setThumbPreview(imageBase64(res));
+          } else {
+            setThumbPreview("");
+          }
           setTitle(title);
           setSns(sns);
           setAuthor(author);
           setCategory(category);
+          imgRef.current.value = "";
+          setThumb();
         });
       }
     },
@@ -87,14 +122,20 @@ function SummaryUpload({ location, history }) {
     <Row className="mt-3">
       <Col lg="6">
         <h3>썸네일 업로드</h3>
+        <div />
         <Image
-          src={sample}
+          src={thumbPreview || sample}
           rounded
           style={{ width: "160px", height: "90px" }}
         />
         <Form.Group controlId="formFile" className="mb-3">
           <Form.Label>썸네일 업로드</Form.Label>
-          <Form.Control type="file" name="thumb" onChange={handleInput} />
+          <Form.Control
+            ref={imgRef}
+            type="file"
+            name="thumb"
+            onChange={handleInput}
+          />
         </Form.Group>
       </Col>
       <Col lg="6">
@@ -140,12 +181,26 @@ function SummaryUpload({ location, history }) {
             <option value="health">운동 루틴</option>
             <option value="diet">식단</option>
           </Form.Select>
-          <Button variant="primary" type="submit">
-            플랜 등록
-          </Button>
-          {location.search && (
-            <Button variant="primary" type="button" onClick={openDetailPlan}>
-              세부 추가
+
+          {location.search ? (
+            <>
+              <Button variant="primary" type="button" onClick={openDetailPlan}>
+                세부 추가
+              </Button>
+              <Button
+                variant="primary"
+                type="button"
+                onClick={updateSummaryPlan}
+              >
+                수정하기
+              </Button>
+              <Link to="/uploads" onClick={resetInputField}>
+                플랜 새로 등록하러 가기
+              </Link>
+            </>
+          ) : (
+            <Button variant="primary" type="submit">
+              플랜 등록
             </Button>
           )}
         </Form>

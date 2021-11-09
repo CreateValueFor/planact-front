@@ -154,7 +154,7 @@ export const usePlans = () => {
   const getUplaodedPlansByID = async (id) => {
     try {
       const res = await axios.get(`${BASE_URL}/plan/summary?id=${id}`);
-      return res.data.plans;
+      return res.data;
     } catch (error) {
       console.log(error);
     }
@@ -166,6 +166,15 @@ export const usePlans = () => {
       console.log(res);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const updateSummaryPlans = async (plans, id) => {
+    try {
+      const res = await axios.patch(`${BASE_URL}/plan/summary?id=${id}`, plans);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -191,6 +200,7 @@ export const usePlans = () => {
     uploadDailyPlanImg,
     uploadDailyPlan,
     deleteDailyPlan,
+    updateSummaryPlans,
     getUploadedPlans,
     updateDailyPlan,
     getUplaodedPlansByID,
