@@ -19,6 +19,8 @@ const initialState = {
   currentPlans: [],
   filters: [],
   uploads: [],
+  count: 0,
+  page: 1,
 };
 
 export default function planReducer(state = initialState, action) {
@@ -50,6 +52,7 @@ export default function planReducer(state = initialState, action) {
       return {
         ...state,
         uploads: action.uploads,
+        count: action.count,
       };
     default:
       return state;

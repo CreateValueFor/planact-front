@@ -8,9 +8,12 @@ import Pagination from "./Pagination";
 function List() {
   return (
     <Row className="w-100">
-      <Col lg="12">
+      <Col
+        lg="12"
+        style={{ display: "flex", flexDirection: "column", paddingRight: 0 }}
+      >
         <Search />
-        <Filter />
+
         <PlanList />
         <Pagination />
       </Col>

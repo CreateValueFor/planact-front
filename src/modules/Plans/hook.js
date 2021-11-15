@@ -9,7 +9,7 @@ import { GET_PLANS, GET_UPLOADS, MAKE_FILTERS, REMOVE_PLANS } from "./Plans";
 
 export const usePlans = () => {
   const dispatch = useDispatch();
-  const { plans, filters, currentPlans, uploads } = useSelector(
+  const { plans, filters, currentPlans, uploads, count, page } = useSelector(
     (state) => state.plan
   );
   const { email, nick } = useSelector((state) => state.user.user);
@@ -188,20 +188,65 @@ export const usePlans = () => {
     }
   };
 
+  // * 사용자한테 플랜을 보여줄 때 쓸 api
+  const getAllPlanBySort = async (standard) => {
+    try {
+      if (standard) {
+        const res = await axios.post(
+          `${BASE_URL}/plan/summary?email=${email}`,
+          {
+            standard,
+          }
+        );
+
+        console.log(res.data);
+        return res.data;
+      }
+      const res = await axios.get(`${BASE_URL}/plan/summary?email=all`);
+      console.log(res.data.plans);
+      dispatch({
+        type: GET_UPLOADS,
+        uploads: res.data.plans,
+        count: res.data.count,
+      });
+      return res.data.plans;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const searchPlanByKeyword = async (keyword) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/plan/summary?search=${keyword}`);
+      console.log(res.data);
+      dispatch({
+        type: GET_UPLOADS,
+        uploads: res.data.plans,
+        count: res.data.count,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     plans,
     filters,
     currentPlans,
     uploads,
+    count,
+    page,
     getPlans,
     makefilters,
     getDailyPlanImg,
     removePlans,
     uploadDailyPlanImg,
     uploadDailyPlan,
+    getAllPlanBySort,
     deleteDailyPlan,
     updateSummaryPlans,
     getUploadedPlans,
+    searchPlanByKeyword,
     updateDailyPlan,
     getUplaodedPlansByID,
     uploadSummaryPlans,

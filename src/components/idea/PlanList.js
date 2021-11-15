@@ -1,44 +1,16 @@
 import { useCallback } from "preact/hooks";
-import React, { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Dropdown, Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-
-const dummyList = [
-  {
-    image: "...",
-    title: "Hello",
-    location: "Seoul",
-    date: "2021-03-21",
-  },
-  {
-    image: "...",
-    title: "Hello",
-    location: "Seoul",
-    date: "2021-03-21",
-  },
-  {
-    image: "...",
-    title: "Hello",
-    location: "Seoul",
-    date: "2021-03-21",
-  },
-  {
-    image: "...",
-    title: "Hello",
-    location: "Seoul",
-    date: "2021-03-21",
-  },
-  {
-    image: "...",
-    title: "Hello",
-    location: "Seoul",
-    date: "2021-03-21",
-  },
-];
+import BASE_URL from "../../modules/host";
+import { usePlans } from "../../modules/Plans/hook";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 const StyledItem = styled.div`
   height: 90px;
-
+  text-decoration: none;
   background: #eff7f9;
   border-radius: 20px;
   display: flex;
@@ -53,10 +25,10 @@ const StyledItem = styled.div`
   .item-image {
     width: 78px;
     height: 55px;
-    left: 219px;
-    top: 348px;
+    /* left: 219px;
+    top: 348px; */
     margin-left: 2%;
-    background: #c4c4c4;
+    /* background: #c4c4c4; */
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -143,6 +115,35 @@ const StyledItem = styled.div`
   }
 `;
 
+const StyledFilter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+
+  div:last-child {
+    button {
+      background: transparent;
+      border: none;
+      color: #363946;
+      outline: none;
+    }
+    button:first-child {
+      margin-right: 1rem;
+    }
+  }
+`;
+
+const categoryFormatter = (category) => {
+  switch (category) {
+    case "health":
+      return "운동";
+    case "diet":
+      return "식단";
+    default:
+      return "일반";
+  }
+};
+
 function PlanItem({ index, contents }) {
   const [select, setSelect] = useState(true);
   const [open, setOpen] = useState(false);
@@ -153,21 +154,35 @@ function PlanItem({ index, contents }) {
   const toggleDetail = () => {
     setOpen((prev) => !prev);
   };
+  const imagePath = BASE_URL + "/uploads/" + contents.imgID;
+
   return (
     <>
-      <StyledItem key={index} className="mb-3" onClick={toggleDetail}>
-        <div className="item-image"> image</div>
+      <StyledItem
+        to="/idea/list"
+        key={index}
+        className="mb-3"
+        onClick={toggleDetail}
+      >
+        <div className="item-image">
+          {" "}
+          <img src={imagePath} style={{ width: "100%", height: "100%" }} />
+        </div>
         <div className="item-summary">
           <div className="item-title mb-1">{contents.title}</div>
-          <div className="item-sub-title">{contents.location}</div>
+          <div className="item-sub-title">
+            {categoryFormatter(contents.category)} |{" "}
+            {contents.sns === "instagram" && "@"}
+            {contents.author}
+          </div>
         </div>
         <div
           onClick={togglePlan}
           className={select ? "item-btn add" : "item-btn delete"}
         />
-        <div className="item-date">{contents.date}</div>
+        <div className="item-date">등록수 {contents.downloads}</div>
       </StyledItem>
-      <Modal show={open} onHide={toggleDetail} centered>
+      {/* <Modal show={open} onHide={toggleDetail} centered>
         <Modal.Header closeButton>
           <Modal.Title>{contents.title}</Modal.Title>
         </Modal.Header>
@@ -178,16 +193,46 @@ function PlanItem({ index, contents }) {
           <Button variant="secondary">Close</Button>
           <Button variant="primary">Save changes</Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </>
   );
 }
 
 function PlanList() {
+  const { getAllPlanBySort, uploads, count } = usePlans();
+
+  useEffect(() => {
+    getAllPlanBySort();
+  }, []);
   return (
-    <div>
-      {dummyList.map((dummy, idx) => (
-        <PlanItem index={idx} contents={dummy} />
+    <div style={{ flex: 1 }}>
+      <StyledFilter>
+        <div>전체 {count}개의 플랜</div>
+        <div style={{ display: "flex" }}>
+          <Dropdown>
+            <Dropdown.Toggle variant="white" id="category">
+              전체
+            </Dropdown.Toggle>
+            <Dropdown.Menu style={{ width: "100%" }}>
+              <Dropdown.Item href="#/action-1">전체</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">운동</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">식단</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <Dropdown>
+            <Dropdown.Toggle variant="white" id="order-standard">
+              최신순
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">최신순</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">인기순</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">추천순</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      </StyledFilter>
+      {uploads.map((plan, idx) => (
+        <PlanItem key={idx} index={idx} contents={plan} />
       ))}
     </div>
   );

@@ -11,6 +11,7 @@ import "./Idea.scss";
 
 const StyledMainTemplate = styled.div`
   padding-left: 3rem;
+  padding-right: 2rem;
   display: flex;
   flex: 1;
   height: 100%;
@@ -35,7 +36,15 @@ function Idea({ location }) {
           <LeftTabBar location={location} />
         </Col>
         <Route path="/idea/inquiry" component={InquiryMenu} />
-        <Col lg="10" style={{ display: "flex", flex: 1 }}>
+        <Col
+          lg="10"
+          style={{
+            display: "flex",
+            flex: 1,
+            paddingRight: 0,
+            paddingLeft: "calc(var(--bs-gutter-x) * 1)",
+          }}
+        >
           <StyledMainTemplate className="pt-5 pl-5">
             <Route path="/idea/calendar" exact component={Calendar} />
             <Route path="/idea/list" component={List} />

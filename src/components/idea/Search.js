@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { usePlans } from "../../modules/Plans/hook";
 
 const StyledSearchContainer = styled.div`
   height: 36px;
@@ -35,9 +36,11 @@ const StyledSearchContainer = styled.div`
 `;
 
 function Search() {
+  const { searchPlanByKeyword } = usePlans();
   const onKeyPress = (e) => {
     if (e.key == "Enter") {
-      console.log("asdfasdf");
+      console.log(e.target.value);
+      searchPlanByKeyword(e.target.value);
     }
   };
   return (
