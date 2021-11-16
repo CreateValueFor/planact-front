@@ -5,9 +5,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import BASE_URL from "../../modules/host";
 import { usePlans } from "../../modules/Plans/hook";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-
+import Filter from "./Filter";
 const StyledItem = styled.div`
   height: 90px;
   text-decoration: none;
@@ -115,24 +113,6 @@ const StyledItem = styled.div`
   }
 `;
 
-const StyledFilter = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-
-  div:last-child {
-    button {
-      background: transparent;
-      border: none;
-      color: #363946;
-      outline: none;
-    }
-    button:first-child {
-      margin-right: 1rem;
-    }
-  }
-`;
-
 const categoryFormatter = (category) => {
   switch (category) {
     case "health":
@@ -166,7 +146,15 @@ function PlanItem({ index, contents }) {
       >
         <div className="item-image">
           {" "}
-          <img src={imagePath} style={{ width: "100%", height: "100%" }} />
+          <img
+            src={imagePath}
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: "14px",
+              objectFit: "cover",
+            }}
+          />
         </div>
         <div className="item-summary">
           <div className="item-title mb-1">{contents.title}</div>
@@ -199,41 +187,20 @@ function PlanItem({ index, contents }) {
 }
 
 function PlanList() {
-  const { getAllPlanBySort, uploads, count } = usePlans();
+  const { getAllPlanBySort, uploads, count, pagination } = usePlans();
 
   useEffect(() => {
     getAllPlanBySort();
   }, []);
+
   return (
     <div style={{ flex: 1 }}>
-      <StyledFilter>
-        <div>전체 {count}개의 플랜</div>
-        <div style={{ display: "flex" }}>
-          <Dropdown>
-            <Dropdown.Toggle variant="white" id="category">
-              전체
-            </Dropdown.Toggle>
-            <Dropdown.Menu style={{ width: "100%" }}>
-              <Dropdown.Item href="#/action-1">전체</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">운동</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">식단</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-          <Dropdown>
-            <Dropdown.Toggle variant="white" id="order-standard">
-              최신순
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">최신순</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">인기순</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">추천순</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-      </StyledFilter>
-      {uploads.map((plan, idx) => (
-        <PlanItem key={idx} index={idx} contents={plan} />
-      ))}
+      <Filter />
+      {uploads
+        .slice((pagination - 1) * 6, (pagination - 1) * 6 + 6)
+        .map((plan, idx) => (
+          <PlanItem key={idx} index={idx} contents={plan} />
+        ))}
     </div>
   );
 }

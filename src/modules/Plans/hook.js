@@ -3,15 +3,29 @@ import { useDispatch, useSelector } from "react-redux";
 import getStockData from "../../dummy/stock";
 import { getStocks } from "../../dummy/stocks";
 import BASE_URL from "../host";
-import { GET_PLANS, GET_UPLOADS, MAKE_FILTERS, REMOVE_PLANS } from "./Plans";
+import {
+  ADD_PAGE,
+  GET_PLANS,
+  GET_UPLOADS,
+  MAKE_FILTERS,
+  REMOVE_PLANS,
+  SUBTRACT_PAGE,
+  SWITCH_PAGE,
+} from "./Plans";
 
 //axios
 
 export const usePlans = () => {
   const dispatch = useDispatch();
-  const { plans, filters, currentPlans, uploads, count, page } = useSelector(
-    (state) => state.plan
-  );
+  const {
+    plans,
+    filters,
+    currentPlans,
+    uploads,
+    count,
+    page,
+    pagination,
+  } = useSelector((state) => state.plan);
   const { email, nick } = useSelector((state) => state.user.user);
 
   const getPlans = async (category) => {
@@ -198,6 +212,12 @@ export const usePlans = () => {
             standard,
           }
         );
+        dispatch({
+          type: GET_UPLOADS,
+          uploads: res.data.plans,
+          count: res.data.count,
+          page: Math.ceil(res.data.count / 6),
+        });
 
         console.log(res.data);
         return res.data;
@@ -208,6 +228,7 @@ export const usePlans = () => {
         type: GET_UPLOADS,
         uploads: res.data.plans,
         count: res.data.count,
+        page: Math.ceil(res.data.count / 6),
       });
       return res.data.plans;
     } catch (error) {
@@ -215,28 +236,55 @@ export const usePlans = () => {
     }
   };
 
-  const searchPlanByKeyword = async (keyword) => {
+  const searchPlanByKeyword = async (keyword, ...args) => {
+    let URL = `${BASE_URL}/plan/summary?search=${keyword}`;
+    if (args.order) {
+      URL = `${BASE_URL}/plan/summary?search=${keyword}` + "&order";
+    }
     try {
       const res = await axios.get(`${BASE_URL}/plan/summary?search=${keyword}`);
-      console.log(res.data);
+
       dispatch({
         type: GET_UPLOADS,
         uploads: res.data.plans,
         count: res.data.count,
+        page: Math.ceil(res.data.count / 6),
       });
     } catch (error) {
       console.log(error);
     }
   };
 
+  const changePage = async (page) => {
+    dispatch({
+      type: SWITCH_PAGE,
+      pagination: page,
+    });
+  };
+
+  const addPage = async () => {
+    dispatch({
+      type: ADD_PAGE,
+    });
+  };
+  const subtractPage = async () => {
+    dispatch({
+      type: SUBTRACT_PAGE,
+    });
+  };
+
   return {
     plans,
     filters,
+    pagination,
     currentPlans,
     uploads,
     count,
     page,
     getPlans,
+    addPage,
+    subtractPage,
+    changePage,
     makefilters,
     getDailyPlanImg,
     removePlans,

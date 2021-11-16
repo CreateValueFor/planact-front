@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -33,26 +33,40 @@ const StyledPaginationItem = styled.div`
 `;
 
 function Pagination() {
-  const { count, page } = usePlans();
+  const {
+    count,
+    page,
+    pagination,
+    changePage,
+    subtractPage,
+    addPage,
+  } = usePlans();
   const pages = Math.round(count / 6);
-  const pagination = [...Array(pages).keys()].map((key) => key + 1);
+
+  const pageClick = useCallback((e) => {
+    console.log(e.target.innerText);
+    changePage(e.target.innerText);
+  }, []);
 
   return (
     <StyledPaginationContainer>
-      <StyledPaginationItem>
+      <StyledPaginationItem onClick={subtractPage}>
         <FontAwesomeIcon icon={faChevronLeft} />
       </StyledPaginationItem>
-      {pagination.map((pageElem, idx) => (
+      {[...Array(page)].map((pageElem, idx) => (
         <StyledPaginationItem
           key={idx}
           style={
-            pageElem === page ? { color: "#fff", background: "#089bab" } : {}
+            idx + 1 === pagination * 1
+              ? { color: "#fff", background: "#089bab" }
+              : {}
           }
+          onClick={pageClick}
         >
-          {pageElem}
+          {idx + 1}
         </StyledPaginationItem>
       ))}
-      <StyledPaginationItem>
+      <StyledPaginationItem onClick={addPage}>
         <FontAwesomeIcon icon={faChevronRight} />
       </StyledPaginationItem>
     </StyledPaginationContainer>
