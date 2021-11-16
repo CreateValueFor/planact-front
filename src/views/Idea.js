@@ -7,6 +7,7 @@ import Inquiry from "../components/idea/Inquiry";
 import InquiryTab from "../components/idea/InquiryTab";
 import LeftTabBar from "../components/idea/LeftTabBar";
 import List from "../components/idea/List";
+import PlanDetail from "../components/idea/PlanDetail";
 import "./Idea.scss";
 
 const StyledMainTemplate = styled.div`
@@ -47,7 +48,8 @@ function Idea({ location }) {
         >
           <StyledMainTemplate className="pt-5 pl-5">
             <Route path="/idea/calendar" exact component={Calendar} />
-            <Route path="/idea/list" component={List} />
+            <Route path="/idea/list" exact component={List} />
+            <Route path="/idea/list/:id" component={PlanDetail} />
             <Route path="/idea/inquiry" component={Inquiry} />
           </StyledMainTemplate>
         </Col>
