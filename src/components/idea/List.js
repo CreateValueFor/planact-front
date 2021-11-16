@@ -5,7 +5,7 @@ import Filter from "./Filter";
 import PlanList from "./PlanList";
 import Pagination from "./Pagination";
 
-function List() {
+function List({ history }) {
   return (
     <Row className="w-100">
       <Col
@@ -14,7 +14,7 @@ function List() {
       >
         <Search />
 
-        <PlanList />
+        <PlanList history={history} />
         <Pagination />
       </Col>
     </Row>

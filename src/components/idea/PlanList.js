@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Dropdown, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import useCustomHooks from "../../modules/customHooks/Index";
 import BASE_URL from "../../modules/host";
 import { usePlans } from "../../modules/Plans/hook";
 import Filter from "./Filter";
@@ -113,33 +114,38 @@ const StyledItem = styled.div`
   }
 `;
 
-const categoryFormatter = (category) => {
-  switch (category) {
-    case "health":
-      return "운동";
-    case "diet":
-      return "식단";
-    default:
-      return "일반";
-  }
-};
+// const categoryFormatter = (category) => {
+//   switch (category) {
+//     case "health":
+//       return "운동";
+//     case "diet":
+//       return "식단";
+//     default:
+//       return "일반";
+//   }
+// };
 
-function PlanItem({ index, contents }) {
+function PlanItem({ index, contents, history }) {
   const [select, setSelect] = useState(true);
   const [open, setOpen] = useState(false);
+  const { categoryFormatter } = useCustomHooks();
   const togglePlan = (e) => {
     e.stopPropagation();
     setSelect((prev) => !prev);
   };
   const toggleDetail = () => {
     setOpen((prev) => !prev);
+    history.push({
+      pathname: `/idea/list/${contents.id}`,
+      state: { contents },
+    });
   };
   const imagePath = BASE_URL + "/uploads/" + contents.imgID;
 
   return (
     <>
       <StyledItem
-        to="/idea/list"
+        to={`/idea/list?id=${contents.id}`}
         key={index}
         className="mb-3"
         onClick={toggleDetail}
@@ -186,7 +192,7 @@ function PlanItem({ index, contents }) {
   );
 }
 
-function PlanList() {
+function PlanList({ history }) {
   const { getAllPlanBySort, uploads, count, pagination } = usePlans();
 
   useEffect(() => {
@@ -194,13 +200,26 @@ function PlanList() {
   }, []);
 
   return (
-    <div style={{ flex: 1 }}>
+    <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       <Filter />
-      {uploads
-        .slice((pagination - 1) * 6, (pagination - 1) * 6 + 6)
-        .map((plan, idx) => (
-          <PlanItem key={idx} index={idx} contents={plan} />
-        ))}
+      {count === 0 ? (
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          검색 결과가 없습니다
+        </div>
+      ) : (
+        uploads
+          .slice((pagination - 1) * 6, (pagination - 1) * 6 + 6)
+          .map((plan, idx) => (
+            <PlanItem history={history} key={idx} index={idx} contents={plan} />
+          ))
+      )}
     </div>
   );
 }
