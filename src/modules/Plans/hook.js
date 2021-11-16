@@ -237,13 +237,13 @@ export const usePlans = () => {
   };
 
   const searchPlanByKeyword = async (keyword, ...args) => {
-    let URL = `${BASE_URL}/plan/summary?search=${keyword}`;
-    if (args.order) {
-      URL = `${BASE_URL}/plan/summary?search=${keyword}` + "&order";
-    }
+    console.log(keyword);
+    // let URL = `${BASE_URL}/plan/summary?search=${keyword}`;
+    // if (args.order) {
+    //   URL = `${BASE_URL}/plan/summary?search=${keyword}` + "&order";
+    // }
     try {
       const res = await axios.get(`${BASE_URL}/plan/summary?search=${keyword}`);
-
       dispatch({
         type: GET_UPLOADS,
         uploads: res.data.plans,
@@ -267,10 +267,36 @@ export const usePlans = () => {
       type: ADD_PAGE,
     });
   };
+
   const subtractPage = async () => {
     dispatch({
       type: SUBTRACT_PAGE,
     });
+  };
+
+  const downloadPlan = async (id, date) => {
+    try {
+      const res = await axios.post(BASE_URL + "/plan/download", {
+        id,
+        date,
+        email,
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const checkDownloaded = async (id) => {
+    try {
+      const res = await axios.get(
+        BASE_URL + `/plan/download?email=${email}&id=${id}`
+      );
+
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return {
@@ -283,6 +309,7 @@ export const usePlans = () => {
     page,
     getPlans,
     addPage,
+    checkDownloaded,
     subtractPage,
     changePage,
     makefilters,
@@ -290,6 +317,7 @@ export const usePlans = () => {
     removePlans,
     uploadDailyPlanImg,
     uploadDailyPlan,
+    downloadPlan,
     getAllPlanBySort,
     deleteDailyPlan,
     updateSummaryPlans,
