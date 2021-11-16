@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const StyledButton = styled(Button)`
+export const StyledButton = styled(Button)`
   /* background: #313340; */
   /* border-radius: 12px; */
   border: none;
