@@ -299,6 +299,13 @@ export const usePlans = () => {
     }
   };
 
+  const getCalendarRenderer = async () => {
+    try {
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return {
     plans,
     filters,
