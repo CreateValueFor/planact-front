@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 // import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -47,8 +47,12 @@ function renderEventContent(eventInfo) {
 }
 
 function Calendar(style) {
-  const { plans } = usePlans();
+  const { plans, getCalendarRenderer } = usePlans();
   const calendar = useRef();
+
+  useEffect(() => {
+    getCalendarRenderer();
+  }, []);
 
   return (
     <div className="mb-3" style={{ flex: 1, marginRight: "3rem" }}>
