@@ -124,6 +124,10 @@ th.fc-col-header-cell.fc-day{
       background-color: auto;
     }
 }
+.fc-toolbar{
+  display: flex;
+  justify-content: center !important;
+}
 .fc-toolbar-chunk:nth-child(2){
   div{
     min-width: 250px;
@@ -165,6 +169,11 @@ th.fc-col-header-cell.fc-day{
   border-bottom:1px solid transparent !important;
 }
 
+.fc-toolbar-chunk:nth-child(3){
+  
+  position: absolute;
+  right: 0;
+}
 @media (max-width: 797px) { 
   .fc-toolbar-chunk:nth-child(3){
     display:none;

@@ -6,6 +6,7 @@ import "./Calendar.scss";
 import koLocale from "@fullcalendar/core/locales/ko";
 import { usePlans } from "../../modules/Plans/hook";
 import { Card, Dropdown, DropdownButton } from "react-bootstrap";
+import useResponsive from "../../Responsive";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <div
@@ -26,7 +27,6 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 ));
 
 function renderEventContent(eventInfo) {
-  console.log(eventInfo);
   return (
     <>
       {/* <b>{eventInfo.timetext}</b> */}
@@ -49,15 +49,18 @@ function renderEventContent(eventInfo) {
 function Calendar(style) {
   const { plans, getCalendarRenderer } = usePlans();
   const calendar = useRef();
-
+  const { isMobile } = useResponsive();
   useEffect(() => {
     getCalendarRenderer();
   }, []);
 
   return (
-    <div className="mb-3" style={{ flex: 1, marginRight: "3rem" }}>
+    <div
+      className={!isMobile && "mb-3"}
+      style={isMobile ? { flex: 1 } : { flex: 1, marginRight: "3rem" }}
+    >
       <FullCalendar
-        height="100%"
+        height={isMobile ? "600px" : "100%"}
         plugins={[dayGridPlugin]}
         // initialView="dayGridMonth"
         ref={calendar}
