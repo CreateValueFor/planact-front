@@ -12,9 +12,37 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import ReactHtmlParser from "react-html-parser";
 import collect from "../../assets/docs/collect";
 import usage from "../../assets/docs/usage";
+import styled from "styled-components";
+import CustomText, { CustomLabelText } from "../CustomText";
+
+const StyledHtmlContainer = styled.div`
+  /* max-height: 100%; */
+  width: 100%;
+  /* flex: 1; */
+  background: #f1f6f9;
+  border-radius: 30px;
+  /* overflow-y: scroll; */
+  padding: 14px;
+  flex-grow: 1;
+  height: 350px;
+  overflow: auto;
+  /* for Firefox */
+  min-height: 0;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  * {
+    background: #f1f6f9 !important;
+  }
+  html {
+    height: 100%;
+    background: #f1f6f9;
+  }
+`;
+
 const DetailAgreement = ({ children, clickDetail, type }) => {
   return (
-    <Card style={{ width: "100%", height: "100%", position: "absolute" }}>
+    <StyledCard style={{ width: "100%", height: "100%", position: "absolute" }}>
       <Card.Body className="d-flex flex-column">
         <div
           className="d-flex justify-content-start align-items-center mb-3"
@@ -26,23 +54,17 @@ const DetailAgreement = ({ children, clickDetail, type }) => {
           <FontAwesomeIcon icon={faChevronLeft} />
           <div>플랜액트 {type}</div>
         </div>
-        <div
-          style={{
-            maxHeight: "100%",
-            width: "100%",
-            flex: 1,
-            background: "#F1F6F9",
-            borderRadius: 30,
-            overflowY: "scroll",
-            padding: "14px",
-          }}
-        >
-          {children}
-        </div>
+        <StyledHtmlContainer style={{}}>{children}</StyledHtmlContainer>
       </Card.Body>
-    </Card>
+    </StyledCard>
   );
 };
+
+const StyledCard = styled(Card)`
+  background: #ffffff;
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.25), 0px 0px 16px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+`;
 
 function RegisterModal({ setRegister, style, open }) {
   const { register } = useAuth();
@@ -53,6 +75,7 @@ function RegisterModal({ setRegister, style, open }) {
   const [nick, setNick] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [registerSuccess, setRegisterSuccess] = useState(false);
 
   const onSubmit = useCallback((e) => {
     e.preventDefault();
@@ -84,7 +107,8 @@ function RegisterModal({ setRegister, style, open }) {
     const nick = data.get("nick");
     const password = data.get("password");
     register({ email, nick, password });
-    setRegister(false);
+    // setRegister(false);
+    setRegisterSuccess(true);
   }, []);
 
   const clickDetail = useCallback((string) => {
@@ -109,11 +133,58 @@ function RegisterModal({ setRegister, style, open }) {
     return <></>;
   }
   return (
-    <Card
+    <StyledCard
       className="auth-modal"
       style={{ ...{ position: "relative" }, ...style }}
       onClick={stopPropagation}
     >
+      {registerSuccess && (
+        <StyledCard
+          style={{ width: "100%", height: "100%", position: "absolute" }}
+        >
+          <Card.Body className="d-flex flex-column">
+            <div
+              className="d-flex justify-content-between"
+              style={{ marginBottom: 22, marginTop: 4 }}
+            >
+              <img src={Logo} style={{ margin: "0 auto" }} />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                flex: 1,
+              }}
+            >
+              <CustomLabelText
+                fontSize={20}
+                text="환영합니다."
+                style={{
+                  color: "#000000",
+                  textAlign: "center",
+                  marginBottom: "50px",
+                  marginTop: "50px",
+                }}
+              />
+              <p style={{ textAlign: "center" }}>
+                {nick}님, 회원가입을 축하합니다. <br />
+                이제 플랜액트에서 나의 일정을 저장하고
+                <br />
+                다운로드할 수 있습니다.
+              </p>
+            </div>
+            <CustomButton
+              text="시작하기"
+              type="button"
+              onClick={() => {
+                setRegister(false);
+              }}
+              style={{ marginBottom: 28 }}
+            />
+          </Card.Body>
+        </StyledCard>
+      )}
       {openUsage && (
         <DetailAgreement
           text={"asdfadf"}
@@ -199,7 +270,7 @@ function RegisterModal({ setRegister, style, open }) {
           />
         </Form>
       </Card.Body>
-    </Card>
+    </StyledCard>
   );
 }
 

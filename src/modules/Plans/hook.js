@@ -1,21 +1,28 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import getStockData from "../../dummy/stock";
-import { getStocks } from "../../dummy/stocks";
+import useCustomHooks from "../customHooks/Index";
 import BASE_URL from "../host";
 import {
   ADD_PAGE,
   GET_PLANS,
+  GET_RENDERS,
   GET_UPLOADS,
   MAKE_FILTERS,
   REMOVE_PLANS,
   SUBTRACT_PAGE,
   SWITCH_PAGE,
 } from "./Plans";
+import CONSTANTS from "../../constants";
 
 //axios
+Date.prototype.addDays = function(days) {
+  const date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};
 
 export const usePlans = () => {
+  const { formatDate } = useCustomHooks();
   const dispatch = useDispatch();
   const {
     plans,
@@ -287,6 +294,18 @@ export const usePlans = () => {
     }
   };
 
+  const deletePlan = async (id) => {
+    try {
+      const res = await axios.delete(
+        BASE_URL + `/plan/download?id=${id}&email=${email}`,
+        {}
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const checkDownloaded = async (id) => {
     try {
       const res = await axios.get(
@@ -301,6 +320,41 @@ export const usePlans = () => {
 
   const getCalendarRenderer = async () => {
     try {
+      const res = await axios.get(`${BASE_URL}/plan/render?email=${email}`);
+      let start;
+      let end;
+      let date;
+      let title;
+      let color;
+      let events = [];
+      res.data.data.forEach((elem, idx) => {
+        start = elem.start.replaceAll(". ", "-").replace(".", "");
+        date = new Date(start);
+        end = formatDate(date.addDays(elem.plan.length));
+        title = elem.summary.title;
+        color = CONSTANTS.pallete[idx % 20];
+        console.log(start);
+        console.log(end);
+        console.log(title);
+        console.log(color);
+        events.push({
+          title,
+          start,
+          end,
+          color,
+          summary: elem.summary,
+          plan: elem.plan,
+        });
+      });
+      // console.log(res.data.data.forEach(elem));
+      console.log(events);
+      dispatch({
+        type: GET_RENDERS,
+        plans: {
+          events,
+        },
+      });
+      return;
     } catch (err) {
       console.log(err);
     }
@@ -316,6 +370,8 @@ export const usePlans = () => {
     page,
     getPlans,
     addPage,
+    deletePlan,
+    getCalendarRenderer,
     checkDownloaded,
     subtractPage,
     changePage,

@@ -45,24 +45,35 @@ function PlanDetailSummary({ summary }) {
   const { categoryFormatter, snsFormatter } = useCustomHooks();
   const [show, setShow] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-  const { downloadPlan, checkDownloaded } = usePlans();
+  const { downloadPlan, checkDownloaded, deletePlan } = usePlans();
   const [isDownloaded, setIsDownloaded] = useState(false);
+  const [isChanged, setIsChanged] = useState(0);
+
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    if (isDownloaded) {
+      deletePlan(summary.id);
+      setIsChanged((prev) => prev++);
+    } else {
+      setShow(true);
+    }
+  };
 
   const downloads = () => {
     downloadPlan(summary.id, startDate.toLocaleDateString()).then((data) => {
       console.log(data);
+      setIsChanged((prev) => prev++);
       handleClose();
     });
   };
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <StyledDatePickerInput ref={ref} onClick={onClick} style={{}}>
+    <StyledDatePickerInput ref={ref} onClick={onClick}>
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
           src={CalendarLogo}
           style={{ marginRight: "1rem", width: 20, height: 20 }}
+          alt="calendar"
         />
         <div>{value}</div>
       </div>
@@ -75,9 +86,11 @@ function PlanDetailSummary({ summary }) {
       console.log(data);
       if (data.downloaded) {
         setIsDownloaded(true);
+      } else {
+        setIsDownloaded(false);
       }
     });
-  }, []);
+  }, [isChanged]);
 
   return (
     <>
@@ -283,12 +296,9 @@ function PlanDetailBody({ match }) {
   }, []);
 
   //contents 업데이트 시 작동할 함수
-  useEffect(
-    () => {
-      console.log(contents);
-    },
-    [contents]
-  );
+  useEffect(() => {
+    console.log(contents);
+  }, [contents]);
 
   const clickDay = (id) => {
     setSelectedId(id);

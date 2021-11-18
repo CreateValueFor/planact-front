@@ -12,16 +12,16 @@ export const StyledButton = styled(Button)`
   border-radius: 30px;
   &:hover {
     filter: brightness(0.4);
-    background: #313340;
+    background: #ffb350;
   }
   &:active {
     filter: brightness(1);
-    background: #313340;
+    background: #ffb350;
     box-shadow: none;
   }
   &:focus {
     color: #fff;
-    background-color: #313340;
+    background-color: #ffb350;
 
     box-shadow: none;
   }

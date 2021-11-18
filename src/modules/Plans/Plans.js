@@ -6,6 +6,7 @@ export const GET_UPLOADS = "plans/GET_UPLOADS";
 export const SWITCH_PAGE = "plans/SWITCH_PAGE";
 export const ADD_PAGE = "plans/ADD_PAGE";
 export const SUBTRACT_PAGE = "plans/SUBTRACT_PAGE";
+export const GET_RENDERS = "plans/GET_RENDERS";
 
 const initialState = {
   plans: {
@@ -74,6 +75,12 @@ export default function planReducer(state = initialState, action) {
       return {
         ...state,
         pagination: state.pagination--,
+      };
+
+    case GET_RENDERS:
+      return {
+        ...state,
+        plans: action.plans,
       };
     default:
       return state;

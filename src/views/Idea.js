@@ -31,12 +31,19 @@ const InquiryMenu = () => {
 
 function Idea({ location }) {
   return (
-    <Container fluid style={{ maxHeight: "100vh", backgroundColor: "#F1F6F9" }}>
-      <Row style={{ maxHeight: "100vh" }}>
-        <Col lg="1" style={{ paddingLeft: "0px" }}>
+    <Container
+      fluid
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#F1F6F9",
+        display: "flex",
+      }}
+    >
+      <Row style={{ flex: 1, display: "flex" }}>
+        <Col lg="1" style={{ paddingLeft: "0px", flexBasis: "130px" }}>
           <LeftTabBar location={location} />
         </Col>
-        <Route path="/idea/inquiry" component={InquiryMenu} />
+        <Route path="/inquiry" component={InquiryMenu} />
         <Col
           lg="10"
           style={{
@@ -47,10 +54,11 @@ function Idea({ location }) {
           }}
         >
           <StyledMainTemplate className="pt-5 pl-5">
-            <Route path="/idea/calendar" exact component={Calendar} />
-            <Route path="/idea/list" exact component={List} />
-            <Route path="/idea/list/:id" component={PlanDetail} />
-            <Route path="/idea/inquiry" component={Inquiry} />
+            <Route path="/" exact component={Calendar} />
+            <Route path="/calendar" exact component={Calendar} />
+            <Route path="/list" exact component={List} />
+            <Route path="/list/:id" component={PlanDetail} />
+            <Route path="/inquiry" component={Inquiry} />
           </StyledMainTemplate>
         </Col>
       </Row>

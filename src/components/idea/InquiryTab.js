@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import useAuth from "../../modules/User/hook";
 import { CustomTabButton } from "../CustomButton";
 import CustomText, { CustomLabelText } from "../CustomText";
 
@@ -62,7 +63,11 @@ const StyledTabBox = styled.div`
 
 function InquiryTab() {
   const [selected, setSelected] = useState(1);
+  const { logout } = useAuth();
   const onTabClick = useCallback((e) => {
+    if (e.target.id == 2) {
+      logout();
+    }
     console.log(e.target.id);
     setSelected(e.target.id);
   }, []);
@@ -72,7 +77,7 @@ function InquiryTab() {
       <ListGroup variant={"flush"}>
         <CustomLabelText text={"내 계정"} />
         <CustomTabButton
-          to="/idea/inquiry/profile"
+          to="/inquiry/profile"
           focus
           selectedId={selected}
           id="1"
@@ -81,7 +86,7 @@ function InquiryTab() {
           계정설정
         </CustomTabButton>
         <CustomTabButton
-          to="/"
+          to="/calendar"
           selectedId={selected}
           id="2"
           onClick={onTabClick}
@@ -92,7 +97,7 @@ function InquiryTab() {
       <ListGroup>
         <CustomLabelText text="PLANACT" />
         <CustomTabButton
-          to="/idea/inquiry/ask"
+          to="/inquiry/ask"
           selectedId={selected}
           id="3"
           onClick={onTabClick}
@@ -100,7 +105,7 @@ function InquiryTab() {
           문의
         </CustomTabButton>
         <CustomTabButton
-          to="/idea/inquiry/collect"
+          to="/inquiry/collect"
           selectedId={selected}
           id="4"
           onClick={onTabClick}
@@ -108,7 +113,7 @@ function InquiryTab() {
           개인정보처리방침
         </CustomTabButton>
         <CustomTabButton
-          to="/idea/inquiry/usage"
+          to="/inquiry/usage"
           selectedId={selected}
           id="5"
           onClick={onTabClick}

@@ -155,10 +155,10 @@ const InquiryContentsText = ({ title, subTitle }) => {
 function Inquiry() {
   return (
     <StyledContainer>
-      <Route path="/idea/inquiry/profile" render={ProfileRoutes} />
-      <Route path="/idea/inquiry/ask" render={AskRoutes} />
-      <Route path="/idea/inquiry/usage" render={UsageRoutes} />
-      <Route path="/idea/inquiry/collect" render={CollectRoutes} />
+      <Route path="/inquiry/profile" render={ProfileRoutes} />
+      <Route path="/inquiry/ask" render={AskRoutes} />
+      <Route path="/inquiry/usage" render={UsageRoutes} />
+      <Route path="/inquiry/collect" render={CollectRoutes} />
     </StyledContainer>
   );
 }

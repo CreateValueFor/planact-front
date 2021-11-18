@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { usePlans } from "../../modules/Plans/hook";
-
+import { useMediaQuery } from "react-responsive";
 const StyledSearchContainer = styled.div`
   height: 36px;
   /* width: 240px; */
@@ -12,8 +12,7 @@ const StyledSearchContainer = styled.div`
   border-radius: 100px;
   display: flex;
   align-items: center;
-  margin-left: 3rem;
-  margin-bottom: 2.25rem;
+
   padding: 1rem;
   input {
     border: none;
@@ -37,6 +36,9 @@ const StyledSearchContainer = styled.div`
 
 function Search() {
   const { searchPlanByKeyword } = usePlans();
+  const isPc = useMediaQuery({
+    query: "(min-width:1024px)",
+  });
   const onKeyPress = (e) => {
     if (e.key == "Enter") {
       console.log(e.target.value);
@@ -44,7 +46,14 @@ function Search() {
     }
   };
   return (
-    <StyledSearchContainer className="mr-3">
+    <StyledSearchContainer
+      className="mr-3"
+      style={
+        isPc
+          ? { marginLeft: "3rem", marginBottom: "2.25rem" }
+          : { marginBottom: "2.25rem" }
+      }
+    >
       <FontAwesomeIcon icon={faSearch} style={{ color: "#d5d6d8" }} />
       <input placeholder="Search" onKeyPress={onKeyPress} />
     </StyledSearchContainer>

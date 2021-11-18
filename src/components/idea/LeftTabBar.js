@@ -9,9 +9,9 @@ import { Link } from "react-router-dom";
 import LoginModal from "../login/Login";
 import RegisterModal from "../login/Register";
 import useAuth from "../../modules/User/hook";
-import CalenarLogo from "../../assets/img/Calendar.svg";
 import AuthorizeButton from "./AuthorizeButton";
 import AuthTab from "../login/AuthTab";
+import CalenarLogo from "../../assets/img/Calendar.svg";
 import SearchLogo from "../../assets/img/Search.svg";
 import ColoredSearch from "../../assets/img/coloredSearch.png";
 import ColoredCalendar from "../../assets/img/coloredCalendar.png";
@@ -110,7 +110,7 @@ const RouterButtons = (props) => {
           <StyledLink
             name="calendar"
             className={!selectedTab && "active"}
-            to="/idea/calendar"
+            to="/calendar"
           >
             <img
               src={!selectedTab ? ColoredCalendar : CalenarLogo}
@@ -125,7 +125,7 @@ const RouterButtons = (props) => {
             selectTab("list");
           }}
         >
-          <StyledLink className={selectedTab && "active"} to="/idea/list">
+          <StyledLink className={selectedTab && "active"} to="/list">
             <img
               src={selectedTab ? ColoredSearch : SearchLogo}
               alt="searchLogo"
@@ -189,7 +189,8 @@ const AuthMethodContainer = () => {
 
 const ProfileContainer = () => {
   const [authTab, setAuthTab] = useState(false);
-  const clickProfile = useCallback(() => {
+  const clickProfile = useCallback((e) => {
+    e.stopPropagation();
     setAuthTab((prev) => !prev);
   }, []);
   return (
@@ -202,7 +203,7 @@ const ProfileContainer = () => {
         onClick={clickProfile}
       />
 
-      <AuthTab open={authTab} style={popUpStyle} />
+      <AuthTab open={authTab} setAuthTab={setAuthTab} style={popUpStyle} />
     </>
   );
 };
@@ -227,7 +228,7 @@ function LeftTabBar({ location }) {
   return (
     <div
       style={{
-        height: "100vh",
+        height: "100%",
         backgroundColor: "#089BAB",
         display: "flex",
         flexDirection: "column",

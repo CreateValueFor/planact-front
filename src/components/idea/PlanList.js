@@ -136,7 +136,7 @@ function PlanItem({ index, contents, history }) {
   const toggleDetail = () => {
     setOpen((prev) => !prev);
     history.push({
-      pathname: `/idea/list/${contents.id}`,
+      pathname: `/list/${contents.id}`,
       state: { contents },
     });
   };
@@ -145,7 +145,7 @@ function PlanItem({ index, contents, history }) {
   return (
     <>
       <StyledItem
-        to={`/idea/list?id=${contents.id}`}
+        to={`/list?id=${contents.id}`}
         key={index}
         className="mb-3"
         onClick={toggleDetail}
