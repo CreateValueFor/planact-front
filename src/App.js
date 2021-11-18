@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Route } from "react-router-dom";
 import Home from "./views/home";
 import Login from "./views/login";
@@ -13,7 +13,14 @@ import CalenarLogo from "./assets/img/Calendar.svg";
 import SearchLogo from "./assets/img/Search.svg";
 import ColoredSearch from "./assets/img/coloredSearch.png";
 import ColoredCalendar from "./assets/img/coloredCalendar.png";
+import ShareLogo from "./assets/img/Mask.png";
+import CloseLogo from "./assets/img/Union.png";
 import List from "./components/idea/List";
+import { Col, Container, ListGroup, Row } from "react-bootstrap";
+import AuthTab, {
+  StyledListGroup,
+  StyledProfileBox,
+} from "./components/login/AuthTab";
 
 const StyledMobileTab = styled.div`
   background: #ffffff;
@@ -51,9 +58,12 @@ const StyledMobileTab = styled.div`
 
 const StyledMobileTopBar = styled.div`
   height: 64px;
+  width: calc(100% - 1.5rem);
   padding: 1rem;
   position: fixed;
   top: 0;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const StyledMobileBody = styled.div`
@@ -70,6 +80,44 @@ const StyledMobileBody = styled.div`
   }
 `;
 
+const StyledMobileSideBar = styled.div`
+  width: 300px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: -300px;
+  z-index: 20;
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transition: 0.3s ease all;
+  transition: 0.3s ease all;
+  background: #fff;
+  padding: 40px 30px;
+
+  &.open {
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    -webkit-transform: translateX(300px);
+    transform: translateX(300px);
+  }
+  .menu {
+    > li {
+      > a {
+        padding: 15px 20px;
+        color: #fff;
+      }
+    }
+  }
+`;
+
+const StledMobileListGroup = styled(StyledListGroup)`
+  margin-bottom: 2rem;
+  h2 {
+    color: #089bab;
+  }
+`;
+
 function App() {
   const isPc = useMediaQuery({
     query: "(min-width:1024px)",
@@ -80,6 +128,34 @@ function App() {
   const isMobile = useMediaQuery({
     query: "(max-width:797px)",
   });
+
+  const height = window.innerHeight;
+  // * side bar Menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // * side bar tab
+  // const []
+
+  const onMenuToggle = (e) => {
+    e.stopPropagation();
+    setIsMenuOpen((prev) => !prev);
+  };
+  const onMenuClose = (e) => {
+    e.stopPropagation();
+    setIsMenuOpen((prev) => false);
+  };
+
+  const onSideBarClick = (e) => {
+    e.stopPropagation();
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", onMenuClose);
+    return () => {
+      window.removeEventListener("click", onMenuClose);
+    };
+  }, []);
+
   return (
     <div style={{ backgroundColor: "#fcfcfe", minHeight: "100vh" }}>
       {(isPc || isTablet) && (
@@ -91,19 +167,74 @@ function App() {
         </div>
       )}
       {isMobile && (
-        <div
+        <Container
           style={{
-            height: "100%",
+            height,
             display: "flex",
             flexDirection: "column",
             backgroundColor: "rgb(252, 252, 254)",
           }}
         >
+          <StyledMobileSideBar
+            onClick={onSideBarClick}
+            className={`sidebar-menu${isMenuOpen === true ? " open" : ""}`}
+            style={{ height }}
+          >
+            <img
+              src={CloseLogo}
+              style={{ marginLeft: "auto", marginBottom: "2rem" }}
+              onClick={onMenuToggle}
+              alt="close"
+            />
+            <StyledProfileBox style={{ marginBottom: "40px" }}>
+              <img
+                src={Profile}
+                style={{ width: 42, height: 42 }}
+                alt="profile"
+              />
+              <div>
+                <h2>닉네임</h2>
+                <h3>example@example.com</h3>
+              </div>
+            </StyledProfileBox>
+            <StledMobileListGroup>
+              <h2>내 계정</h2>
+              <ListGroup variant="flush">
+                <ListGroup.Item action>
+                  <Link to="/inquiry/profile">계정 설정</Link>
+                </ListGroup.Item>
+                <ListGroup.Item action onClick={onMenuToggle}>
+                  로그아웃
+                </ListGroup.Item>
+              </ListGroup>
+            </StledMobileListGroup>
+            <StledMobileListGroup>
+              <h2>PLANACT</h2>
+              <ListGroup variant="flush">
+                <ListGroup.Item action>
+                  <Link to="/inquiry/usage">문의</Link>
+                </ListGroup.Item>
+                <ListGroup.Item action>
+                  <Link to="/inquiry/collect">개인정보처리방침</Link>
+                </ListGroup.Item>
+                <ListGroup.Item action>
+                  <Link to="/inquiry/usage">이용약관</Link>
+                </ListGroup.Item>
+              </ListGroup>
+            </StledMobileListGroup>
+          </StyledMobileSideBar>
+
           <StyledMobileTopBar>
             <img
               src={Profile}
               style={{ width: "32px", height: "32px" }}
               alt="profile"
+              onClick={onMenuToggle}
+            />
+            <img
+              src={ShareLogo}
+              alt="share"
+              style={{ width: 32, height: 32 }}
             />
           </StyledMobileTopBar>
           <StyledMobileBody
@@ -130,7 +261,7 @@ function App() {
               <p>검색</p>
             </Link>
           </StyledMobileTab>
-        </div>
+        </Container>
       )}
     </div>
   );

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Profile from "../../assets/img/Default Profile.png";
 import useAuth from "../../modules/User/hook";
-const StyledListGroup = styled(ListGroup)`
+export const StyledListGroup = styled(ListGroup)`
   padding: 0;
 
   margin-bottom: 1.5rem;
@@ -49,7 +49,7 @@ const StyledListGroup = styled(ListGroup)`
   }
 `;
 
-const StyledProfileBox = styled.div`
+export const StyledProfileBox = styled.div`
   display: flex;
   margin-bottom: 1.25rem;
   align-items: center;
