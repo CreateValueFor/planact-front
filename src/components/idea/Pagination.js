@@ -6,6 +6,7 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { usePlans } from "../../modules/Plans/hook";
+import useResponsive from "../../Responsive";
 const StyledPaginationContainer = styled.div`
   display: flex;
   align-items: center;
@@ -47,9 +48,12 @@ function Pagination() {
     console.log(e.target.innerText);
     changePage(e.target.innerText);
   }, []);
+  const { isMobile } = useResponsive();
 
   return (
-    <StyledPaginationContainer>
+    <StyledPaginationContainer
+      style={isMobile ? { marginBottom: 100 } : { width: "auto" }}
+    >
       <StyledPaginationItem onClick={subtractPage}>
         <FontAwesomeIcon icon={faChevronLeft} />
       </StyledPaginationItem>

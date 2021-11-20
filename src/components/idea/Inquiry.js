@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Profile from "../../assets/img/Default Profile.png";
 import CustomContainer from "../CustomContainer";
@@ -9,6 +9,56 @@ import Kakao from "../../assets/img/KakaoChannelBg.png";
 import ReactHtmlParser from "react-html-parser";
 import usage from "../../assets/docs/usage";
 import collect from "../../assets/docs/collect";
+import useResponsive from "../../Responsive";
+import useViews from "../../modules/View/hooks";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronDown,
+  faChevronLeft,
+} from "@fortawesome/free-solid-svg-icons";
+
+const StyldMobileTobbar = styled.div`
+  position: relative;
+  .icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  p {
+    display: block;
+    margin-bottom: 0px;
+    text-align: center;
+    font-family: Noto Sans KR;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 36px;
+    /* identical to box height, or 200% */
+
+    /* PIVO GREY/PIVO GREY */
+
+    color: #313340;
+  }
+`;
+
+function InquiryMobileTobBar({ title }) {
+  const width = window.innerWidth;
+  return (
+    <StyldMobileTobbar style={{ width, marginLeft: "-.75rem" }}>
+      <div>
+        <FontAwesomeIcon
+          className="icon"
+          width="16px"
+          height="16px"
+          icon={faChevronLeft}
+        />
+        <p>{title}</p>
+      </div>
+      <hr />
+    </StyldMobileTobbar>
+  );
+}
 
 const StyledContainer = styled.div`
   padding: 120px 90px;
@@ -143,23 +193,36 @@ const ProfileRoutes = () => {
 };
 
 const InquiryContentsText = ({ title, subTitle }) => {
+  const { isMobile } = useResponsive();
   return (
     <>
-      <CustomText text={title} />
-      <CustomLabelText text={subTitle} />
-      <hr className="w-100" />
+      {!isMobile && (
+        <>
+          <CustomText text={title} />
+          <CustomLabelText text={subTitle} />
+          <hr className="w-100" />
+        </>
+      )}
     </>
   );
 };
 
 function Inquiry() {
+  const { isMobile } = useResponsive();
+  const { viewDetail } = useViews();
+  useEffect(() => {
+    viewDetail();
+  }, []);
   return (
-    <StyledContainer>
-      <Route path="/inquiry/profile" render={ProfileRoutes} />
-      <Route path="/inquiry/ask" render={AskRoutes} />
-      <Route path="/inquiry/usage" render={UsageRoutes} />
-      <Route path="/inquiry/collect" render={CollectRoutes} />
-    </StyledContainer>
+    <>
+      {isMobile && <InquiryMobileTobBar title="계정설정" />}
+      <StyledContainer>
+        <Route path="/inquiry/profile" render={ProfileRoutes} />
+        <Route path="/inquiry/ask" render={AskRoutes} />
+        <Route path="/inquiry/usage" render={UsageRoutes} />
+        <Route path="/inquiry/collect" render={CollectRoutes} />
+      </StyledContainer>
+    </>
   );
 }
 

@@ -50,17 +50,19 @@ function Calendar(style) {
   const { plans, getCalendarRenderer } = usePlans();
   const calendar = useRef();
   const { isMobile } = useResponsive();
+  const height = window.innerHeight - 130;
+
   useEffect(() => {
     getCalendarRenderer();
+    console.log(calendar.current);
   }, []);
-
   return (
     <div
       className={!isMobile && "mb-3"}
       style={isMobile ? { flex: 1 } : { flex: 1, marginRight: "3rem" }}
     >
       <FullCalendar
-        height={isMobile ? "600px" : "100%"}
+        height={isMobile ? `${height}px` : "100%"}
         plugins={[dayGridPlugin]}
         // initialView="dayGridMonth"
         ref={calendar}

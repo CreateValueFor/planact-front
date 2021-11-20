@@ -15,6 +15,8 @@ import CalendarLogo from "../../assets/img/datepicker.png";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./PlanDetail.scss";
+import useResponsive from "../../Responsive";
+import useViews from "../../modules/View/hooks";
 
 const StyledDownloadBtn = styled(StyledButton)`
   color: #fff;
@@ -48,6 +50,7 @@ function PlanDetailSummary({ summary }) {
   const { downloadPlan, checkDownloaded, deletePlan } = usePlans();
   const [isDownloaded, setIsDownloaded] = useState(false);
   const [isChanged, setIsChanged] = useState(0);
+  const { isMobile } = useResponsive();
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -91,7 +94,10 @@ function PlanDetailSummary({ summary }) {
       }
     });
   }, [isChanged]);
-
+  const height = window.innerHeight;
+  useEffect(() => {
+    console.log(document.querySelector(".modal-backdrop"));
+  }, []);
   return (
     <>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -113,7 +119,15 @@ function PlanDetailSummary({ summary }) {
             {isDownloaded ? "내 달력에서 제거" : "내 달력에 추가"}
           </StyledDownloadBtn>
         </div>
-        <Modal show={show} onHide={handleClose} style={{}}>
+        <Modal
+          show={show}
+          onHide={handleClose}
+          style={
+            isMobile
+              ? { height, width: "calc(100% - 56px)", margin: "0 28px" }
+              : {}
+          }
+        >
           <Modal.Body
             style={{
               background: "#FFFFFF",
@@ -174,6 +188,7 @@ const StyledDayContainer = styled.div`
 `;
 
 function DayContainer({ contents, selectedId, clickDay }) {
+  const { isMobile } = useResponsive();
   return (
     <StyledDayContainer style={{ width: "27%" }}>
       <CustomText
@@ -248,8 +263,13 @@ const StyledDayDetailContainer = styled.div`
 `;
 
 function DayDetailContainer({ curContents }) {
+  const { isMobile } = useResponsive();
   return (
-    <StyledDayDetailContainer>
+    <StyledDayDetailContainer
+      style={
+        isMobile ? { padding: 0, margin: 0, height: "auto" } : { width: "auto" }
+      }
+    >
       {curContents.map((event) => (
         <div key={event.id}>
           <CustomText
@@ -266,7 +286,11 @@ function DayDetailContainer({ curContents }) {
               {theme.thumb && (
                 <img
                   src={theme.thumb}
-                  style={{ width: "347px", height: "188px" }}
+                  style={{
+                    width: isMobile ? "100%" : "347px",
+                    height: "188px",
+                  }}
+                  alt="thumbnail"
                 />
               )}
             </div>
@@ -286,7 +310,7 @@ function PlanDetailBody({ match }) {
   const [selectedId, setSelectedId] = useState(0);
   const { getUploadedPlansJson } = usePlans();
   const { id } = match.params;
-
+  const { isMobile } = useResponsive();
   //페이지 진입 시 데이터 fetch
   useEffect(() => {
     getUploadedPlansJson(id).then((data) => {
@@ -315,11 +339,13 @@ function PlanDetailBody({ match }) {
         <div>세부 플랜이 존재하지 않습니다.</div>
       ) : (
         <>
-          <MemorizedDayContainer
-            contents={contents}
-            clickDay={clickDay}
-            selectedId={selectedId}
-          />
+          {!isMobile && (
+            <MemorizedDayContainer
+              contents={contents}
+              clickDay={clickDay}
+              selectedId={selectedId}
+            />
+          )}
           <MemorizedDayDetailContainer curContents={curContents} />
         </>
       )}
@@ -334,9 +360,13 @@ const MemorizedPlanDetailSummary = React.memo(PlanDetailSummary);
 function PlanDetail({ history, match }) {
   const location = useLocation();
   const summary = location.state.contents;
-
+  const { viewDetail } = useViews();
+  const { isMobile } = useResponsive();
+  useEffect(() => {
+    viewDetail();
+  }, []);
   return (
-    <Row className="w-100">
+    <Row className={`w-100 ${isMobile && "m-0 p-0"}`}>
       <Col
         lg="12"
         style={{
@@ -345,6 +375,7 @@ function PlanDetail({ history, match }) {
           paddingRight: "10%",
           paddingLeft: "10%",
           paddingTop: "3%",
+          padding: isMobile ? "0px 1rem" : "auto",
         }}
       >
         <div

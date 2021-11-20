@@ -21,6 +21,9 @@ import AuthTab, {
   StyledListGroup,
   StyledProfileBox,
 } from "./components/login/AuthTab";
+import PlanDetail from "./components/idea/PlanDetail";
+import useViews from "./modules/View/hooks";
+import Inquiry from "./components/idea/Inquiry";
 
 const StyledMobileTab = styled.div`
   background: #ffffff;
@@ -60,10 +63,13 @@ const StyledMobileTopBar = styled.div`
   height: 64px;
   width: calc(100% - 1.5rem);
   padding: 1rem;
+  background: #fff;
   position: fixed;
   top: 0;
+  z-index: 10;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const StyledMobileBody = styled.div`
@@ -77,6 +83,9 @@ const StyledMobileBody = styled.div`
       /* padding-left: 0 !important; */
       padding-right: 1rem;
     }
+  }
+  .modal-backdrop {
+    min-height: 800px;
   }
 `;
 
@@ -128,8 +137,10 @@ function App() {
   const isMobile = useMediaQuery({
     query: "(max-width:797px)",
   });
+  const { page } = useViews();
 
   const height = window.innerHeight;
+
   // * side bar Menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -172,9 +183,10 @@ function App() {
             height,
             display: "flex",
             flexDirection: "column",
-            backgroundColor: "rgb(252, 252, 254)",
+            backgroundColor: "#fff",
           }}
         >
+          {/* !== "detail" && ( */}
           <StyledMobileSideBar
             onClick={onSideBarClick}
             className={`sidebar-menu${isMenuOpen === true ? " open" : ""}`}
@@ -223,44 +235,60 @@ function App() {
               </ListGroup>
             </StledMobileListGroup>
           </StyledMobileSideBar>
+          {/* )} */}
 
-          <StyledMobileTopBar>
-            <img
-              src={Profile}
-              style={{ width: "32px", height: "32px" }}
-              alt="profile"
-              onClick={onMenuToggle}
-            />
-            <img
-              src={ShareLogo}
-              alt="share"
-              style={{ width: 32, height: 32 }}
-            />
-          </StyledMobileTopBar>
+          {page !== "detail" && (
+            <StyledMobileTopBar>
+              <img
+                src={Profile}
+                style={{ width: "32px", height: "32px" }}
+                alt="profile"
+                onClick={onMenuToggle}
+              />
+              <img
+                src={ShareLogo}
+                alt="share"
+                style={{ width: 20, height: 24 }}
+                onClick={() => {
+                  window.alert("ddd");
+                }}
+              />
+            </StyledMobileTopBar>
+          )}
           <StyledMobileBody
-            style={{ height: "calc(100% - 70px)", width: "100%" }}
+            height={height}
+            style={{
+              height: page !== "detail" ? `calc(${height}px - 70px)` : "auto",
+              paddingBottom: "72px",
+              width: "100%",
+              marginTop: page !== "detail" ? "64px" : "1rem",
+            }}
           >
             <Route path="/" exact component={Calendar} />
             <Route path="/list" exact component={List} />
+            <Route path="/inquiry" component={Inquiry} />
+            <Route path="/list/:id" exact component={PlanDetail} />
           </StyledMobileBody>
-          <StyledMobileTab>
-            <Link to="/">
-              <img
-                src={ColoredCalendar}
-                style={{ width: "24px", height: "24px" }}
-                alt="calendar"
-              />
-              <p>달력</p>
-            </Link>
-            <Link to="/list">
-              <img
-                src={ColoredSearch}
-                style={{ width: "24px", height: "24px" }}
-                alt="search"
-              />
-              <p>검색</p>
-            </Link>
-          </StyledMobileTab>
+          {page !== "detail" && (
+            <StyledMobileTab style={isMobile && { marginLeft: "-.75rem" }}>
+              <Link to="/">
+                <img
+                  src={ColoredCalendar}
+                  style={{ width: "24px", height: "24px" }}
+                  alt="calendar"
+                />
+                <p>달력</p>
+              </Link>
+              <Link to="/list">
+                <img
+                  src={ColoredSearch}
+                  style={{ width: "24px", height: "24px" }}
+                  alt="search"
+                />
+                <p>검색</p>
+              </Link>
+            </StyledMobileTab>
+          )}
         </Container>
       )}
     </div>
