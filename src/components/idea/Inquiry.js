@@ -1,28 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Profile from "../../assets/img/Default Profile.png";
 import CustomContainer from "../CustomContainer";
 import CustomText, { CustomLabelText, CustomLinkText } from "../CustomText";
 import InputForm from "../InputForm";
 import { Route } from "react-router-dom";
-import Kakao from "../../assets/img/KakaoChannelBg.png";
+import Kakao from "../../assets/img/Kakao Channel.png";
+import Instagram from "../../assets/img/Instagram.png";
+import Email from "../../assets/img/mail.png";
 import ReactHtmlParser from "react-html-parser";
 import usage from "../../assets/docs/usage";
 import collect from "../../assets/docs/collect";
 import useResponsive from "../../Responsive";
+import useReactRouter from "use-react-router";
 import useViews from "../../modules/View/hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronDown,
-  faChevronLeft,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 const StyldMobileTobbar = styled.div`
   position: relative;
   .icon {
     position: absolute;
     left: 1rem;
-    top: 50%;
+    top: calc(50% - 8px);
     transform: translateY(-50%);
   }
   p {
@@ -33,7 +33,7 @@ const StyldMobileTobbar = styled.div`
     font-style: normal;
     font-weight: bold;
     font-size: 18px;
-    line-height: 36px;
+    /* line-height: 36px; */
     /* identical to box height, or 200% */
 
     /* PIVO GREY/PIVO GREY */
@@ -44,15 +44,18 @@ const StyldMobileTobbar = styled.div`
 
 function InquiryMobileTobBar({ title }) {
   const width = window.innerWidth;
+  const { history } = useReactRouter();
+  const { changeMAin } = useViews();
+  const onClickBack = () => {
+    changeMAin();
+    history.push("/");
+  };
   return (
     <StyldMobileTobbar style={{ width, marginLeft: "-.75rem" }}>
       <div>
-        <FontAwesomeIcon
-          className="icon"
-          width="16px"
-          height="16px"
-          icon={faChevronLeft}
-        />
+        <div className="icon" onClick={onClickBack}>
+          <FontAwesomeIcon width="16px" height="16px" icon={faChevronLeft} />
+        </div>
         <p>{title}</p>
       </div>
       <hr />
@@ -61,8 +64,61 @@ function InquiryMobileTobBar({ title }) {
 }
 
 const StyledContainer = styled.div`
-  padding: 120px 90px;
+  padding: ${(props) => (props.isMobile ? "0px" : "120px 90px")};
   width: 100%;
+  ${(props) =>
+    props.isMobile &&
+    "display: flex;flex-direction: column;align-items: center;"}
+
+  .flex-box {
+    flex-direction: column;
+  }
+  #profile-contents {
+    margin-top: 50px;
+    width: 80%;
+    align-items: center;
+    user-select: auto;
+    div:first-child {
+      margin-right: 70px;
+    }
+
+    //when Mobile
+    ${(props) =>
+      props.isMobile &&
+      "margin:0; div:first-child{margin:0; margin-bottom:2rem;} label{    align-self: start;}"}
+  }
+
+  #usage-contents {
+    div:first-child {
+      margin-top: 50px;
+      width: 80%;
+      align-items: center;
+    }
+    ${(props) =>
+      props.isMobile &&
+      "padding:0 1rem; div:first-child{margin:0;} div:last-child{height:auto;}"}
+  }
+
+  #collect-contents {
+    div:first-child {
+      margin-top: 50px;
+      width: 80%;
+      align-items: center;
+    }
+    ${(props) =>
+      props.isMobile &&
+      "padding:0 1rem; div:first-child{margin:0;} div:last-child{height:auto;}"}
+  }
+  #inquiry-contents {
+    div:first-child {
+      margin-top: 50px;
+      width: 80%;
+      align-items: center;
+    }
+    ${(props) =>
+      props.isMobile &&
+      "width:100%; margin-top:35px; padding:0 1rem; div:first-child{margin:0;}"}
+  }
 `;
 
 const StyledAgreementContainer = styled.div`
@@ -77,19 +133,12 @@ const StyledInquiryMethodContainer = styled.div`
 
 const CollectRoutes = () => {
   return (
-    <div style={{}}>
+    <div id="collect-contents">
       <InquiryContentsText
         title="개인정보처리방침"
         subTitle="PLANACT 개인정보처리방침입니다."
       />
-      <CustomContainer
-        style={{
-          marginTop: 50,
-
-          width: "80%",
-          alignItems: "center",
-        }}
-      />
+      <CustomContainer />
       <StyledAgreementContainer>
         {ReactHtmlParser(collect)}
       </StyledAgreementContainer>
@@ -99,18 +148,16 @@ const CollectRoutes = () => {
 
 const UsageRoutes = () => {
   return (
-    <>
+    <div id="usage-contents">
       <InquiryContentsText
         title="이용약관"
         subTitle="PLANACT 이용약관입니다."
       />
-      <CustomContainer
-        style={{ marginTop: 50, width: "80%", alignItems: "center" }}
-      />
+      <CustomContainer />
       <StyledAgreementContainer>
         {ReactHtmlParser(usage)}
       </StyledAgreementContainer>
-    </>
+    </div>
   );
 };
 
@@ -128,24 +175,30 @@ const AskRoutes = () => {
         title="문의"
         subTitle="PLANACT 관련 문의사항은 다음으로 부탁드립니다."
       />
-      <CustomContainer
-        style={{ marginTop: 50, width: "80%", alignItems: "center" }}
-      >
+      <CustomContainer id="inquiry-contents" style={{}}>
         <div>
           <StyledInquiryMethodContainer style={{ marginBottom: "1rem" }}>
-            <img src={Kakao} />
+            <img src={Kakao} alt="kakao" />
             <CustomLinkText
               text="카카오톡 채널: plan_act"
               style={methodStyle}
               href="http://pf.kakao.com/_cuVqb"
             />
           </StyledInquiryMethodContainer>
-          <StyledInquiryMethodContainer>
-            <img src={Kakao} />
+          <StyledInquiryMethodContainer style={{ marginBottom: "1rem" }}>
+            <img src={Instagram} alt="insta" />
             <CustomLinkText
               text="인스타그램: planact.official"
               style={methodStyle}
               href="https://www.instagram.com/planact.official/"
+            />
+          </StyledInquiryMethodContainer>
+          <StyledInquiryMethodContainer>
+            <img src={Email} alt="mail" />
+            <CustomLinkText
+              text="이메일: contact@planact.co.kr"
+              style={methodStyle}
+              href="mailto:contact@planact.co.kr"
             />
           </StyledInquiryMethodContainer>
         </div>
@@ -162,10 +215,15 @@ const ProfileRoutes = () => {
         subTitle="계정 설정에서는 프로필 사진과 닉네임을 설정할 수 있습니다."
       />
       <CustomContainer
+        id="profile-contents"
         style={{ marginTop: 50, width: "80%", alignItems: "center" }}
       >
-        <div style={{ marginRight: 70 }}>
-          <img src={Profile} style={{ width: "180px", height: "180px" }} />
+        <div>
+          <img
+            src={Profile}
+            style={{ width: "180px", height: "180px" }}
+            alt="profile"
+          />
         </div>
         <div style={{ flex: 1 }}>
           <CustomContainer
@@ -209,16 +267,37 @@ const InquiryContentsText = ({ title, subTitle }) => {
 
 function Inquiry() {
   const { isMobile } = useResponsive();
-  const { viewDetail } = useViews();
+  const { viewDetail, page } = useViews();
+  const [title, setTitle] = useState("");
+
+  useEffect(() => {
+    switch (page) {
+      case "usage":
+        setTitle("이용약관");
+        break;
+      case "collect":
+        setTitle("개인정보 수집동의");
+        break;
+      case "inquiry":
+        setTitle("문의");
+        break;
+      case "profile":
+        setTitle("프로필 설정");
+        break;
+      default:
+        break;
+    }
+  }, [page]);
+
   useEffect(() => {
     viewDetail();
   }, []);
   return (
     <>
-      {isMobile && <InquiryMobileTobBar title="계정설정" />}
-      <StyledContainer>
+      {isMobile && <InquiryMobileTobBar title={title} />}
+      <StyledContainer isMobile={isMobile}>
         <Route path="/inquiry/profile" render={ProfileRoutes} />
-        <Route path="/inquiry/ask" render={AskRoutes} />
+        <Route path="/inquiry/" exact render={AskRoutes} />
         <Route path="/inquiry/usage" render={UsageRoutes} />
         <Route path="/inquiry/collect" render={CollectRoutes} />
       </StyledContainer>

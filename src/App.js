@@ -22,7 +22,9 @@ import AuthTab, {
   StyledProfileBox,
 } from "./components/login/AuthTab";
 import PlanDetail from "./components/idea/PlanDetail";
+
 import useViews from "./modules/View/hooks";
+import usePlans from "./modules/Plans/hook";
 import Inquiry from "./components/idea/Inquiry";
 
 const StyledMobileTab = styled.div`
@@ -138,7 +140,7 @@ function App() {
     query: "(max-width:797px)",
   });
   const { page } = useViews();
-
+  const { exportPlans } = usePlans();
   const height = window.innerHeight;
 
   // * side bar Menu
@@ -147,8 +149,29 @@ function App() {
   // * side bar tab
   // const []
 
+  const { changeView } = useViews();
+
   const onMenuToggle = (e) => {
     e.stopPropagation();
+    const text = e.target.innerHTML;
+    switch (text) {
+      case "이용약관":
+        console.log("ddd");
+        changeView("usage");
+        break;
+      case "개인정보처리방침":
+        changeView("collect");
+        break;
+      case "문의":
+        changeView("inquiry");
+        break;
+      case "계정 설정":
+        changeView("profile");
+        break;
+      default:
+        console.log(text);
+        break;
+    }
     setIsMenuOpen((prev) => !prev);
   };
   const onMenuClose = (e) => {
@@ -213,7 +236,9 @@ function App() {
               <h2>내 계정</h2>
               <ListGroup variant="flush">
                 <ListGroup.Item action>
-                  <Link to="/inquiry/profile">계정 설정</Link>
+                  <Link onClick={onMenuToggle} to="/inquiry/profile">
+                    계정 설정
+                  </Link>
                 </ListGroup.Item>
                 <ListGroup.Item action onClick={onMenuToggle}>
                   로그아웃
@@ -224,13 +249,19 @@ function App() {
               <h2>PLANACT</h2>
               <ListGroup variant="flush">
                 <ListGroup.Item action>
-                  <Link to="/inquiry/usage">문의</Link>
+                  <Link onClick={onMenuToggle} to="/inquiry/">
+                    문의
+                  </Link>
                 </ListGroup.Item>
                 <ListGroup.Item action>
-                  <Link to="/inquiry/collect">개인정보처리방침</Link>
+                  <Link onClick={onMenuToggle} to="/inquiry/collect">
+                    개인정보처리방침
+                  </Link>
                 </ListGroup.Item>
                 <ListGroup.Item action>
-                  <Link to="/inquiry/usage">이용약관</Link>
+                  <Link onClick={onMenuToggle} to="/inquiry/usage">
+                    이용약관
+                  </Link>
                 </ListGroup.Item>
               </ListGroup>
             </StledMobileListGroup>
@@ -245,14 +276,17 @@ function App() {
                 alt="profile"
                 onClick={onMenuToggle}
               />
-              <img
-                src={ShareLogo}
-                alt="share"
-                style={{ width: 20, height: 24 }}
-                onClick={() => {
-                  window.alert("ddd");
-                }}
-              />
+              {page === "main" && (
+                <img
+                  src={ShareLogo}
+                  alt="share"
+                  style={{ width: 20, height: 24 }}
+                  onClick={() => {
+                    window.alert("ddd");
+                    exportPlans();
+                  }}
+                />
+              )}
             </StyledMobileTopBar>
           )}
           <StyledMobileBody

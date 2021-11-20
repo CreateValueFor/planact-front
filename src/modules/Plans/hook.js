@@ -13,7 +13,7 @@ import {
   SWITCH_PAGE,
 } from "./Plans";
 import CONSTANTS from "../../constants";
-
+const ics = require("ics");
 //axios
 Date.prototype.addDays = function(days) {
   const date = new Date(this.valueOf());
@@ -360,6 +360,64 @@ export const usePlans = () => {
     }
   };
 
+  const exportPlans = async () => {
+    let ics = [];
+
+    let sdt;
+    let edt;
+    let crdt;
+    let dateDiff;
+
+    plans.events.map((daily) => {
+      sdt = new Date(daily.start);
+      edt = new Date(daily.end);
+      crdt = new Date();
+      dateDiff = Math.ceil(
+        (edt.getTime() - sdt.getTime()) / (1000 * 3600 * 24)
+      );
+      for (let i = 1; i <= dateDiff; i++) {
+        let planFormat = {};
+        let description = "";
+        // 날짜(일) 더하기
+        crdt.setDate(sdt.getDate() + i);
+        planFormat.title = daily.title;
+        planFormat.start = [
+          crdt.getFullYear(),
+          crdt.getMonth() + 1,
+          crdt.getDate(),
+        ];
+        console.log(daily);
+        daily.plan.map((ev) => {
+          description += ev.title + ev.contents;
+        });
+        planFormat.description = description;
+        ics.push(planFormat);
+      }
+    });
+    console.log(ics);
+    return;
+
+    const { error, value } = ics.createEvents([
+      {
+        title: "test",
+        start: [2018, 1, 15],
+        duration: { minutes: 45 },
+        description: "TEst",
+      },
+      {
+        title: "ttttt",
+        start: [2018, 1, 15, 12, 15],
+        duration: { hours: 1, minutes: 30 },
+      },
+    ]);
+
+    const file = new Blob([value], { type: "text/calendar;charset=utf-8" });
+    const path = window.URL.createObjectURL(file);
+
+    window.open("data:text/calendar;charset=utf8," + escape(value));
+    console.log(path);
+  };
+
   return {
     plans,
     filters,
@@ -369,6 +427,7 @@ export const usePlans = () => {
     count,
     page,
     getPlans,
+    exportPlans,
     addPage,
     deletePlan,
     getCalendarRenderer,
@@ -392,3 +451,4 @@ export const usePlans = () => {
     getUploadedPlansJson,
   };
 };
+export default usePlans;

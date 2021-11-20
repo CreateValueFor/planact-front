@@ -26,6 +26,14 @@ const StyledDownloadBtn = styled(StyledButton)`
   }
 `;
 
+const StyledPlanDetail = styled.div`
+  display: flex;
+  align-items: center;
+  .modal-backdrop {
+    height: ${(props) => props.height};
+  }
+`;
+
 const StyledSummary = styled.div``;
 
 const StyledDatePickerInput = styled.button`
@@ -53,13 +61,17 @@ function PlanDetailSummary({ summary }) {
   const { isMobile } = useResponsive();
 
   const handleClose = () => setShow(false);
-  const handleShow = () => {
+  const handleShow = (e) => {
+    e.stopPropagation();
     if (isDownloaded) {
       deletePlan(summary.id);
       setIsChanged((prev) => prev++);
     } else {
       setShow(true);
     }
+  };
+  const modalClick = (e) => {
+    e.stopPropagation();
   };
 
   const downloads = () => {
@@ -71,7 +83,11 @@ function PlanDetailSummary({ summary }) {
   };
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <StyledDatePickerInput ref={ref} onClick={onClick}>
+    <StyledDatePickerInput
+      style={isMobile ? { width: "100%" } : {}}
+      ref={ref}
+      onClick={onClick}
+    >
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
           src={CalendarLogo}
@@ -96,69 +112,73 @@ function PlanDetailSummary({ summary }) {
   }, [isChanged]);
   const height = window.innerHeight;
   useEffect(() => {
-    console.log(document.querySelector(".modal-backdrop"));
+    window.addEventListener("click", handleClose);
+    return () => {
+      window.removeEventListener("click", handleClose);
+    };
   }, []);
   return (
-    <>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <div style={{ flex: 1 }}>
-          <CustomText text={summary.title} />
-          <CustomLabelText
-            text={`${categoryFormatter(summary.category)} | ${snsFormatter(
-              summary.sns
-            )} ${summary.author} 제공`}
-          />
-        </div>
-        <div style={{ width: 150 }}>
-          <StyledDownloadBtn
-            onClick={handleShow}
-            id="downloadBtn"
-            style={{ height: 44 }}
-            className={isDownloaded ? "downloaded w-100" : "w-100"}
-          >
-            {isDownloaded ? "내 달력에서 제거" : "내 달력에 추가"}
-          </StyledDownloadBtn>
-        </div>
-        <Modal
-          show={show}
-          onHide={handleClose}
-          style={
-            isMobile
-              ? { height, width: "calc(100% - 56px)", margin: "0 28px" }
-              : {}
-          }
-        >
-          <Modal.Body
-            style={{
-              background: "#FFFFFF",
-              boxShadow: "0px 10px 33px rgba(54, 57, 70, 0.2)",
-              borderRadius: 30,
-            }}
-          >
-            <CustomLabelText
-              text={`${summary.title} 플랜을 언제부터 시작할까요?`}
-              fontSize={18}
-              style={{ color: "#363946", marginBottom: "5rem" }}
-            />
-            <DatePicker
-              dateFormat="yyyy년 MM월 dd일"
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              customInput={<CustomInput />}
-              style={{ marginBottom: "5rem" }}
-            />
-
-            <div style={{ width: 110, margin: "0 auto" }}>
-              <CustomButton
-                onClick={downloads}
-                text={"확인"}
-                style={{ marginTop: "5rem" }}
-              />
-            </div>
-          </Modal.Body>
-        </Modal>
+    <StyledPlanDetail height={height}>
+      <div style={{ flex: 1 }}>
+        <CustomText text={summary.title} />
+        <CustomLabelText
+          text={`${categoryFormatter(summary.category)} | ${snsFormatter(
+            summary.sns
+          )} ${summary.author} 제공`}
+        />
       </div>
-    </>
+      <div style={{ width: 150 }}>
+        <StyledDownloadBtn
+          onClick={handleShow}
+          id="downloadBtn"
+          style={{ height: 44 }}
+          className={isDownloaded ? "downloaded w-100" : "w-100"}
+        >
+          {isDownloaded ? "내 달력에서 제거" : "내 달력에 추가"}
+        </StyledDownloadBtn>
+      </div>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        centered
+        onClick={modalClick}
+        backdrop={false}
+        style={
+          isMobile
+            ? { height, width: "calc(100% - 56px)", margin: "0 28px" }
+            : {}
+        }
+      >
+        <Modal.Body
+          style={{
+            background: "#FFFFFF",
+            boxShadow: "0px 10px 33px rgba(54, 57, 70, 0.2)",
+            borderRadius: 30,
+          }}
+        >
+          <CustomLabelText
+            text={`${summary.title} 플랜을 언제부터 시작할까요?`}
+            fontSize={18}
+            style={{ color: "#363946", marginBottom: "5rem" }}
+          />
+          <DatePicker
+            dateFormat="yyyy년 MM월 dd일"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            customInput={<CustomInput />}
+            style={{ marginBottom: "5rem", width: isMobile ? "100%" : "70%" }}
+          />
+
+          <div style={{ width: 110, margin: "0 auto" }}>
+            <CustomButton
+              onClick={downloads}
+              text={"확인"}
+              style={{ marginTop: "5rem" }}
+            />
+          </div>
+        </Modal.Body>
+      </Modal>
+    </StyledPlanDetail>
   );
 }
 

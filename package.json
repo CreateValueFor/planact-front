@@ -39,6 +39,7 @@
     "redux-persist": "^6.0.0",
     "styled-components": "^5.3.1",
     "unique-string": "^3.0.0",
+    "use-react-router": "^1.0.7",
     "web-vitals": "^1.0.1",
     "webfontloader": "^1.6.28"
   },

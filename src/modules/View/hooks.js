@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { CHANGE_INQUIRY, CHANGE_MAIN, VIEW_DETAIL } from "./View";
+import { CHANGE_INQUIRY, CHANGE_MAIN, CHANGE_VIEW, VIEW_DETAIL } from "./View";
 
 function useViews() {
   const dispatch = useDispatch();
@@ -31,10 +31,21 @@ function useViews() {
       console.log(error);
     }
   };
+  const changeView = (page) => {
+    try {
+      dispatch({
+        type: CHANGE_VIEW,
+        page: page,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return {
     changeInquiry,
     changeMAin,
     viewDetail,
+    changeView,
     page,
   };
 }
