@@ -14,6 +14,7 @@ import collect from "../../assets/docs/collect";
 import useResponsive from "../../Responsive";
 import useReactRouter from "use-react-router";
 import useViews from "../../modules/View/hooks";
+import useAuth from "../../modules/User/hook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -78,8 +79,12 @@ const StyledContainer = styled.div`
     width: 80%;
     align-items: center;
     user-select: auto;
-    div:first-child {
+    flex-direction: ${(props) => (props.isMobile ? "column" : "row")};
+    & > div:first-child {
       margin-right: 70px;
+    }
+    & > flex-box {
+      align-items: ${(props) => (props.isMobile ? "center" : "auto")};
     }
 
     //when Mobile
@@ -110,7 +115,7 @@ const StyledContainer = styled.div`
       "padding:0 1rem; div:first-child{margin:0;} div:last-child{height:auto;}"}
   }
   #inquiry-contents {
-    div:first-child {
+    & > div:first-child {
       margin-top: 50px;
       width: 80%;
       align-items: center;
@@ -207,7 +212,7 @@ const AskRoutes = () => {
   );
 };
 
-const ProfileRoutes = () => {
+const ProfileRoutes = ({ email, nick }) => {
   return (
     <>
       <InquiryContentsText
@@ -226,23 +231,21 @@ const ProfileRoutes = () => {
           />
         </div>
         <div style={{ flex: 1 }}>
-          <CustomContainer
-            style={{ alignItems: "center", marginBottom: "3rem" }}
-          >
+          <CustomContainer style={{ marginBottom: "3rem" }}>
             <CustomLabelText
               fontSize={12}
               text={"닉네임"}
               style={{ marginBottom: "1rem", marginRight: "2rem" }}
             />
-            <InputForm style={{ flex: 1 }} />
+            <InputForm style={{ flex: 1 }} value={nick} disabled />
           </CustomContainer>
-          <CustomContainer style={{ alignItems: "center" }}>
+          <CustomContainer>
             <CustomLabelText
               fontSize={12}
               text={"이메일"}
               style={{ marginBottom: "1rem", marginRight: "2rem" }}
             />
-            <InputForm style={{ flex: 1 }} />
+            <InputForm style={{ flex: 1 }} value={email} disabled />
           </CustomContainer>
         </div>
       </CustomContainer>
@@ -268,6 +271,8 @@ const InquiryContentsText = ({ title, subTitle }) => {
 function Inquiry() {
   const { isMobile } = useResponsive();
   const { viewDetail, page } = useViews();
+  const { email, nick } = useAuth();
+
   const [title, setTitle] = useState("");
 
   useEffect(() => {
@@ -296,7 +301,10 @@ function Inquiry() {
     <>
       {isMobile && <InquiryMobileTobBar title={title} />}
       <StyledContainer isMobile={isMobile}>
-        <Route path="/inquiry/profile" render={ProfileRoutes} />
+        <Route
+          path="/inquiry/profile"
+          render={() => <ProfileRoutes email={email} nick={nick} />}
+        />
         <Route path="/inquiry/" exact render={AskRoutes} />
         <Route path="/inquiry/usage" render={UsageRoutes} />
         <Route path="/inquiry/collect" render={CollectRoutes} />

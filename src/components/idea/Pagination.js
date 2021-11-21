@@ -11,8 +11,8 @@ const StyledPaginationContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  margin-bottom: 2rem;
+  padding: 40px 0px;
+  /* margin-bottom: 3rem; */
 `;
 
 const StyledPaginationItem = styled.div`
@@ -45,7 +45,6 @@ function Pagination() {
   const pages = Math.round(count / 6);
 
   const pageClick = useCallback((e) => {
-    console.log(e.target.innerText);
     changePage(e.target.innerText);
   }, []);
   const { isMobile } = useResponsive();

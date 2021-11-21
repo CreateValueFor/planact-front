@@ -68,7 +68,7 @@ function InquiryTab() {
     if (e.target.id == 2) {
       logout();
     }
-    console.log(e.target.id);
+
     setSelected(e.target.id);
   }, []);
 
@@ -97,7 +97,7 @@ function InquiryTab() {
       <ListGroup>
         <CustomLabelText text="PLANACT" />
         <CustomTabButton
-          to="/inquiry/ask"
+          to="/inquiry/"
           selectedId={selected}
           id="3"
           onClick={onTabClick}

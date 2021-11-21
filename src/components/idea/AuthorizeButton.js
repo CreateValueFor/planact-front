@@ -26,7 +26,7 @@ function AuthorizeButton({ clickAuth, openLogin, openRegister }) {
     background: "#FFFFFF",
     color: "#089BAB",
   };
-  console.log(openRegister);
+
   return (
     <div className="d-flex flex-column">
       <StyledAuthButton onClick={clickAuth} style={openLogin ? focusStyle : {}}>

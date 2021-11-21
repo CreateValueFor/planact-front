@@ -9,15 +9,15 @@ import useViews from "../../modules/View/hooks";
 
 function List({ history }) {
   const { isMobile } = useResponsive();
-  const { changeMAin } = useViews();
+  const { changeView } = useViews();
   useEffect(() => {
-    changeMAin();
+    changeView("list");
   }, []);
   return (
     <Container fluid>
       <Row
         className={`w-100 ${isMobile && "m-0"}`}
-        style={{ paddingRight: isMobile ? "0px" : "2rem" }}
+        style={{ paddingRight: isMobile ? "0px" : "2rem", height: "100%" }}
       >
         <Col
           lg="12"

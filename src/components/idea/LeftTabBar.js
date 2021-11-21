@@ -33,6 +33,7 @@ export const StyledTabItem = styled.div`
 const StyledBackgroundTab = styled(StyledTabItem)`
   z-index: 1;
   position: absolute;
+  /* top: -100%; */
   background: #ffffff;
 `;
 

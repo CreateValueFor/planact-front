@@ -41,7 +41,6 @@ function Search() {
   });
   const onKeyPress = (e) => {
     if (e.key == "Enter") {
-      console.log(e.target.value);
       searchPlanByKeyword(e.target.value);
     }
   };
