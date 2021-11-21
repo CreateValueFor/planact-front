@@ -6,7 +6,7 @@ import CustomButton from "../CustomButton";
 
 function Profile({ setIsLogin }) {
   const { nick, logout } = useAuth();
-  console.log(nick);
+
   const onClick = useCallback(() => {
     logout();
   }, []);

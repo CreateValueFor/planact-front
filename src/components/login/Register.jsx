@@ -24,7 +24,7 @@ const StyledHtmlContainer = styled.div`
   /* overflow-y: scroll; */
   padding: 14px;
   flex-grow: 1;
-  height: 350px;
+  height: 330px;
   overflow: auto;
   /* for Firefox */
   min-height: 0;
@@ -45,13 +45,21 @@ const DetailAgreement = ({ children, clickDetail, type }) => {
     <StyledCard style={{ width: "100%", height: "100%", position: "absolute" }}>
       <Card.Body className="d-flex flex-column">
         <div
-          className="d-flex justify-content-start align-items-center mb-3"
-          style={{ cursor: "pointer" }}
+          className="d-flex justify-content-center align-items-center mb-3"
+          style={{ cursor: "pointer", position: "relative" }}
           onClick={() => {
             clickDetail("close");
           }}
         >
-          <FontAwesomeIcon icon={faChevronLeft} />
+          <FontAwesomeIcon
+            icon={faChevronLeft}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "1rem",
+              transform: "translate(0, -50%)",
+            }}
+          />
           <div>플랜액트 {type}</div>
         </div>
         <StyledHtmlContainer style={{}}>{children}</StyledHtmlContainer>
@@ -81,8 +89,7 @@ function RegisterModal({ setRegister, style, open }) {
     e.preventDefault();
 
     const data = new FormData(e.target);
-    console.log(data);
-    console.log(data.get("nick"));
+
     if (data.get("nick") == "") {
       window.alert("닉네임을 입력해주세요.");
       return;
@@ -147,7 +154,11 @@ function RegisterModal({ setRegister, style, open }) {
               className="d-flex justify-content-between"
               style={{ marginBottom: 22, marginTop: 4 }}
             >
-              <img src={Logo} style={{ margin: "0 auto" }} />
+              <img
+                src={Logo}
+                style={{ margin: "0 auto", width: "23px", height: "35px" }}
+                alt="logo"
+              />
             </div>
             <div
               style={{
@@ -206,14 +217,19 @@ function RegisterModal({ setRegister, style, open }) {
       <Card.Body>
         <div
           className="d-flex justify-content-between"
-          style={{ marginBottom: 22, marginTop: 4 }}
+          style={{ marginBottom: 22, marginTop: 4, alignItems: "center" }}
         >
           <div style={{ width: 20 }} />
-          <img src={Logo} />
+          <img
+            src={Logo}
+            style={{ width: "23px", height: "35px" }}
+            alt="logo"
+          />
           <CustomeCloseButton
             onClick={() => {
               setRegister(false);
             }}
+            style={{ fontSize: "1.25rem" }}
           />
         </div>
         <Form onSubmit={onSubmit}>

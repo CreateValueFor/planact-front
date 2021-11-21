@@ -15,7 +15,7 @@ function LoginModal({ setLogin, style, open }) {
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     const data = new FormData(e.target);
-    console.log(data.get("email"));
+
     const email = data.get("email");
 
     const password = data.get("password");
@@ -30,13 +30,17 @@ function LoginModal({ setLogin, style, open }) {
       <Card.Body>
         <div
           className="d-flex justify-content-between"
-          style={{ marginBottom: 22, marginTop: 4 }}
+          style={{ marginBottom: 22, marginTop: 4, alignItems: "center" }}
         >
           <div style={{ width: 20 }} />
-          <img src={Logo} />
+          <img
+            src={Logo}
+            style={{ width: "23px", height: "35px" }}
+            alt="logo"
+          />
           <CustomeCloseButton
             style={{
-              fontSize: "2rem",
+              fontSize: "1.25rem",
               // transform: "matrix(-1, 0, 0, 1, 0, 0)",
             }}
             onClick={() => {
