@@ -156,7 +156,6 @@ function App() {
     const text = e.target.innerHTML;
     switch (text) {
       case "이용약관":
-        console.log("ddd");
         changeView("usage");
         break;
       case "개인정보처리방침":
@@ -217,7 +216,12 @@ function App() {
           >
             <img
               src={CloseLogo}
-              style={{ marginLeft: "auto", marginBottom: "2rem" }}
+              style={{
+                width: 14,
+                height: 14,
+                marginLeft: "auto",
+                marginBottom: "2rem",
+              }}
               onClick={onMenuToggle}
               alt="close"
             />
@@ -280,7 +284,7 @@ function App() {
                 <img
                   src={ShareLogo}
                   alt="share"
-                  style={{ width: 20, height: 24 }}
+                  style={{ width: 15, height: 18 }}
                   onClick={() => {
                     window.alert("ddd");
                     exportPlans();

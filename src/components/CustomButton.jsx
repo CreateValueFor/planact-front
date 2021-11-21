@@ -96,7 +96,7 @@ export const CustomeCloseButton = ({ onClick, style }) => {
 
 export const CustomTabButton = (props) => {
   const { focus, text, style, onClick, children, id, to, selectedId } = props;
-  console.log(props);
+
   const computedClassName = selectedId === id ? "active" : "muted";
   return (
     <StyledCustomTabButton

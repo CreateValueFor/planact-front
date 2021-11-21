@@ -84,7 +84,7 @@ export const usePlans = () => {
     });
     let set = new Set(filters);
     filters = [...set];
-    console.log(filters);
+
     filters.sort(function(a, b) {
       return a.length - b.length;
     });
@@ -333,10 +333,7 @@ export const usePlans = () => {
         end = formatDate(date.addDays(elem.plan.length));
         title = elem.summary.title;
         color = CONSTANTS.pallete[idx % 20];
-        console.log(start);
-        console.log(end);
-        console.log(title);
-        console.log(color);
+
         events.push({
           title,
           start,

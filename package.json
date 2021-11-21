@@ -21,6 +21,7 @@
     "gh-pages": "^3.2.3",
     "http-proxy-middleware": "^2.0.1",
     "ics": "^2.31.0",
+    "moment": "^2.29.1",
     "node-sass": "^6.0.1",
     "node-scss": "^7.0.3",
     "qs": "^6.10.1",

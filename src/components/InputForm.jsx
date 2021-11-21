@@ -14,7 +14,16 @@ const StyledInputForm = styled(Form.Group)`
   }
 `;
 
-function InputForm({ setValue, placeholder, text, type, className, style }) {
+function InputForm({
+  setValue,
+  placeholder,
+  value,
+  disabled,
+  text,
+  type,
+  className,
+  style,
+}) {
   const onChange = useCallback(
     (e) => {
       const {
@@ -33,6 +42,8 @@ function InputForm({ setValue, placeholder, text, type, className, style }) {
       style={style}
     >
       <Form.Control
+        disabled={disabled}
+        value={value}
         onChange={onChange}
         type={type}
         placeholder={placeholder}

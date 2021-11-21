@@ -13,7 +13,6 @@ import { PersistGate } from "redux-persist/integration/react";
 const store = createStore(rootReducer, applyMiddleware(logger));
 const persister = persistStore(store);
 
-// console.log(store.getState());
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persister}>
