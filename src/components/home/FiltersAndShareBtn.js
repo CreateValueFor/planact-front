@@ -28,13 +28,10 @@ function FiltersAndShareBtn({ setIsSideBarExist }) {
   const onClick = () => {
     window.open("data:text/calendar;charset=utf8," + escape(value));
   };
-  // console.log(value);
-  const onSideBarToggle = useCallback(
-    () => {
-      setIsSideBarExist((prev) => !prev);
-    },
-    [setIsSideBarExist]
-  );
+
+  const onSideBarToggle = useCallback(() => {
+    setIsSideBarExist((prev) => !prev);
+  }, [setIsSideBarExist]);
   return (
     <Row className="my-3 ">
       <Col lg="6">

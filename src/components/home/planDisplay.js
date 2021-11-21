@@ -11,7 +11,7 @@ import { usePlans } from "../../modules/Plans/hook";
 
 function PlanDisplay() {
   const { plans, currentPlans, filters, getPlans, makefilters } = usePlans();
-  // console.log(plans);
+
   useEffect(() => {
     getPlans();
     // getPlans().then(() => {

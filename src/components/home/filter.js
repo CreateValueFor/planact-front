@@ -7,7 +7,7 @@ import "./filter.scss";
 import Pallete from "./Pallete";
 function Filter() {
   const { plans } = usePlans();
-  // console.log(getStocks());
+
   return (
     <div>
       <h2 className="filter-title mb-5" style={{ textAlign: "center" }}>

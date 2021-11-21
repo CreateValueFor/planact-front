@@ -7,6 +7,10 @@ import koLocale from "@fullcalendar/core/locales/ko";
 import { usePlans } from "../../modules/Plans/hook";
 import { Card, Dropdown, DropdownButton } from "react-bootstrap";
 import useResponsive from "../../Responsive";
+import useViews from "../../modules/View/hooks";
+import styled from "styled-components";
+import moment from "moment";
+import CustomText, { CustomLabelText } from "../CustomText";
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <div
@@ -16,6 +20,8 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
       overflow: "hidden",
       textOverflow: "ellipsis",
       whiteSpace: "nowrap",
+      textAlign: "start",
+      fontSize: ".75rem",
     }}
     onClick={(e) => {
       e.preventDefault();
@@ -30,7 +36,7 @@ function renderEventContent(eventInfo) {
   return (
     <>
       {/* <b>{eventInfo.timetext}</b> */}
-      <div className="mb-2 custom-render">
+      <div className="custom-render">
         <Dropdown drop="end">
           <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
             {eventInfo.event.title}
@@ -46,18 +52,39 @@ function renderEventContent(eventInfo) {
   );
 }
 
+const StyledCalendarWrapper = styled.div`
+  table > tbody > tr > th.fc-col-header-cell.fc-day div a {
+    font-size: ${(props) => (props.isMobile ? "12px" : "1rem")};
+  }
+  tbody > tr > td.fc-daygrid-day.fc-day > div > div.fc-daygrid-day-top > a {
+    font-size: ${(props) => (props.isMobile ? "12px" : "1rem")};
+  }
+  .fc-theme-standard td {
+    border: ${(props) => (props.isMobile ? "1px solid transparent" : "auto")};
+    border-bottom: 1px solid #e9e9e9;
+  }
+`;
+
+const StyledTitleFormat = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 function Calendar(style) {
   const { plans, getCalendarRenderer } = usePlans();
+  console.log(plans);
   const calendar = useRef();
   const { isMobile } = useResponsive();
+  const { changeView } = useViews();
   const height = window.innerHeight - 130;
 
   useEffect(() => {
     getCalendarRenderer();
-    console.log(calendar.current);
+    changeView("main");
   }, []);
   return (
-    <div
+    <StyledCalendarWrapper
+      isMobile={isMobile}
       className={!isMobile && "mb-3"}
       style={isMobile ? { flex: 1 } : { flex: 1, marginRight: "3rem" }}
     >
@@ -68,15 +95,36 @@ function Calendar(style) {
         ref={calendar}
         events={plans}
         eventContent={renderEventContent}
-        dayHeaderFormat={{
-          weekday: "short",
+        locale={koLocale}
+        dayHeaderFormat={(args) => {
+          if (isMobile) {
+            return moment(args.date).format("dd")[0];
+          } else {
+            return moment(args.date).format("ddd");
+          }
+        }}
+        dayCellContent={(args) => {
+          return moment(args.date).format("D");
         }}
         headerToolbar={{
           start: "",
           center: "prev,title,next",
           end: "share",
         }}
-        titleFormat={{ year: "numeric", month: "long" }}
+        titleFormat={(args) => {
+          return (
+            <StyledTitleFormat className="custom-title">
+              <CustomText
+                text={`${args.date.array[1] + 1}월`}
+                fontSize={isMobile ? "16px" : "18px"}
+              />
+              <CustomLabelText
+                text={args.date.array[0]}
+                fontSize={isMobile ? "13px" : "14px"}
+              />
+            </StyledTitleFormat>
+          );
+        }}
         customButtons={{
           share: {
             text: "일정 다운로드",
@@ -90,7 +138,7 @@ function Calendar(style) {
         initialView="dayGridMonth"
         // locales={[koLocale]}
       />
-    </div>
+    </StyledCalendarWrapper>
   );
 }
 
