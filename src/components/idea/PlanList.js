@@ -7,6 +7,16 @@ import useCustomHooks from "../../modules/customHooks/Index";
 import BASE_URL from "../../modules/host";
 import { usePlans } from "../../modules/Plans/hook";
 import Filter from "./Filter";
+import useResponsive, { isMobile } from "../../Responsive";
+import { CustomLabelText } from "../CustomText";
+import CustomButton from "../CustomButton";
+import DatePicker from "react-datepicker";
+import { forwardRef } from "preact/compat";
+import CalendarLogo from "../../assets/img/datepicker.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import useAuth from "../../modules/User/hook";
+
 const StyledItem = styled.div`
   height: 90px;
   text-decoration: none;
@@ -40,10 +50,14 @@ const StyledItem = styled.div`
       font-family: Avenir Next;
       font-style: normal;
       font-weight: 600;
-      font-size: 18px;
+      font-size: ${(props) => (props.isMobile ? "13px" : "18px")};
       line-height: 20px;
-      /* identical to box height, or 111% */
 
+      /* identical to box height, or 111% */
+      width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       letter-spacing: 0.9px;
 
       color: #363946;
@@ -52,7 +66,7 @@ const StyledItem = styled.div`
       font-family: Avenir Next;
       font-style: normal;
       font-weight: 500;
-      font-size: 11px;
+      font-size: ${(props) => (props.isMobile ? "9px" : "11px")};
       line-height: 15px;
       /* identical to box height */
 
@@ -73,6 +87,7 @@ const StyledItem = styled.div`
     position: relative;
     transition: 0.3s;
     cursor: pointer;
+    margin-right: ${(props) => (props.isMobile ? ".75rem" : "0px")};
     &.delete {
       transform: rotate(45deg);
 
@@ -125,10 +140,31 @@ const StyledItem = styled.div`
 //   }
 // };
 
+const StyledDatePickerInput = styled.button`
+  border: 1.42029px solid #d5d6d8;
+  box-sizing: border-box;
+  border-radius: 30px;
+  background: #fff;
+  width: 70%;
+  margin: 0 auto;
+  height: 42px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 function PlanItem({ index, contents, history }) {
+  const [startDate, setStartDate] = useState(new Date());
   const [select, setSelect] = useState(true);
   const [open, setOpen] = useState(false);
-  const { categoryFormatter } = useCustomHooks();
+
+  const { isMobile } = useResponsive();
+  const { categoryFormatter, formatDate } = useCustomHooks();
+  const { downloadPlan } = usePlans();
+  const { email } = useAuth();
+
   const togglePlan = (e) => {
     e.stopPropagation();
     setSelect((prev) => !prev);
@@ -140,18 +176,59 @@ function PlanItem({ index, contents, history }) {
       state: { contents },
     });
   };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const modalClick = () => {};
+
+  const downloads = () => {
+    if (!email) {
+      window.alert("로그인 후 플랜을 다운받을 수 있습니다.");
+      handleClose();
+      return;
+    }
+    downloadPlan(contents.id, formatDate(startDate));
+  };
+
+  const CustomInput = forwardRef(({ value, onClick }, ref) => (
+    <StyledDatePickerInput
+      style={isMobile ? { width: "100%" } : {}}
+      ref={ref}
+      onClick={onClick}
+    >
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <img
+          src={CalendarLogo}
+          style={{ marginRight: "1rem", width: 20, height: 20 }}
+          alt="calendar"
+        />
+        <div>{value}</div>
+      </div>
+      <FontAwesomeIcon icon={faChevronDown} />
+    </StyledDatePickerInput>
+  ));
+
   const imagePath = BASE_URL + "/uploads/" + contents.imgID;
+  const height = window.innerHeight;
+
+  useEffect(() => {
+    window.addEventListener("click", handleClose);
+    return () => {
+      window.removeEventListener("click", handleClose);
+    };
+  }, []);
 
   return (
     <>
       <StyledItem
         to={`/list?id=${contents.id}`}
         key={index}
+        isMobile={isMobile}
         className="mb-3"
         onClick={toggleDetail}
       >
         <div className="item-image">
-          {" "}
           <img
             src={imagePath}
             style={{
@@ -160,6 +237,7 @@ function PlanItem({ index, contents, history }) {
               borderRadius: "14px",
               objectFit: "cover",
             }}
+            alt="summary-thumb"
           />
         </div>
         <div className="item-summary">
@@ -168,26 +246,62 @@ function PlanItem({ index, contents, history }) {
             {categoryFormatter(contents.category)} |{" "}
             {contents.sns === "instagram" && "@"}
             {contents.author}
+            {isMobile && ` | 등록수 ${contents.downloads}`}
           </div>
         </div>
         <div
           onClick={togglePlan}
           className={select ? "item-btn add" : "item-btn delete"}
         />
-        <div className="item-date">등록수 {contents.downloads}</div>
+        {!isMobile && (
+          <div className="item-date">등록수 {contents.downloads}</div>
+        )}
       </StyledItem>
-      {/* <Modal show={open} onHide={toggleDetail} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{contents.title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Sample Sample Sample</p>
+      <Modal
+        show={open}
+        onHide={handleClose}
+        centered
+        onClick={modalClick}
+        backdrop={false}
+        style={
+          isMobile
+            ? { height, width: "calc(100% - 56px)", margin: "0 28px" }
+            : {}
+        }
+      >
+        <Modal.Body
+          style={{
+            background: "#FFFFFF",
+            boxShadow: "0px 10px 33px rgba(54, 57, 70, 0.2)",
+            borderRadius: 30,
+          }}
+        >
+          <CustomLabelText
+            text={`${contents.title} 을(를) 언제부터 시작할까요?`}
+            fontSize={18}
+            style={{
+              color: "#363946",
+              marginBottom: "5rem",
+              lineHeight: "24px",
+            }}
+          />
+          <DatePicker
+            dateFormat="yyyy년 MM월 dd일"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            customInput={<CustomInput />}
+            style={{ marginBottom: "5rem", width: isMobile ? "100%" : "70%" }}
+          />
+
+          <div style={{ width: 110, margin: "0 auto" }}>
+            <CustomButton
+              onClick={downloads}
+              text={"확인"}
+              style={{ marginTop: "5rem" }}
+            />
+          </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary">Close</Button>
-          <Button variant="primary">Save changes</Button>
-        </Modal.Footer>
-      </Modal> */}
+      </Modal>
     </>
   );
 }

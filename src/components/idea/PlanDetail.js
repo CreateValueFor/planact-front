@@ -17,6 +17,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./PlanDetail.scss";
 import useResponsive from "../../Responsive";
 import useViews from "../../modules/View/hooks";
+import useAuth from "../../modules/User/hook";
 
 const StyledDownloadBtn = styled(StyledButton)`
   color: #fff;
@@ -51,34 +52,38 @@ const StyledDatePickerInput = styled.button`
   justify-content: space-between;
 `;
 
-function PlanDetailSummary({ summary }) {
-  const { categoryFormatter, snsFormatter } = useCustomHooks();
-  const [show, setShow] = useState(false);
+function PlanDetailSummary({
+  setShow,
+  show,
+  summary,
+  handleShow,
+  isDownloaded,
+  setIsChanged,
+  isChanged,
+  setIsDownloaded,
+}) {
+  const { categoryFormatter, snsFormatter, formatDate } = useCustomHooks();
+  const { email } = useAuth();
+
   const [startDate, setStartDate] = useState(new Date());
-  const { downloadPlan, checkDownloaded, deletePlan } = usePlans();
-  const [isDownloaded, setIsDownloaded] = useState(false);
-  const [isChanged, setIsChanged] = useState(0);
+  const { downloadPlan, checkDownloaded } = usePlans();
+
   const { isMobile } = useResponsive();
 
   const handleClose = () => setShow(false);
-  const handleShow = (e) => {
-    e.stopPropagation();
-    if (isDownloaded) {
-      deletePlan(summary.id);
-      setIsChanged((prev) => prev++);
-    } else {
-      setShow(true);
-    }
-  };
+
   const modalClick = (e) => {
     e.stopPropagation();
   };
 
   const downloads = () => {
-    downloadPlan(summary.id, startDate.toLocaleDateString()).then((data) => {
-      console.log(data);
-      setIsChanged((prev) => prev++);
+    if (!email) {
+      window.alert("로그인 후 플랜을 다운받을 수 있습니다.");
       handleClose();
+      return;
+    }
+    downloadPlan(summary.id, formatDate(startDate)).then((data) => {
+      setIsChanged((prev) => prev++);
     });
   };
 
@@ -102,14 +107,13 @@ function PlanDetailSummary({ summary }) {
 
   useEffect(() => {
     checkDownloaded(summary.id).then((data) => {
-      console.log(data);
       if (data.downloaded) {
         setIsDownloaded(true);
       } else {
         setIsDownloaded(false);
       }
     });
-  }, [isChanged]);
+  }, [isChanged, summary.id, setIsDownloaded, checkDownloaded]);
   const height = window.innerHeight;
   useEffect(() => {
     window.addEventListener("click", handleClose);
@@ -120,23 +124,28 @@ function PlanDetailSummary({ summary }) {
   return (
     <StyledPlanDetail height={height}>
       <div style={{ flex: 1 }}>
-        <CustomText text={summary.title} />
+        <CustomText
+          text={summary.title}
+          fontSize={isMobile ? "16px" : "20px"}
+        />
         <CustomLabelText
           text={`${categoryFormatter(summary.category)} | ${snsFormatter(
             summary.sns
           )} ${summary.author} 제공`}
         />
       </div>
-      <div style={{ width: 150 }}>
-        <StyledDownloadBtn
-          onClick={handleShow}
-          id="downloadBtn"
-          style={{ height: 44 }}
-          className={isDownloaded ? "downloaded w-100" : "w-100"}
-        >
-          {isDownloaded ? "내 달력에서 제거" : "내 달력에 추가"}
-        </StyledDownloadBtn>
-      </div>
+      {!isMobile && (
+        <div style={{ width: 150 }}>
+          <StyledDownloadBtn
+            onClick={handleShow}
+            id="downloadBtn"
+            style={{ height: 44 }}
+            className={isDownloaded ? "downloaded w-100" : "w-100"}
+          >
+            {isDownloaded ? "내 달력에서 제거" : "내 달력에 추가"}
+          </StyledDownloadBtn>
+        </div>
+      )}
       <Modal
         show={show}
         onHide={handleClose}
@@ -157,9 +166,13 @@ function PlanDetailSummary({ summary }) {
           }}
         >
           <CustomLabelText
-            text={`${summary.title} 플랜을 언제부터 시작할까요?`}
+            text={`${summary.title} 을(를) 언제부터 시작할까요?`}
             fontSize={18}
-            style={{ color: "#363946", marginBottom: "5rem" }}
+            style={{
+              color: "#363946",
+              marginBottom: "5rem",
+              lineHeight: "24px",
+            }}
           />
           <DatePicker
             dateFormat="yyyy년 MM월 dd일"
@@ -225,8 +238,8 @@ function DayContainer({ contents, selectedId, clickDay }) {
           id="0"
           action
           style={{ border: "1px solid transparent" }}
-          active={selectedId === 0 && true}
-          onClick={() => clickDay(0)}
+          active={selectedId === -1 && true}
+          onClick={() => clickDay(-1)}
         >
           <CustomText
             fontSize={14}
@@ -307,8 +320,10 @@ function DayDetailContainer({ curContents }) {
                 <img
                   src={theme.thumb}
                   style={{
+                    objectFit: "cover",
                     width: isMobile ? "100%" : "347px",
                     height: "188px",
+                    borderRadius: "30px",
                   }}
                   alt="thumbnail"
                 />
@@ -334,19 +349,22 @@ function PlanDetailBody({ match }) {
   //페이지 진입 시 데이터 fetch
   useEffect(() => {
     getUploadedPlansJson(id).then((data) => {
+      if (data) {
+        data.sort(function(a, b) {
+          return a.id - b.id;
+        });
+      }
       setContents(data);
       setCurContents(data);
     });
   }, []);
 
   //contents 업데이트 시 작동할 함수
-  useEffect(() => {
-    console.log(contents);
-  }, [contents]);
+  useEffect(() => {}, [contents]);
 
   const clickDay = (id) => {
     setSelectedId(id);
-    if (id) {
+    if (id > -1) {
       setCurContents(contents.filter((elem) => elem.id === id));
     } else {
       setCurContents(contents);
@@ -381,7 +399,21 @@ function PlanDetail({ history, match }) {
   const location = useLocation();
   const summary = location.state.contents;
   const { viewDetail } = useViews();
+  const { deletePlan } = usePlans();
   const { isMobile } = useResponsive();
+  const [isDownloaded, setIsDownloaded] = useState(false);
+  const [isChanged, setIsChanged] = useState(0);
+  const [show, setShow] = useState(false);
+  const height = window.innerHeight;
+  const handleShow = (e) => {
+    e.stopPropagation();
+    if (isDownloaded) {
+      deletePlan(summary.id);
+      setIsChanged((prev) => prev++);
+    } else {
+      setShow(true);
+    }
+  };
   useEffect(() => {
     viewDetail();
   }, []);
@@ -410,9 +442,44 @@ function PlanDetail({ history, match }) {
           />
           돌아가기
         </div>
-        <MemorizedPlanDetailSummary summary={summary} />
+        <MemorizedPlanDetailSummary
+          show={show}
+          setIsDownloaded={setIsDownloaded}
+          setShow={setShow}
+          isChanged={isChanged}
+          setIsChanged={setIsChanged}
+          handleShow={handleShow}
+          isDownloaded={isDownloaded}
+          summary={summary}
+        />
         <hr />
         <MemorizedPlanDetailBody match={match} />
+        {isMobile && (
+          <div
+            style={{
+              width: "100%",
+              position: "fixed",
+              display: "flex",
+              alignItems: "center",
+              height: 72,
+              top: height - 72,
+              paddingRight: "calc(50% - 75px)",
+              paddingLeft: "calc(50% - 75px)",
+              left: 0,
+              background:
+                "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 25.52%)",
+            }}
+          >
+            <StyledDownloadBtn
+              onClick={handleShow}
+              id="downloadBtn"
+              style={{ height: 44, fontSize: 15 }}
+              className={isDownloaded ? "downloaded w-100" : "w-100"}
+            >
+              {isDownloaded ? "내 달력에서 제거" : "내 달력에 추가"}
+            </StyledDownloadBtn>
+          </div>
+        )}
       </Col>
     </Row>
   );
