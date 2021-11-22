@@ -21,7 +21,7 @@ const StyledTabBox = styled.div`
   }
   .list-group-item {
     margin: 0;
-    font-family: Noto Sans KR;
+    font-family: "Noto Sans KR";
     font-style: normal;
     font-weight: 500;
     font-size: 13px;

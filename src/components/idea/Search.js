@@ -22,7 +22,7 @@ const StyledSearchContainer = styled.div`
     margin-left: 0.25rem;
     &::placeholder {
       /* Subheading/Extra Small */
-      font-family: Caros Soft;
+      font-family: "Caros Soft";
       font-style: normal;
       font-weight: normal;
       font-size: 16px;

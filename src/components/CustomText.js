@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledLabel = styled.label`
-  font-family: Noto Sans KR;
+  font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 500;
   font-size: 10px;
@@ -15,7 +15,7 @@ const StyledLabel = styled.label`
 `;
 
 const StyledLink = styled.a`
-  font-family: Noto Sans KR;
+  font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 500;
   font-size: 13px;
@@ -31,7 +31,7 @@ const StyledLink = styled.a`
 `;
 
 const StyledText = styled.h2`
-  font-family: Noto Sans KR;
+  font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: bold;
   font-size: 20px;

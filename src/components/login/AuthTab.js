@@ -10,7 +10,7 @@ export const StyledListGroup = styled(ListGroup)`
   margin-bottom: 1.5rem;
 
   h2 {
-    font-family: Noto Sans KR;
+    font-family: "Noto Sans KR";
     font-style: normal;
     font-weight: 500;
     font-size: 0.75rem;
@@ -18,7 +18,7 @@ export const StyledListGroup = styled(ListGroup)`
     color: #acadb2;
   }
   .list-group-item {
-    font-family: Noto Sans KR;
+    font-family: "Noto Sans KR";
     font-style: normal;
     font-weight: 500;
     font-size: 0.8125rem;
@@ -59,7 +59,7 @@ export const StyledProfileBox = styled.div`
     flex-direction: column;
     justify-content: center;
     h2 {
-      font-family: Noto Sans KR;
+      font-family: "Noto Sans KR";
       font-style: normal;
       font-weight: 500;
       font-size: 0.8125rem;
@@ -72,7 +72,7 @@ export const StyledProfileBox = styled.div`
       color: #000000;
     }
     h3 {
-      font-family: Noto Sans KR;
+      font-family: "Noto Sans KR";
       font-style: normal;
       font-weight: normal;
       font-size: 11px;

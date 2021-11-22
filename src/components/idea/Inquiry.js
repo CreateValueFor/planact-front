@@ -30,7 +30,7 @@ const StyldMobileTobbar = styled.div`
     display: block;
     margin-bottom: 0px;
     text-align: center;
-    font-family: Noto Sans KR;
+    font-family: "Noto Sans KR";
     font-style: normal;
     font-weight: bold;
     font-size: 18px;
