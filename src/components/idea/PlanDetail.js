@@ -82,8 +82,10 @@ function PlanDetailSummary({
       handleClose();
       return;
     }
+    handleClose();
     downloadPlan(summary.id, formatDate(startDate)).then((data) => {
       setIsChanged((prev) => prev++);
+      setIsDownloaded(true);
     });
   };
 
@@ -409,6 +411,7 @@ function PlanDetail({ history, match }) {
     e.stopPropagation();
     if (isDownloaded) {
       deletePlan(summary.id);
+      setIsDownloaded(false);
       setIsChanged((prev) => prev++);
     } else {
       setShow(true);

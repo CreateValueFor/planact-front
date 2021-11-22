@@ -54,10 +54,10 @@ const StyledItem = styled.div`
       line-height: 20px;
 
       /* identical to box height, or 111% */
-      width: 150px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      width: ${(props) => (props.isMobile ? "150px" : "auto")};
+      white-space: ${(props) => (props.isMobile ? "nowrap" : "auto")};
+      overflow: hidden
+      text-overflow: ${(props) => (props.isMobile ? "elipsis" : "auto")};
       letter-spacing: 0.9px;
 
       color: #363946;
@@ -159,6 +159,7 @@ function PlanItem({ index, contents, history }) {
   const [startDate, setStartDate] = useState(new Date());
   const [select, setSelect] = useState(true);
   const [open, setOpen] = useState(false);
+  const [imgValid, setImgValid] = useState(true);
 
   const { isMobile } = useResponsive();
   const { categoryFormatter, formatDate } = useCustomHooks();
@@ -190,6 +191,16 @@ function PlanItem({ index, contents, history }) {
     }
     downloadPlan(contents.id, formatDate(startDate));
   };
+
+  // const handleShow = (e) => {
+  //   e.stopPropagation();
+  //   if (isDownloaded) {
+  //     deletePlan(summary.id);
+  //     setIsChanged((prev) => prev++);
+  //   } else {
+  //     setShow(true);
+  //   }
+  // };
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
     <StyledDatePickerInput
@@ -228,9 +239,17 @@ function PlanItem({ index, contents, history }) {
         className="mb-3"
         onClick={toggleDetail}
       >
-        <div className="item-image">
+        <div
+          className="item-image"
+          style={{
+            display: imgValid ? "auto" : "none",
+          }}
+        >
           <img
             src={imagePath}
+            onError={(e) => {
+              setImgValid(false);
+            }}
             style={{
               width: "100%",
               height: "100%",
