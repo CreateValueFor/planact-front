@@ -56,8 +56,8 @@ const StyledItem = styled.div`
       /* identical to box height, or 111% */
       width: ${(props) => (props.isMobile ? "150px" : "auto")};
       white-space: ${(props) => (props.isMobile ? "nowrap" : "auto")};
-      overflow: hidden
-      text-overflow: ${(props) => (props.isMobile ? "elipsis" : "auto")};
+      overflow: hidden;
+      text-overflow: ${(props) => (props.isMobile ? "ellipsis" : "auto")};
       letter-spacing: 0.9px;
 
       color: #363946;
