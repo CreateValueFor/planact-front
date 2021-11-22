@@ -71,7 +71,7 @@ const StyledTitleFormat = styled.div`
 `;
 
 function Calendar(style) {
-  const { plans, getCalendarRenderer } = usePlans();
+  const { plans, getCalendarRenderer, exportPlans } = usePlans();
   console.log(plans);
   const calendar = useRef();
   const { isMobile } = useResponsive();
@@ -129,7 +129,7 @@ function Calendar(style) {
           share: {
             text: "일정 다운로드",
             click: function() {
-              alert("clicked the custom button!");
+              exportPlans();
             },
           },
         }}

@@ -10,15 +10,7 @@ export const GET_RENDERS = "plans/GET_RENDERS";
 
 const initialState = {
   plans: {
-    events: [
-      {
-        title: "시몬느액세서리컬렉션(유가)",
-        start: " 2021-10-25",
-        end: "2021-10-26 ",
-        color: "red",
-        category: "sample",
-      },
-    ],
+    events: [],
   },
   currentPlans: [],
   filters: [],

@@ -358,7 +358,7 @@ export const usePlans = () => {
   };
 
   const exportPlans = async () => {
-    let ics = [];
+    let icsContainer = [];
 
     let sdt;
     let edt;
@@ -369,9 +369,13 @@ export const usePlans = () => {
       sdt = new Date(daily.start);
       edt = new Date(daily.end);
       crdt = new Date();
+      console.log("daily", daily);
+      // 날짜 차이 수 계산
       dateDiff = Math.ceil(
         (edt.getTime() - sdt.getTime()) / (1000 * 3600 * 24)
       );
+
+      //날짜 일수만큼 돌면서 객체 생성
       for (let i = 1; i <= dateDiff; i++) {
         let planFormat = {};
         let description = "";
@@ -383,36 +387,29 @@ export const usePlans = () => {
           crdt.getMonth() + 1,
           crdt.getDate(),
         ];
-        console.log(daily);
-        daily.plan.map((ev) => {
-          description += ev.title + ev.contents;
+
+        if (!daily.plan[i]) {
+          continue;
+        }
+
+        daily.plan[i].events.map((ev) => {
+          description += ev.title + " " + ev.contents;
+          description += " \n ";
         });
         planFormat.description = description;
-        ics.push(planFormat);
+        icsContainer.push(planFormat);
       }
     });
-    console.log(ics);
-    return;
+    // console.log(icsContainer);
 
-    const { error, value } = ics.createEvents([
-      {
-        title: "test",
-        start: [2018, 1, 15],
-        duration: { minutes: 45 },
-        description: "TEst",
-      },
-      {
-        title: "ttttt",
-        start: [2018, 1, 15, 12, 15],
-        duration: { hours: 1, minutes: 30 },
-      },
-    ]);
+    const { error, value } = ics.createEvents(icsContainer);
+    console.log(value);
 
-    const file = new Blob([value], { type: "text/calendar;charset=utf-8" });
-    const path = window.URL.createObjectURL(file);
+    // const file = new Blob([value], { type: "text/calendar;charset=utf8" });
+    // const path = window.URL.createObjectURL(file);
 
-    window.open("data:text/calendar;charset=utf8," + escape(value));
-    console.log(path);
+    window.open("data:text/calendar;charset=utf8," + encodeURIComponent(value));
+    // console.log(path);
   };
 
   return {

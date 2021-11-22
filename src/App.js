@@ -286,7 +286,6 @@ function App() {
                   alt="share"
                   style={{ width: 15, height: 18 }}
                   onClick={() => {
-                    window.alert("ddd");
                     exportPlans();
                   }}
                 />
