@@ -26,6 +26,9 @@ import PlanDetail from "./components/idea/PlanDetail";
 import useViews from "./modules/View/hooks";
 import usePlans from "./modules/Plans/hook";
 import Inquiry from "./components/idea/Inquiry";
+import useAuth from "./modules/User/hook";
+
+import LoginPage from "./components/login/LoginPage";
 
 const StyledMobileTab = styled.div`
   background: #ffffff;
@@ -63,8 +66,9 @@ const StyledMobileTab = styled.div`
 
 const StyledMobileTopBar = styled.div`
   height: 64px;
-  width: calc(100% - 1.5rem);
-  padding: 1rem;
+  width: calc(100%);
+  margin-left: -0.75rem;
+  padding: 1.75rem;
   background: #fff;
   position: fixed;
   top: 0;
@@ -72,6 +76,24 @@ const StyledMobileTopBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  .login-btn {
+    background: #089bab;
+    width: 64.76px;
+    height: 32px;
+    border-radius: 35.4286px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: Noto Sans KR;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 10.6667px;
+    line-height: 10px;
+
+    color: #ffffff;
+  }
 `;
 
 const StyledMobileBody = styled.div`
@@ -139,17 +161,21 @@ function App() {
   const isMobile = useMediaQuery({
     query: "(max-width:797px)",
   });
-  const { page } = useViews();
+  const { page, changeView } = useViews();
   const { exportPlans } = usePlans();
+  const { status, logout } = useAuth();
+
   const height = window.innerHeight;
 
   // * side bar Menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // * auth method
+  const [openLogin, setOpenLogin] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
+
   // * side bar tab
   // const []
-
-  const { changeView } = useViews();
 
   const onMenuToggle = (e) => {
     e.stopPropagation();
@@ -208,6 +234,15 @@ function App() {
             backgroundColor: "#fff",
           }}
         >
+          {/* <LoginPage /> */}
+          {/* <LoginModal
+            style={{
+              position: "absolute",
+              width: "100%",
+            }}
+            open={openLogin}
+            setLogin={setOpenLogin}
+          /> */}
           {/* !== "detail" && ( */}
           <StyledMobileSideBar
             onClick={onSideBarClick}
@@ -244,7 +279,14 @@ function App() {
                     계정 설정
                   </Link>
                 </ListGroup.Item>
-                <ListGroup.Item action onClick={onMenuToggle}>
+                <ListGroup.Item
+                  action
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    logout();
+                    setIsMenuOpen(false);
+                  }}
+                >
                   로그아웃
                 </ListGroup.Item>
               </ListGroup>
@@ -272,14 +314,26 @@ function App() {
           </StyledMobileSideBar>
           {/* )} */}
 
-          {page !== "detail" && (
+          {page !== "detail" && page !== "login" && page !== "register" && (
             <StyledMobileTopBar>
-              <img
-                src={Profile}
-                style={{ width: "32px", height: "32px" }}
-                alt="profile"
-                onClick={onMenuToggle}
-              />
+              {status ? (
+                <img
+                  src={Profile}
+                  style={{ width: "32px", height: "32px" }}
+                  alt="profile"
+                  onClick={onMenuToggle}
+                />
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => {
+                    setOpenLogin(true);
+                  }}
+                  className="login-btn"
+                >
+                  로그인
+                </Link>
+              )}
               {page === "main" && (
                 <img
                   src={ShareLogo}
@@ -302,11 +356,12 @@ function App() {
             }}
           >
             <Route path="/" exact component={Calendar} />
+            <Route path="/login" exact component={LoginPage} />
             <Route path="/list" exact component={List} />
             <Route path="/inquiry" component={Inquiry} />
             <Route path="/list/:id" exact component={PlanDetail} />
           </StyledMobileBody>
-          {page !== "detail" && (
+          {page !== "detail" && page !== "login" && page !== "register" && (
             <StyledMobileTab style={isMobile && { marginLeft: "-.75rem" }}>
               <Link to="/">
                 <img

@@ -63,6 +63,12 @@ const StyledCalendarWrapper = styled.div`
     border: ${(props) => (props.isMobile ? "1px solid transparent" : "auto")};
     border-bottom: 1px solid #e9e9e9;
   }
+  table th .fc-scrollgrid-sync-inner {
+    justify-content: ${(props) => (props.isMobile ? "center" : "flex-end")};
+  }
+  .fc .fc-daygrid-day-top {
+    justify-content: ${(props) => (props.isMobile ? "center" : "auto")};
+  }
 `;
 
 const StyledTitleFormat = styled.div`

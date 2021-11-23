@@ -7,6 +7,7 @@ export const SWITCH_PAGE = "plans/SWITCH_PAGE";
 export const ADD_PAGE = "plans/ADD_PAGE";
 export const SUBTRACT_PAGE = "plans/SUBTRACT_PAGE";
 export const GET_RENDERS = "plans/GET_RENDERS";
+export const LOGOUT = "plans/LOGOUT";
 
 const initialState = {
   plans: {
@@ -22,6 +23,13 @@ const initialState = {
 
 export default function planReducer(state = initialState, action) {
   switch (action.type) {
+    case LOGOUT:
+      return {
+        ...state,
+        plans: {
+          events: [],
+        },
+      };
     case GET_PLANS:
       return {
         ...state,

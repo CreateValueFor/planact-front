@@ -2,13 +2,14 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import BASE_URL from "../host";
 import { LOGIN, LOGOUT, REGISTER } from "./User";
-
+import { LOGOUT as planLogout } from "../Plans/Plans";
 function useAuth() {
   const dispatch = useDispatch();
   const {
     user: { email, nick },
   } = useSelector((state) => state.user);
   const { status } = useSelector((state) => state.user);
+  const { plans } = useSelector((state) => state.plan);
 
   const register = async ({ email, nick, password }) => {
     try {
@@ -56,7 +57,7 @@ function useAuth() {
       console.log(res);
 
       if (res.data.code !== 200) {
-        window.alert("문제가 발생하였습니다.");
+        window.alert("아이디 또는 비밀번호가 다릅니다.");
         return;
       }
       dispatch({
@@ -76,10 +77,13 @@ function useAuth() {
       dispatch({
         type: LOGOUT,
       });
+      dispatch({
+        type: planLogout,
+      });
     } catch (err) {
       console.log(err);
       dispatch({
-        type: LOGOUT,
+        type: planLogout,
       });
     }
   };

@@ -211,7 +211,7 @@ const ProfileContainer = () => {
 
 function LeftTabBar({ location }) {
   const { status } = useAuth();
-  const [selectCalendar, setSelectCalendar] = useState(true);
+  const [selectCalendar, setSelectCalendar] = useState(false);
 
   useEffect(() => {
     const currentPath = location.pathname.split("/")[2];
