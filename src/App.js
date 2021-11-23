@@ -29,6 +29,7 @@ import Inquiry from "./components/idea/Inquiry";
 import useAuth from "./modules/User/hook";
 
 import LoginPage from "./components/login/LoginPage";
+import RegisterPage from "./components/login/RegisterPage";
 
 const StyledMobileTab = styled.div`
   background: #ffffff;
@@ -357,6 +358,7 @@ function App() {
           >
             <Route path="/" exact component={Calendar} />
             <Route path="/login" exact component={LoginPage} />
+            <Route path="/register" exact component={RegisterPage} />
             <Route path="/list" exact component={List} />
             <Route path="/inquiry" component={Inquiry} />
             <Route path="/list/:id" exact component={PlanDetail} />

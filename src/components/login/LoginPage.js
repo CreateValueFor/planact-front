@@ -23,6 +23,24 @@ const StyledCard = styled(Card)`
       display: flex;
       flex-direction: column;
     }
+    .register-btn {
+      font-family: Noto Sans KR;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 12px;
+      /* identical to box height, or 92% */
+
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex: 1;
+      color: #737373;
+      div {
+        color: #74b9ff;
+        margin-left: 1rem;
+      }
+    }
   }
 `;
 
@@ -98,8 +116,18 @@ function LoginPage() {
             type="password"
             className="mb-5"
             setValue={setPassword}
-            style={{ flex: 1, height: "60px" }}
+            style={{ height: "60px", marginBottom: "0rem" }}
           />
+          <div className="register-btn">
+            계정이 없으신가요?
+            <div
+              onClick={() => {
+                history.push("/register");
+              }}
+            >
+              회원가입
+            </div>
+          </div>
           <CustomButton
             text="로그인"
             type="submit"
