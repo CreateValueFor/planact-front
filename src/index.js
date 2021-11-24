@@ -9,7 +9,10 @@ import { Provider } from "react-redux";
 import logger from "redux-logger";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
+import ReactGA from "react-ga";
 
+ReactGA.initialize("UA-213530943-1");
+ReactGA.pageview(window.location.pathname + window.location.search);
 // const store = createStore(rootReducer, applyMiddleware(logger));
 const store = createStore(rootReducer);
 const persister = persistStore(store);
