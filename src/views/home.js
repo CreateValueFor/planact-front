@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import Calendar from "../components/home/Calendar";
 import Filter from "../components/home/filter";
 
-import Logo from "../assets/img/Subtract.png";
+import Logo from "../assets/img/Subtract.svg";
 import Login from "../components/home/login";
 
 import LoginModal from "../components/login/Login";

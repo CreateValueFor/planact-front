@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Card, Form } from "react-bootstrap";
 import useAuth from "../../modules/User/hook";
 import InputForm from "../InputForm";
-import Logo from "../../assets/img/Subtract.png";
+import Logo from "../../assets/img/Subtract.svg";
 import CustomButton, { CustomeCloseButton } from "../CustomButton";
 import "./login.scss";
 import eventFunction from "../../modules/customHooks/eventFunction";

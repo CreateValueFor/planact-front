@@ -95,6 +95,9 @@ const StyledMobileTopBar = styled.div`
 
     color: #ffffff;
   }
+  a{
+    text-decoration:none
+  }
 `;
 
 const StyledMobileBody = styled.div`
@@ -331,6 +334,7 @@ function App() {
                     setOpenLogin(true);
                   }}
                   className="login-btn"
+                  style={{textDecoraton:"none"}}
                 >
                   로그인
                 </Link>

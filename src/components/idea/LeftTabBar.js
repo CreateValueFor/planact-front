@@ -242,7 +242,7 @@ function LeftTabBar({ location }) {
       <img
         src={Logo}
         className="mt-5"
-        style={{ width: 42, height: 62 }}
+        style={{ width: 30, height: 44 }}
         alt="logo"
       />
       <RouterButtons

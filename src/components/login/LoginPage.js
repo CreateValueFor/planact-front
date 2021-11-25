@@ -3,7 +3,7 @@ import { Card, Form } from "react-bootstrap";
 import useAuth from "../../modules/User/hook";
 import CustomButton from "../CustomButton";
 import InputForm from "../InputForm";
-import Logo from "../../assets/img/Subtract.png";
+import Logo from "../../assets/img/Subtract.svg";
 import { CustomeCloseButton } from "../CustomButton";
 import eventFunction from "../../modules/customHooks/eventFunction";
 import useViews from "../../modules/View/hooks";
