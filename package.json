@@ -23,7 +23,7 @@
     "ics": "^2.31.0",
     "moment": "^2.29.1",
     "node-sass": "^6.0.1",
-    "node-scss": "^7.0.3",
+    
     "qs": "^6.10.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0-beta.6",
