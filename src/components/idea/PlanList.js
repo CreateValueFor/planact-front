@@ -169,6 +169,7 @@ function PlanItem({ index, contents, history }) {
   const togglePlan = (e) => {
     e.stopPropagation();
     setSelect((prev) => !prev);
+    setOpen(true);
   };
   const toggleDetail = () => {
     setOpen((prev) => !prev);
@@ -268,10 +269,10 @@ function PlanItem({ index, contents, history }) {
             {isMobile && ` | 등록수 ${contents.downloads}`}
           </div>
         </div>
-        <div
+        {/* <div
           onClick={togglePlan}
           className={select ? "item-btn add" : "item-btn delete"}
-        />
+        /> */}
         {!isMobile && (
           <div className="item-date">등록수 {contents.downloads}</div>
         )}

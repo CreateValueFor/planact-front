@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Search from "./Search";
-import Filter from "./Filter";
+
 import PlanList from "./PlanList";
 import Pagination from "./Pagination";
 import useResponsive from "../../Responsive";

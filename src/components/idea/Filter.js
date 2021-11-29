@@ -43,7 +43,7 @@ function Filter() {
   return (
     <StyledFilter>
       <div>전체 {count}개의 플랜</div>
-      <div style={{ display: "flex" }}>
+      {/* <div style={{ display: "flex" }}>
         <Form.Select
           aria-label="Default select example"
           name="category"
@@ -64,7 +64,7 @@ function Filter() {
           <option value="downloads">인기순</option>
           <option value="recommend">추천순</option>
         </Form.Select>
-      </div>
+      </div> */}
     </StyledFilter>
   );
 }
