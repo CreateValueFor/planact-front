@@ -18,6 +18,7 @@ import "./PlanDetail.scss";
 import useResponsive from "../../Responsive";
 import useViews from "../../modules/View/hooks";
 import useAuth from "../../modules/User/hook";
+import BASE_URL from "../../modules/host";
 
 const StyledDownloadBtn = styled(StyledButton)`
   color: #fff;
@@ -318,9 +319,23 @@ function DayDetailContainer({ curContents }) {
               <div style={{ marginBottom: "1rem", fontSize: ".875rem" }}>
                 {theme.contents}
               </div>
-              {theme.thumb && (
+              {theme.thumb &&
+              theme.thumb.split(".")[1] !== "undefined" &&
+              theme.thumb != "" &&
+              theme.thumb.length > 100 ? (
                 <img
                   src={theme.thumb}
+                  style={{
+                    objectFit: "cover",
+                    width: isMobile ? "100%" : "347px",
+                    height: "188px",
+                    borderRadius: "30px",
+                  }}
+                  alt="thumbnail"
+                />
+              ) : (
+                <img
+                  src={`${BASE_URL}/uploads/daily/${theme.thumb}`}
                   style={{
                     objectFit: "cover",
                     width: isMobile ? "100%" : "347px",
@@ -341,28 +356,17 @@ function DayDetailContainer({ curContents }) {
 const MemorizedDayDetailContainer = React.memo(DayDetailContainer);
 const MemorizedDayContainer = React.memo(DayContainer);
 
-function PlanDetailBody({ match }) {
-  const [contents, setContents] = useState([]);
+function PlanDetailBody({ match, contents }) {
   const [curContents, setCurContents] = useState([]);
   const [selectedId, setSelectedId] = useState(0);
-  const { getUploadedPlansJson } = usePlans();
-  const { id } = match.params;
+
   const { isMobile } = useResponsive();
-  //페이지 진입 시 데이터 fetch
-  useEffect(() => {
-    getUploadedPlansJson(id).then((data) => {
-      if (data) {
-        data.sort(function(a, b) {
-          return a.id - b.id;
-        });
-      }
-      setContents(data);
-      setCurContents(data);
-    });
-  }, []);
 
   //contents 업데이트 시 작동할 함수
-  useEffect(() => {}, [contents]);
+  useEffect(() => {
+    setCurContents(contents);
+    console.log(contents);
+  }, [contents]);
 
   const clickDay = (id) => {
     setSelectedId(id);
@@ -398,15 +402,36 @@ const MemorizedPlanDetailBody = React.memo(PlanDetailBody);
 const MemorizedPlanDetailSummary = React.memo(PlanDetailSummary);
 
 function PlanDetail({ history, match }) {
+  const [isDownloaded, setIsDownloaded] = useState(false);
+  const [isChanged, setIsChanged] = useState(0);
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const [contents, setContents] = useState([]);
+  const { getUploadedPlansJson } = usePlans();
+
+  const { id } = match.params;
+  //페이지 진입 시 데이터 fetch
+  useEffect(() => {
+    getUploadedPlansJson(id).then((data) => {
+      if (data) {
+        data.sort(function(a, b) {
+          return a.id - b.id;
+        });
+      }
+      setContents(data);
+      setLoading(false);
+      console.log(data);
+    });
+  }, []);
+
   const location = useLocation();
   const summary = location.state.contents;
   const { viewDetail } = useViews();
   const { deletePlan } = usePlans();
   const { isMobile } = useResponsive();
-  const [isDownloaded, setIsDownloaded] = useState(false);
-  const [isChanged, setIsChanged] = useState(0);
-  const [show, setShow] = useState(false);
   const height = window.innerHeight;
+
   const handleShow = (e) => {
     e.stopPropagation();
     if (isDownloaded) {
@@ -456,7 +481,15 @@ function PlanDetail({ history, match }) {
           summary={summary}
         />
         <hr />
-        <MemorizedPlanDetailBody match={match} />
+        {loading ? (
+          <div>loading... </div>
+        ) : (
+          <MemorizedPlanDetailBody
+            contents={contents}
+            setLoading={setLoading}
+            match={match}
+          />
+        )}
         {isMobile && (
           <div
             style={{
