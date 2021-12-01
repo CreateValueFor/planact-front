@@ -244,6 +244,8 @@ function PlanItem({ index, contents, history }) {
           className="item-image"
           style={{
             display: imgValid ? "auto" : "none",
+            marginLeft: isMobile? ".75em": "auto",
+            marginRight: isMobile? "1rem": "auto",
           }}
         >
           <img
@@ -256,6 +258,7 @@ function PlanItem({ index, contents, history }) {
               height: "100%",
               borderRadius: "14px",
               objectFit: "cover",
+
             }}
             alt="summary-thumb"
           />

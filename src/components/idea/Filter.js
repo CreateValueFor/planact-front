@@ -2,6 +2,8 @@ import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { Dropdown, Form } from "react-bootstrap";
 import { usePlans } from "../../modules/Plans/hook";
+import useResponsive from "../../Responsive";
+
 const StyledFilter = styled.div`
   display: flex;
   justify-content: space-between;
@@ -18,11 +20,23 @@ const StyledFilter = styled.div`
       margin-right: 1rem;
     }
   }
+  .plan-count {
+    font-family: Noto Sans KR;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 1px;
+
+    color: #363946;
+  }
 `;
 
 function Filter() {
   const [category, setCategory] = useState("all");
   const [order, setOrder] = useState("recent");
+
+  const {isMobile} = useResponsive();
 
   const onChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -41,8 +55,8 @@ function Filter() {
 
   const { count } = usePlans();
   return (
-    <StyledFilter>
-      <div>전체 {count}개의 플랜</div>
+    <StyledFilter className={`${isMobile && "mb-3"}`}>
+      <div className="plan-count">전체 {count}개의 플랜</div>
       {/* <div style={{ display: "flex" }}>
         <Form.Select
           aria-label="Default select example"
