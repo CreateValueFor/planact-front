@@ -32,13 +32,20 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   </div>
 ));
 
+const StyledCustomRender = styled.div`
+    .dropend > div{
+      margin-left:.5rem;
+      font-weight:200;
+    }
+`;
+
 function renderEventContent(eventInfo) {
   return (
     <>
       {/* <b>{eventInfo.timetext}</b> */}
-      <div className="custom-render">
+      <StyledCustomRender>
         <Dropdown drop="end">
-          <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
+          <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" style={{paddingLeft:'1rem'}}>
             {eventInfo.event.title}
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -47,7 +54,7 @@ function renderEventContent(eventInfo) {
             </Card>
           </Dropdown.Menu>
         </Dropdown>
-      </div>
+      </StyledCustomRender>
     </>
   );
 }
