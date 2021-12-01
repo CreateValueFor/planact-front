@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, Route } from "react-router-dom";
-import Home from "./views/home";
+
 import Login from "./views/login";
 import "./app.css";
 import Idea from "./views/Idea";
@@ -223,9 +223,9 @@ function App() {
     <div style={{ backgroundColor: "#fcfcfe", minHeight: "100vh" }}>
       {(isPc || isTablet) && (
         <div style={{ minHeight: "100vh" }}>
-          <Route path="/trash" exact component={Home} />
+          
           <Route path="/" component={Idea} />
-          <Route path="/login" component={Login} />
+          
           <Route path="/uploads" component={Uploads} />
         </div>
       )}

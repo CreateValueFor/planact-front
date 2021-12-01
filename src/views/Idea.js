@@ -35,7 +35,7 @@ function Idea({ location }) {
       fluid
       style={{
         minHeight: "100vh",
-        maxHeight: "100vh",
+        // maxHeight: "100vh",
         backgroundColor: "#F1F6F9",
         display: "flex",
       }}
