@@ -322,7 +322,7 @@ function DayDetailContainer({ curContents }) {
               {theme.thumb &&
               theme.thumb.split(".")[1] !== "undefined" &&
               theme.thumb != "" &&
-              theme.thumb !== BASE_URL &&
+              theme.thumb !== "https://api3.planact.shop/uploads/daily/" &&
               theme.thumb.length > 100 ? (
                 <img
                   src={theme.thumb}
