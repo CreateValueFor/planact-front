@@ -322,6 +322,7 @@ function DayDetailContainer({ curContents }) {
               {theme.thumb &&
               theme.thumb.split(".")[1] !== "undefined" &&
               theme.thumb != "" &&
+              theme.thumb !== BASE_URL &&
               theme.thumb.length > 100 ? (
                 <img
                   src={theme.thumb}
