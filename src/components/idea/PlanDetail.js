@@ -319,22 +319,25 @@ function DayDetailContainer({ curContents }) {
               <div style={{ marginBottom: "1rem", fontSize: ".875rem" }}>
                 {theme.contents}
               </div>
-              {theme.thumb &&
-              theme.thumb.split(".")[1] !== "undefined" &&
-              theme.thumb != "" &&
-              theme.thumb != "https://api3.planact.shop/uploads/daily/" &&
+              {
               theme.thumb.length > 100 ? (
                 <img
                   src={theme.thumb}
                   style={{
-                    objectFit: "cover",
+                    objectFit: theme.title==="#하루"? "unset": "cover",
                     width: isMobile ? "100%" : "347px",
-                    height: "188px",
+                    height: theme.title==="#하루" ? "auto":"188px",
                     borderRadius: "30px",
+                    marginBottom:"30px"
                   }}
                   alt="thumbnail"
                 />
-              ) : (
+              ) : 
+              theme.thumb &&
+              theme.thumb.split(".")[1] !== "undefined" &&
+              theme.thumb != "" &&
+              theme.thumb != "https://api3.planact.shop/uploads/daily/" &&
+              (
                 <img
                   src={`${BASE_URL}/uploads/daily/${theme.thumb}`}
                   style={{
@@ -342,6 +345,7 @@ function DayDetailContainer({ curContents }) {
                     width: isMobile ? "100%" : "347px",
                     height: "188px",
                     borderRadius: "30px",
+                    marginBottom:"30px"
                   }}
                   alt="thumbnail"
                 />

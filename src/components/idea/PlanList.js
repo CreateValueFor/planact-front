@@ -244,7 +244,7 @@ function PlanItem({ index, contents, history }) {
           className="item-image"
           style={{
             display: imgValid ? "auto" : "none",
-            marginLeft: isMobile? ".75em": "auto",
+            marginLeft: isMobile? ".75em": "1.8%",
             marginRight: isMobile? "1rem": "auto",
           }}
         >
