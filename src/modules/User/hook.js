@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import BASE_URL from "../host";
-import { LOGIN, LOGOUT, REGISTER } from "./User";
+import { LOGIN, LOGOUT, PROFILE, REGISTER } from "./User";
 import { LOGOUT as planLogout } from "../Plans/Plans";
 function useAuth() {
   const dispatch = useDispatch();
   const {
-    user: { email, nick },
+    user: { email, nick,thumb },
   } = useSelector((state) => state.user);
   const { status } = useSelector((state) => state.user);
   const { plans } = useSelector((state) => state.plan);
@@ -88,7 +88,23 @@ function useAuth() {
     }
   };
 
-  return { register, login, logout, email, nick, status };
+  const updateProfile = async(profile)=>{
+    try{
+      const res = await axios.patch(BASE_URL+"/auth/profile",profile)
+      const {nick, thumb} = res.data;
+      console.log(res);
+      dispatch({
+        type:PROFILE,
+        nick: nick,
+        thumb: thumb
+        
+      })
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  return { register,thumb, updateProfile,login, logout, email, nick, status };
 }
 
 export default useAuth;

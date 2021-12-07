@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Profile from "../../assets/img/Default Profile.png";
 import CustomContainer from "../CustomContainer";
@@ -20,6 +20,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import LeftChevron from "../../assets/img/LeftChevron.svg";
 import ChangeBtn from "../../assets/img/profileChange.svg";
 import DeleteBtn from "../../assets/img/profileDelete.svg";
+import CustomButton from "../CustomButton";
 
 
 const StyldMobileTobbar = styled.div`
@@ -227,6 +228,71 @@ const StyledProfileContainer = styled.div`
 `;
 
 const ProfileRoutes = ({ email, nick,isMobile }) => {
+  const [curNick, setCurNick] = useState();
+  const [base64Image, setBase64Image] = useState("");
+  const [image, setImage] = useState();
+  const [isSend, setIsSend] = useState(false)
+  const {updateProfile,thumb} = useAuth();
+
+  const imageRef = useRef();
+  
+  const onRemoveImage = useCallback(()=>{
+    setImage();
+    setBase64Image("")
+  },[])
+
+  const onImageClick = useCallback((e)=>{
+    let reader = new FileReader();
+  
+    reader.onloadend = () => {
+      const base64 = reader.result;
+      if (base64){
+        setBase64Image(base64.toString())
+        console.log(base64.toString())
+        
+      }
+    }
+    if(e.target.files[0]){
+      const file = e.target.files[0];
+      reader.readAsDataURL(file);
+      setImage(file);
+
+    }
+
+  },[])
+
+  const onSubmit = useCallback(()=>{
+    setIsSend(true);
+  },[image, nick])
+  
+  useEffect(()=>{
+    if(isSend){
+
+      let profile = new FormData();
+      console.log(curNick);
+      profile.append("nick",curNick)
+      profile.append("email",email)
+      profile.append("thumb",image)
+      updateProfile(profile)
+      setIsSend(false);
+    }
+  },[isSend])
+
+  useEffect(()=>{
+    setCurNick(nick)
+    setImage(thumb)
+    let reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = reader.result;
+      if (base64){
+        console.log(base64.toString())
+        setBase64Image(base64.toString())
+      }
+    }
+    if(thumb){
+      reader.readAsDataURL(thumb);
+    }
+  },[])
 
   return (
     <>
@@ -240,30 +306,40 @@ const ProfileRoutes = ({ email, nick,isMobile }) => {
       >
         <div>
           <img
-            src={Profile}
+            src={base64Image? base64Image: Profile}
             style={{ width: "180px", height: "180px" }}
             alt="profile"
+            
           />
         </div>
         <div style={{ flex: 1, paddingLeft:isMobile?"1rem":"auto",paddingRight:isMobile?"1rem":"auto" ,width: isMobile? "100%":"auto" }}>
           {isMobile ? (
             <>
               <StyledProfileContainer>
-                <img src={ChangeBtn} alt="change" style={{marginRight:".5rem"}}/>
-                <img src={DeleteBtn} alt="delete" style={{marginLeft:".5rem"}}/>
+                <input onClick={onImageClick}  ref={imageRef} type="file" style={{display:"none"}}   />
+                <img src={ChangeBtn} onClick={()=>{imageRef.current.click()}} alt="change" style={{marginRight:".5rem"}}/>
+                <img src={DeleteBtn} onClick={onRemoveImage} alt="delete" style={{marginLeft:".5rem"}}/>
               </StyledProfileContainer>
               <div>
                 <MobileInputForm
-                  value={nick}
+                  value={curNick}
+                  setValue={setCurNick}
                   text="닉네임"
                   
                 />
                 <MobileInputForm
+                  
                   value={email}
                   text="이메일"
                   disabled={true}
                 />
               </div>
+              <CustomButton
+            text="수정하기"
+            type="submit"
+            onClick={onSubmit}
+            style={{ marginBottom: 28,marginTop:"32px", height: "60px" }}
+          />
             </>
           ):
           (
@@ -307,6 +383,8 @@ const InquiryContentsText = ({ title, subTitle }) => {
     </>
   );
 };
+
+
 
 function Inquiry() {
   const { isMobile } = useResponsive();

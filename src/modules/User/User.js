@@ -3,6 +3,7 @@
 export const LOGIN = "user/LOGIN";
 export const LOGOUT = "user/LOGOUT";
 export const REGISTER = "user/REGISTER";
+export const PROFILE = "user/PROFILE";
 
 function userReducer(state = { user: {}, profile: {}, status: false }, action) {
   switch (action.type) {
@@ -23,6 +24,15 @@ function userReducer(state = { user: {}, profile: {}, status: false }, action) {
         profile: {},
         status: false,
       };
+    case PROFILE:
+      return{
+        ...state,
+        user: {
+          ...state.user,
+          nick:action.nick,
+          thumb:action.thumb
+        }
+      }
     default:
       return state;
   }
