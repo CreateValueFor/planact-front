@@ -29,6 +29,13 @@ table{
 
   color: #000000;
 }
+
+.fc-button{
+  &:visible{
+    box-sizing: none;
+  }
+}
+
 .fc-share-button.fc-button{
   background: #FFB350;
   border:none;
@@ -165,6 +172,11 @@ th.fc-col-header-cell.fc-day{
         
         color:#000000;
         background-color: #fcfcfe !important;
+        box-shadow: none;
+      }
+      &:focus{
+        box-shadow: none !important;
+
       }
     }
   }
