@@ -15,6 +15,8 @@ import usage from "../../assets/docs/usage";
 import styled from "styled-components";
 import CustomText, { CustomLabelText } from "../CustomText";
 import { useHistory } from "react-router";
+import RightChevron from "../../assets/img/Union.svg";
+
 const StyledHtmlContainer = styled.div`
   /* max-height: 100%; */
   width: 100%;
@@ -85,15 +87,17 @@ const StyledCard = styled(Card)`
   .card-body {
     display: flex;
     flex-direction: column;
-    padding: 0rem 1rem 1rem;
+    padding: 1rem 1rem;
   }
   /* margin-left: -0.75rem; */
 `;
 
 const StyledInputForm = styled(InputForm)`
   margin-bottom: 30px !important;
+  border-width: 2px;
   input {
     height: 60px;
+    padding:30px 20px;
   }
 `;
 
@@ -107,6 +111,7 @@ const StyledFormCheck = styled(Form.Check)`
     line-height: 1.5rem;
 
     color: #000000;
+
   }
 `;
 
@@ -179,7 +184,7 @@ function RegisterPage({}) {
     <StyledCard
       height={height}
       className="auth-modal"
-      style={{ ...{ position: "relative" } }}
+      style={{ ...{ position: "relative",boxShadow:"none" } }}
       onClick={stopPropagation}
     >
       {registerSuccess && (
@@ -266,12 +271,12 @@ function RegisterPage({}) {
       <Card.Body>
         <div
           className="d-flex justify-content-between"
-          style={{ marginBottom: 22, marginTop: 4, alignItems: "center" }}
+          style={{ marginBottom: 40, marginTop: 4, alignItems: "center" }}
         >
           <div style={{ width: 20 }} />
           <img
             src={Logo}
-            style={{ width: "33px", height: "50px", marginTop: "26px" }}
+            style={{ width: "33px", height: "50px", marginTop: "0px" }}
             alt="logo"
           />
           <CustomeCloseButton
@@ -301,14 +306,14 @@ function RegisterPage({}) {
             type="password"
             setValue={setPassword}
           />
-          <div className="d-flex">
+          <div className="d-flex" style={{marginTop:"1rem"}}>
             <StyledFormCheck
               type="checkbox"
               label={`플랜액트 이용약관 동의(필수)`}
               id="usage-agreement"
               name="usage"
-              className="mb-1"
-              style={{ flex: 1 }}
+              className=""
+              style={{ flex: 1,marginBottom:"20px" }}
             />
             <div
               name="usage"
@@ -316,8 +321,9 @@ function RegisterPage({}) {
                 clickDetail("usage");
               }}
               style={{ cursor: "pointer" }}
-            >
-              <FontAwesomeIcon icon={faChevronRight} />
+            > 
+              <img src={RightChevron} alt="rightChevron"/>
+              
             </div>
           </div>
           <div className="d-flex">
@@ -336,7 +342,8 @@ function RegisterPage({}) {
                 clickDetail("collect");
               }}
             >
-              <FontAwesomeIcon icon={faChevronRight} />
+              <img src={RightChevron} alt="rightChevron"/>
+              
             </div>
           </div>
           <div style={{ flex: 1 }}>&nbsp;</div>

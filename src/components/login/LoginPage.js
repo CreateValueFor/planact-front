@@ -47,6 +47,7 @@ const StyledCard = styled(Card)`
 const StyledInputForm = styled(InputForm)`
   input {
     height: 60px;
+    padding:30px 20px;
     font-family: Noto Sans KR;
     font-style: normal;
     font-weight: normal;
@@ -124,6 +125,7 @@ function LoginPage() {
               onClick={() => {
                 history.push("/register");
               }}
+              style={{color:"#089BAB"}}
             >
               회원가입
             </div>
