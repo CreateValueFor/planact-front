@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Profile from "../../assets/img/Default Profile.png";
 import CustomContainer from "../CustomContainer";
 import CustomText, { CustomLabelText, CustomLinkText } from "../CustomText";
-import InputForm from "../InputForm";
+import InputForm, { MobileInputForm } from "../InputForm";
 import { Route } from "react-router-dom";
 import Kakao from "../../assets/img/Kakao Channel.png";
 import Instagram from "../../assets/img/Instagram.png";
@@ -17,13 +17,17 @@ import useViews from "../../modules/View/hooks";
 import useAuth from "../../modules/User/hook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import LeftChevron from "../../assets/img/LeftChevron.svg";
+import ChangeBtn from "../../assets/img/profileChange.svg";
+import DeleteBtn from "../../assets/img/profileDelete.svg";
+
 
 const StyldMobileTobbar = styled.div`
   position: relative;
   .icon {
     position: absolute;
-    left: 1rem;
-    top: calc(50% - 8px);
+    left: 35px;
+    top: calc(50% - 9px);
     transform: translateY(-50%);
   }
   p {
@@ -53,9 +57,10 @@ function InquiryMobileTobBar({ title }) {
   };
   return (
     <StyldMobileTobbar style={{ width, marginLeft: "-.75rem" }}>
-      <div>
+      <div >
         <div className="icon" onClick={onClickBack}>
-          <FontAwesomeIcon width="16px" height="16px" icon={faChevronLeft} />
+          <img src={LeftChevron} alt="leftChevron"/>
+          
         </div>
         <p>{title}</p>
       </div>
@@ -212,7 +217,17 @@ const AskRoutes = () => {
   );
 };
 
-const ProfileRoutes = ({ email, nick }) => {
+const StyledProfileContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px !important;
+  img{
+    cursor:'pointer'
+  }
+`;
+
+const ProfileRoutes = ({ email, nick,isMobile }) => {
+
   return (
     <>
       <InquiryContentsText
@@ -221,7 +236,7 @@ const ProfileRoutes = ({ email, nick }) => {
       />
       <CustomContainer
         id="profile-contents"
-        style={{ marginTop: 50, width: "80%", alignItems: "center" }}
+        style={{ marginTop: isMobile? 20:50 , width: isMobile ?"100%" : "80%", alignItems: "center" }}
       >
         <div>
           <img
@@ -230,7 +245,29 @@ const ProfileRoutes = ({ email, nick }) => {
             alt="profile"
           />
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, paddingLeft:isMobile?"1rem":"auto",paddingRight:isMobile?"1rem":"auto" ,width: isMobile? "100%":"auto" }}>
+          {isMobile ? (
+            <>
+              <StyledProfileContainer>
+                <img src={ChangeBtn} alt="change" style={{marginRight:".5rem"}}/>
+                <img src={DeleteBtn} alt="delete" style={{marginLeft:".5rem"}}/>
+              </StyledProfileContainer>
+              <div>
+                <MobileInputForm
+                  value={nick}
+                  text="닉네임"
+                  
+                />
+                <MobileInputForm
+                  value={email}
+                  text="이메일"
+                  disabled={true}
+                />
+              </div>
+            </>
+          ):
+          (
+            <>
           <CustomContainer style={{ marginBottom: "3rem" }}>
             <CustomLabelText
               fontSize={12}
@@ -247,6 +284,9 @@ const ProfileRoutes = ({ email, nick }) => {
             />
             <InputForm style={{ flex: 1 }} value={email} disabled />
           </CustomContainer>
+            </>
+          )
+          }
         </div>
       </CustomContainer>
     </>
@@ -303,7 +343,7 @@ function Inquiry() {
       <StyledContainer isMobile={isMobile}>
         <Route
           path="/inquiry/profile"
-          render={() => <ProfileRoutes email={email} nick={nick} />}
+          render={() => <ProfileRoutes email={email} isMobile={isMobile} nick={nick} />}
         />
         <Route path="/inquiry/" exact render={AskRoutes} />
         <Route path="/inquiry/usage" render={UsageRoutes} />
