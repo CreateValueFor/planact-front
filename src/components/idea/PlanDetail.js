@@ -51,6 +51,19 @@ const StyledDatePickerInput = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  .date-display{
+    font-style: normal;
+font-weight: bold;
+font-size: 13px;
+line-height: 14px;
+color: #363946;
+  }
+`;
+
+const StyledModal = styled(Modal)`
+  .modal-content{
+    border:none !important;
+  }
 `;
 
 function PlanDetailSummary({
@@ -102,7 +115,7 @@ function PlanDetailSummary({
           style={{ marginRight: "1rem", width: 20, height: 20 }}
           alt="calendar"
         />
-        <div>{value}</div>
+        <div className="date-display">{value}</div>
       </div>
       <FontAwesomeIcon icon={faChevronDown} />
     </StyledDatePickerInput>
@@ -149,7 +162,7 @@ function PlanDetailSummary({
           </StyledDownloadBtn>
         </div>
       )}
-      <Modal
+      <StyledModal
         show={show}
         onHide={handleClose}
         centered
@@ -157,8 +170,8 @@ function PlanDetailSummary({
         backdrop={false}
         style={
           isMobile
-            ? { height, width: "calc(100% - 56px)", margin: "0 28px" }
-            : {}
+            ? { height, width: "calc(100% - 56px)", margin: "0 28px",border:"none" }
+            : {border:'none'}
         }
       >
         <Modal.Body
@@ -166,11 +179,15 @@ function PlanDetailSummary({
             background: "#FFFFFF",
             boxShadow: "0px 10px 33px rgba(54, 57, 70, 0.2)",
             borderRadius: 30,
+            paddingTop:"2rem",
+            display:'flex',
+            flexDirection:"column",
+            alignItems:"center"
           }}
         >
           <CustomLabelText
             text={`${summary.title} 을(를) 언제부터 시작할까요?`}
-            fontSize={18}
+            fontSize={16}
             style={{
               color: "#363946",
               marginBottom: "5rem",
@@ -182,7 +199,7 @@ function PlanDetailSummary({
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             customInput={<CustomInput />}
-            style={{ marginBottom: "5rem", width: isMobile ? "100%" : "70%" }}
+            style={{fontSize:16, marginBottom: "5rem", width: isMobile ? "100%" : "70%" }}
           />
 
           <div style={{ width: 110, margin: "0 auto" }}>
@@ -193,7 +210,7 @@ function PlanDetailSummary({
             />
           </div>
         </Modal.Body>
-      </Modal>
+      </StyledModal>
     </StyledPlanDetail>
   );
 }

@@ -88,6 +88,9 @@ function DownloadModal({ show, setShow, setIsChanged, summary }) {
           background: "#FFFFFF",
           boxShadow: "0px 10px 33px rgba(54, 57, 70, 0.2)",
           borderRadius: 30,
+          display:'flex',
+          flexDirection:"column",
+          alignItems:"center"
         }}
       >
         <CustomLabelText

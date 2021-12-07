@@ -30,6 +30,10 @@ const StyledFilter = styled.div`
 
     color: #363946;
   }
+  select{
+    border:none;
+    outline: none;
+  }
 `;
 
 function Filter() {
