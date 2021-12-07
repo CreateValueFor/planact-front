@@ -6,6 +6,30 @@ import InputForm from "../InputForm";
 import Logo from "../../assets/img/Subtract.svg";
 import { CustomeCloseButton } from "../CustomButton";
 import eventFunction from "../../modules/customHooks/eventFunction";
+import styled from "styled-components"
+
+const StyledLoginForm = styled(Form)`
+  input{
+    font-family: Noto Sans KR;
+font-style: normal;
+font-weight: normal;
+font-size: 12px;
+line-height: 17px;
+/* or 142% */
+    padding: 12px 20px;
+
+display: flex;
+align-items: center;
+color: #83848C;
+  }
+  .custom-close-btn{
+    width:12px;
+    height:12px;
+  }
+  img{
+    width:12px !important;
+  }
+`;
 
 function LoginModal({ setLogin, style, open }) {
   const { login } = useAuth();
@@ -48,7 +72,7 @@ function LoginModal({ setLogin, style, open }) {
             }}
           />
         </div>
-        <Form onSubmit={onSubmit}>
+        <StyledLoginForm onSubmit={onSubmit}>
           <InputForm placeholder="이메일" type="email" setValue={setEmail} />
           <InputForm
             placeholder="비밀번호"
@@ -59,9 +83,9 @@ function LoginModal({ setLogin, style, open }) {
           <CustomButton
             text="로그인"
             type="submit"
-            style={{ marginBottom: 28 }}
+            style={{fontSize:13, marginBottom: 28, height:43 }}
           />
-        </Form>
+        </StyledLoginForm>
       </Card.Body>
     </Card>
   );

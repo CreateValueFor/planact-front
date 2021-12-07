@@ -14,6 +14,7 @@ import collect from "../../assets/docs/collect";
 import usage from "../../assets/docs/usage";
 import styled from "styled-components";
 import CustomText, { CustomLabelText } from "../CustomText";
+import RightChevron from "../../assets/img/RightChevron.svg";
 
 const StyledHtmlContainer = styled.div`
   /* max-height: 100%; */
@@ -72,6 +73,40 @@ const StyledCard = styled(Card)`
   background: #ffffff;
   box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.25), 0px 0px 16px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
+`;
+
+const StyledLoginForm = styled(Form)`
+  input{
+    font-family: Noto Sans KR;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 17px;
+  /* or 142% */
+      padding: 12px 20px;
+
+  display: flex;
+  align-items: center;
+  color: #83848C;
+  margin-bottom: 20px !important;
+  }
+  input[name="password"]{
+    margin-bottom: 0px !important;
+  }
+  .custom-close-btn{
+    width:12px;
+    height:12px;
+  }
+  img{
+    width:12px !important;
+  }
+  input[type="checkbox"]{
+    padding:0;
+    width:16px;
+    height:16px;
+    border-radius: 50%;
+    margin-bottom:.5rem !important;
+  }
 `;
 
 function RegisterModal({ setRegister, style, open }) {
@@ -232,7 +267,7 @@ function RegisterModal({ setRegister, style, open }) {
             style={{ fontSize: "1.25rem" }}
           />
         </div>
-        <Form onSubmit={onSubmit}>
+        <StyledLoginForm onSubmit={onSubmit}>
           <InputForm placeholder="닉네임" type="nick" setValue={setNick} />
           <InputForm placeholder="이메일" type="email" setValue={setEmail} />
           <InputForm
@@ -257,7 +292,8 @@ function RegisterModal({ setRegister, style, open }) {
               }}
               style={{ cursor: "pointer" }}
             >
-              <FontAwesomeIcon icon={faChevronRight} />
+              <img src={RightChevron} alt="rightChevron"/>
+              
             </div>
           </div>
           <div className="d-flex">
@@ -276,15 +312,16 @@ function RegisterModal({ setRegister, style, open }) {
                 clickDetail("collect");
               }}
             >
-              <FontAwesomeIcon icon={faChevronRight} />
+              <img src={RightChevron} alt="rightChevron"/>
+              
             </div>
           </div>
           <CustomButton
             text="회원가입"
             type="submit"
-            style={{ marginBottom: 28 }}
+            style={{ fontSize:13, marginBottom: 28,height:"43px" }}
           />
-        </Form>
+        </StyledLoginForm>
       </Card.Body>
     </StyledCard>
   );

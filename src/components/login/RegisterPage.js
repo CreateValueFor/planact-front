@@ -113,6 +113,9 @@ const StyledFormCheck = styled(Form.Check)`
     color: #000000;
 
   }
+  input[type="checkbox"]{
+    border-radius: 50%;
+  }
 `;
 
 function RegisterPage({}) {

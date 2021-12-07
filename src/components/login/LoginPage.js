@@ -9,7 +9,7 @@ import eventFunction from "../../modules/customHooks/eventFunction";
 import useViews from "../../modules/View/hooks";
 import styled from "styled-components";
 import { useHistory } from "react-router";
-
+import Close from "../../assets/img/close-01.svg";
 const StyledCard = styled(Card)`
   height: ${(props) => props.height}px;
   min-height: ${(props) => props.height}px;
