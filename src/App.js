@@ -167,7 +167,7 @@ function App() {
   });
   const { page, changeView } = useViews();
   const { exportPlans } = usePlans();
-  const { status, logout } = useAuth();
+  const { status, logout, email,nick } = useAuth();
 
   const height = window.innerHeight;
 
@@ -271,8 +271,8 @@ function App() {
                 alt="profile"
               />
               <div>
-                <h2>닉네임</h2>
-                <h3>example@example.com</h3>
+                <h2 style={{marginBottom:"-.25rem"}}> {nick}</h2>
+                <h3>{email}</h3>
               </div>
             </StyledProfileBox>
             <StledMobileListGroup>
