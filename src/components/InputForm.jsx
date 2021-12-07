@@ -54,13 +54,14 @@ export function MobileInputForm({setValue,
   text,
   type,
   className,
+  
   style,}){
     const onChange = useCallback(
       (e) => {
         const {
           target: { value },
-        } = e;
-  
+        } = e;  
+        
         setValue(value);
       },
       [setValue]

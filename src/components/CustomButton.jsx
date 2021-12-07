@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import styled from "styled-components";
 import { ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Close from "../assets/img/close-01.svg";
 
 export const StyledButton = styled(Button)`
   /* background: #313340; */
@@ -89,7 +90,7 @@ function CustomButton({ text, onClick, className, type, style }) {
 export const CustomeCloseButton = ({ onClick, style }) => {
   return (
     <StyledCloseButton style={style} onClick={onClick}>
-      &times;
+      <img src={Close} className="custom-close-btn" alt="close"/>
     </StyledCloseButton>
   );
 };
