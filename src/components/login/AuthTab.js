@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Profile from "../../assets/img/Default Profile.png";
 import useAuth from "../../modules/User/hook";
+import Avatar from "../../assets/img/user.svg"
 export const StyledListGroup = styled(ListGroup)`
   padding: 0;
 
@@ -115,7 +116,10 @@ function AuthTab({ open, style, setAuthTab }) {
     >
       <Card.Body>
         <StyledProfileBox>
-          <img src={Profile} style={{ width: 42, height: 42 }} />
+        <div style={{marginLeft:0,cursor:"pointer",width:42,display:"flex",alignItems:"center",justifyContent:"center", height:42, borderRadius:"50%",background:"#d8d8d8"}}>
+        <img src={Avatar} alt="avatar"/>
+      </div>
+          {/* <img src={Profile} style={{ width: 42, height: 42 }} /> */}
           <div>
             <h2 style={{marginBottom:"-.2rem"}}>{nick}</h2>
             <h3>{email}</h3>

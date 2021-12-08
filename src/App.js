@@ -27,7 +27,7 @@ import useViews from "./modules/View/hooks";
 import usePlans from "./modules/Plans/hook";
 import Inquiry from "./components/idea/Inquiry";
 import useAuth from "./modules/User/hook";
-
+import Avatar from "./assets/img/MobileUser.svg";
 import LoginPage from "./components/login/LoginPage";
 import RegisterPage from "./components/login/RegisterPage";
 
@@ -265,11 +265,14 @@ function App() {
               alt="close"
             />
             <StyledProfileBox style={{ marginBottom: "40px" }}>
-              <img
+              {/* <img
                 src={Profile}
                 style={{ width: 42, height: 42 }}
                 alt="profile"
-              />
+              /> */}
+              <div style={{marginLeft:0,cursor:"pointer",width:42,display:"flex",alignItems:"center",justifyContent:"center", height:42, borderRadius:"50%",background:"#f7f7f7"}}>
+                <img src={Avatar} alt="avatar"/>
+              </div>
               <div>
                 <h2 style={{marginBottom:"-.25rem"}}> {nick}</h2>
                 <h3>{email}</h3>
@@ -321,12 +324,15 @@ function App() {
           {page !== "detail" && page !== "login" && page !== "register" && (
             <StyledMobileTopBar>
               {status ? (
-                <img
-                  src={Profile}
-                  style={{ width: "32px", height: "32px" }}
-                  alt="profile"
-                  onClick={onMenuToggle}
-                />
+                // <img
+                //   src={Profile}
+                //   style={{ width: "32px", height: "32px" }}
+                //   alt="profile"
+                //   onClick={onMenuToggle}
+                // />
+                <div onClick={onMenuToggle} style={{marginLeft:0,cursor:"pointer",width:32,display:"flex",alignItems:"center",justifyContent:"center", height:32, borderRadius:"50%",background:"#f7f7f7"}}>
+                <img src={Avatar} alt="avatar"/>
+              </div>
               ) : (
                 <Link
                   to="/login"

@@ -15,6 +15,7 @@ import CalenarLogo from "../../assets/img/Calendar.svg";
 import SearchLogo from "../../assets/img/Search.svg";
 import ColoredSearch from "../../assets/img/coloredSearch.png";
 import ColoredCalendar from "../../assets/img/coloredCalendar.png";
+import Avatar from "../../assets/img/user.svg"
 
 export const StyledTabItem = styled.div`
   z-index: 2;
@@ -196,13 +197,16 @@ const ProfileContainer = () => {
   }, []);
   return (
     <>
-      <img
+      {/* <img
         src={Profile}
         className="mb-5"
         style={{ width: 50, height: 50, cursor: "pointer" }}
         alt="logo"
         onClick={clickProfile}
-      />
+      /> */}
+      <div onClick={clickProfile} className="mb-5" style={{cursor:"pointer",width:50,display:"flex",alignItems:"center",justifyContent:"center", height:50, borderRadius:"50%",background:"#d8d8d8"}}>
+        <img src={Avatar} alt="avatar"/>
+      </div>
 
       <AuthTab open={authTab} setAuthTab={setAuthTab} style={popUpStyle} />
     </>

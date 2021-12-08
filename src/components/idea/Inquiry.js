@@ -21,7 +21,9 @@ import LeftChevron from "../../assets/img/LeftChevron.svg";
 import ChangeBtn from "../../assets/img/profileChange.svg";
 import DeleteBtn from "../../assets/img/profileDelete.svg";
 import CustomButton from "../CustomButton";
-
+import Avatar from "../../assets/img/user.svg";
+import { Form } from "react-bootstrap";
+import BASE_URL from "../../modules/host";
 
 const StyldMobileTobbar = styled.div`
   position: relative;
@@ -235,6 +237,7 @@ const ProfileRoutes = ({ email, nick,isMobile }) => {
   const {updateProfile,thumb} = useAuth();
 
   const imageRef = useRef();
+  const mobileImageRef= useRef();
   
   const onRemoveImage = useCallback(()=>{
     setImage();
@@ -261,9 +264,27 @@ const ProfileRoutes = ({ email, nick,isMobile }) => {
 
   },[])
 
-  const onSubmit = useCallback(()=>{
+  const onSubmit = useCallback((e)=>{
+    e.preventDefault();
     setIsSend(true);
   },[image, nick])
+
+  useEffect(()=>{
+    let reader = new FileReader();
+  
+    reader.onloadend = () => {
+      const base64 = reader.result;
+      if (base64){
+        setBase64Image(base64.toString())
+        console.log(base64.toString())
+        
+      }
+    }
+    if(image){
+      reader.readAsDataURL(image)
+
+    }
+  },[image])
   
   useEffect(()=>{
     if(isSend){
@@ -280,7 +301,7 @@ const ProfileRoutes = ({ email, nick,isMobile }) => {
 
   useEffect(()=>{
     setCurNick(nick)
-    setImage(thumb)
+    
     let reader = new FileReader();
     reader.onloadend = () => {
       const base64 = reader.result;
@@ -290,7 +311,9 @@ const ProfileRoutes = ({ email, nick,isMobile }) => {
       }
     }
     if(thumb){
-      reader.readAsDataURL(thumb);
+      
+      console.log(`${BASE_URL}/uploads/profile/${thumb}`)
+      // reader.readAsDataURL(`${BASE_URL}/uploads/profile/${thumb}`);
     }
   },[])
 
@@ -304,20 +327,37 @@ const ProfileRoutes = ({ email, nick,isMobile }) => {
         id="profile-contents"
         style={{ marginTop: isMobile? 20:50 , width: isMobile ?"100%" : "80%", alignItems: "center" }}
       >
-        <div>
-          <img
-            src={base64Image? base64Image: Profile}
-            style={{ width: "180px", height: "180px" }}
-            alt="profile"
-            
-          />
+        <div style={{position:'relative'}}>
+          {
+            base64Image? (
+              <img
+                src={ base64Image}
+                style={{ width: "180px", height: "180px",borderRadius:"50%" }}
+                alt="profile"
+              />
+
+            ):
+            thumb?(
+              <img src={`${BASE_URL}/uploads/profile/${thumb}`} style={{ width: "180px", height: "180px",borderRadius:"50%" }}/>
+            ):
+            (
+              <div style={{width:180,display:"flex",alignItems:"center",justifyContent:"center", height:180, borderRadius:"50%",background:"#d8d8d8"}}>
+                <img src={Avatar} alt="avatar"/>
+              </div>
+            )
+          }
+          {!isMobile && <StyledProfileContainer style={{position:"absolute", left:"90px", transform:"translate(-50%, 3rem)"}}>
+                <input onClick={onImageClick}  ref={imageRef} type="file" style={{display:"none"}}   />
+                <img src={ChangeBtn} onClick={()=>{imageRef.current.click()}} alt="change" style={{marginRight:".5rem"}}/>
+                <img src={DeleteBtn} onClick={onRemoveImage} alt="delete" style={{marginLeft:".5rem"}}/>
+          </StyledProfileContainer>}
         </div>
         <div style={{ flex: 1, paddingLeft:isMobile?"1rem":"auto",paddingRight:isMobile?"1rem":"auto" ,width: isMobile? "100%":"auto" }}>
           {isMobile ? (
             <>
               <StyledProfileContainer>
-                <input onClick={onImageClick}  ref={imageRef} type="file" style={{display:"none"}}   />
-                <img src={ChangeBtn} onClick={()=>{imageRef.current.click()}} alt="change" style={{marginRight:".5rem"}}/>
+                <input onClick={onImageClick}  ref={mobileImageRef} type="file" style={{display:"none"}}   />
+                <img src={ChangeBtn} onClick={()=>{mobileImageRef.current.click()}} alt="change" style={{marginRight:".5rem"}}/>
                 <img src={DeleteBtn} onClick={onRemoveImage} alt="delete" style={{marginLeft:".5rem"}}/>
               </StyledProfileContainer>
               <div>
@@ -343,14 +383,14 @@ const ProfileRoutes = ({ email, nick,isMobile }) => {
             </>
           ):
           (
-            <>
-          <CustomContainer style={{ marginBottom: "3rem" }}>
+            <Form onSubmit={onSubmit} style={{position:"relative"}}>
+          <CustomContainer style={{ marginBottom: "1rem" }}>
             <CustomLabelText
               fontSize={12}
               text={"닉네임"}
               style={{ marginBottom: "1rem", marginRight: "2rem" }}
             />
-            <InputForm style={{ flex: 1 }} value={nick} disabled />
+            <InputForm style={{ flex: 1 }}  value={curNick} setValue={setCurNick} />
           </CustomContainer>
           <CustomContainer>
             <CustomLabelText
@@ -360,7 +400,15 @@ const ProfileRoutes = ({ email, nick,isMobile }) => {
             />
             <InputForm style={{ flex: 1 }} value={email} disabled />
           </CustomContainer>
-            </>
+          <CustomContainer style={{position:"absolute",width:"100%", right:0}}>
+            <CustomButton
+              text="수정하기"
+              type="submit"
+              onClick={onSubmit}
+              style={{ marginBottom: 28,marginTop:"32px", height: "38px" }}
+            />
+          </CustomContainer>
+            </Form>
           )
           }
         </div>
