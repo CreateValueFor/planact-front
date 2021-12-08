@@ -89,7 +89,7 @@ export const StyledProfileBox = styled.div`
 `;
 
 function AuthTab({ open, style, setAuthTab }) {
-  const { logout } = useAuth();
+  const { logout,email, nick } = useAuth();
   const el = useRef();
   const onClick = useCallback(() => {
     logout();
@@ -117,8 +117,8 @@ function AuthTab({ open, style, setAuthTab }) {
         <StyledProfileBox>
           <img src={Profile} style={{ width: 42, height: 42 }} />
           <div>
-            <h2>닉네임</h2>
-            <h3>example@example.com</h3>
+            <h2 style={{marginBottom:"-.2rem"}}>{nick}</h2>
+            <h3>{email}</h3>
           </div>
         </StyledProfileBox>
         <StyledListGroup>
