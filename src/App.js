@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Route } from "react-router-dom";
+import { Link, Route,Switch } from "react-router-dom";
 
 import Login from "./views/login";
 import "./app.css";
@@ -223,10 +223,10 @@ function App() {
     <div style={{ backgroundColor: "#fcfcfe", minHeight: "100vh" }}>
       {(isPc || isTablet) && (
         <div style={{ minHeight: "100vh" }}>
-          
-          <Route path="/" component={Idea} />
-          
-          <Route path="/uploads" component={Uploads} />
+          <Switch>
+            <Route path="/uploads" component={Uploads} />
+            <Route path="/" component={Idea} />
+          </Switch>
         </div>
       )}
       {isMobile && (
