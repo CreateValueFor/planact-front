@@ -333,9 +333,9 @@ function DayDetailContainer({ curContents }) {
           {event.events.map((theme) => (
             <div key={theme.id}>
               <div style={{ marginBottom: "1rem" }}>{theme.title}</div>
-              <div style={{ marginBottom: "1rem", fontSize: ".875rem" }}>
-                {theme.contents}
-              </div>
+              <pre style={{ marginBottom: "1rem", fontSize: ".875rem" }}>
+                {theme.contents.replaceAll("\\","").replaceAll("n","")}
+              </pre>
               {
               theme.thumb.length > 100 ? (
                 <img
