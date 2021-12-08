@@ -286,7 +286,7 @@ function RegisterPage({}) {
             onClick={() => {
               history.push("/");
             }}
-            style={{ fontSize: "1.5rem" }}
+            style={{ width:22,fontSize: "1.5rem" }}
           />
         </div>
         <Form
@@ -325,7 +325,7 @@ function RegisterPage({}) {
               }}
               style={{ cursor: "pointer" }}
             > 
-              <img src={RightChevron} alt="rightChevron"/>
+              <img style={{width:8}} src={RightChevron} alt="rightChevron"/>
               
             </div>
           </div>
@@ -345,7 +345,7 @@ function RegisterPage({}) {
                 clickDetail("collect");
               }}
             >
-              <img src={RightChevron} alt="rightChevron"/>
+              <img style={{width:8}} src={RightChevron} alt="rightChevron"/>
               
             </div>
           </div>

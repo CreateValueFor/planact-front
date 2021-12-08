@@ -98,7 +98,7 @@ const StyledLoginForm = styled(Form)`
     height:12px;
   }
   img{
-    width:12px !important;
+    width:8px !important;
   }
   input[type="checkbox"]{
     padding:0;
@@ -276,7 +276,7 @@ function RegisterModal({ setRegister, style, open }) {
             type="password"
             setValue={setPassword}
           />
-          <div className="d-flex">
+          <div className="d-flex" style={{alignItems:"baseline"}}>
             <Form.Check
               type="checkbox"
               label={`플랜액트 이용약관 동의(필수)`}
@@ -296,7 +296,7 @@ function RegisterModal({ setRegister, style, open }) {
               
             </div>
           </div>
-          <div className="d-flex">
+          <div className="d-flex" style={{alignItems:"baseline"}}>
             <Form.Check
               type={"checkbox"}
               label={`플랜액트 개인정보 수집 동의(필수)`}
@@ -312,7 +312,7 @@ function RegisterModal({ setRegister, style, open }) {
                 clickDetail("collect");
               }}
             >
-              <img src={RightChevron} alt="rightChevron"/>
+              <img src={RightChevron} style={{width:6}} alt="rightChevron"/>
               
             </div>
           </div>

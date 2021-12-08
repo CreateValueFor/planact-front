@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Close from "../assets/img/close-01.svg";
+import useResponsive from "../Responsive";
 
 export const StyledButton = styled(Button)`
   /* background: #313340; */
@@ -88,9 +89,10 @@ function CustomButton({ text, onClick, className, type, style }) {
 }
 
 export const CustomeCloseButton = ({ onClick, style }) => {
+  const {isMobile} = useResponsive()
   return (
     <StyledCloseButton style={style} onClick={onClick}>
-      <img src={Close} className="custom-close-btn" alt="close"/>
+      <img src={Close} style={{width:isMobile? 22: 12, ...style}} className="custom-close-btn" alt="close"/>
     </StyledCloseButton>
   );
 };
