@@ -268,7 +268,7 @@ function PlanItem({ index, contents, history }) {
           <div className="item-sub-title">
             {categoryFormatter(contents.category)} |{" "}
             {contents.sns === "instagram" && "@"}
-            {contents.author}
+            {contents.author.replace("@","")}
             {isMobile && ` | 등록수 ${contents.downloads}`}
           </div>
         </div>
