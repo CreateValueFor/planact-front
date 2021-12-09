@@ -79,14 +79,24 @@ const popUpStyle = {
 };
 
 const RouterButtons = (props) => {
-  const { selectedTab, setSelectedTab } = props;
+  const { selectedTab, setSelectedTab, match,location } = props;
   const selectTab = useCallback((string) => {
     if (string === "calendar") {
       setSelectedTab(false);
     } else {
       setSelectedTab(true);
     }
-  }, []);
+  }, [selectedTab]);
+
+  useEffect(()=>{
+    console.log('')
+    console.log(match);
+    console.log(location.pathname)
+    if(location.pathname ==='/list'){
+      setSelectedTab(true);
+    } 
+  },[selectedTab])
+
   return (
     <div className="mt-5" style={{ flex: 1, position: "relative" }}>
       <div style={{ position: "relative" }}>
@@ -213,7 +223,7 @@ const ProfileContainer = () => {
   );
 };
 
-function LeftTabBar({ location }) {
+function LeftTabBar({ location,match }) {
   const { status } = useAuth();
   const [selectCalendar, setSelectCalendar] = useState(false);
 
@@ -250,6 +260,8 @@ function LeftTabBar({ location }) {
         alt="logo"
       />
       <RouterButtons
+        match={match}
+        location={location}
         selectedTab={selectCalendar}
         setSelectedTab={setSelectCalendar}
       />
