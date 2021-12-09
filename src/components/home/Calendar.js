@@ -40,19 +40,21 @@ const StyledCustomRender = styled.div`
 `;
 
 function renderEventContent(eventInfo) {
+  
   return (
     <>
       {/* <b>{eventInfo.timetext}</b> */}
       <StyledCustomRender>
         <Dropdown drop="end">
-          <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" style={{paddingLeft:'1rem'}}>
+          <Dropdown.Toggle onClick={()=>{
+          }} as={CustomToggle} id="dropdown-custom-components" style={{paddingLeft:'1rem'}}>
             {eventInfo.event.title}
           </Dropdown.Toggle>
-          <Dropdown.Menu>
+          {/* <Dropdown.Menu>
             <Card>
               <Card.Body>{eventInfo.event.title}</Card.Body>
             </Card>
-          </Dropdown.Menu>
+          </Dropdown.Menu> */}
         </Dropdown>
       </StyledCustomRender>
     </>
@@ -81,6 +83,7 @@ const StyledCalendarWrapper = styled.div`
 const StyledTitleFormat = styled.div`
   display: flex;
   flex-direction: column;
+  width:100%;
 `;
 
 function Calendar(style) {
@@ -107,6 +110,11 @@ function Calendar(style) {
         // initialView="dayGridMonth"
         ref={calendar}
         events={plans}
+        eventClick={(calEvent, jsEvent,view)=>{
+          // console.log(calEvent)
+          // console.log(jsEvent)
+          // console.log(view);
+        }}
         eventContent={renderEventContent}
         locale={koLocale}
         dayHeaderFormat={(args) => {
