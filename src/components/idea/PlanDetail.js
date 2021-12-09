@@ -387,7 +387,7 @@ function PlanDetailBody({ match, contents }) {
   //contents 업데이트 시 작동할 함수
   useEffect(() => {
     setCurContents(contents);
-    console.log(contents);
+    
   }, [contents]);
 
   const clickDay = (id) => {
@@ -440,10 +440,15 @@ function PlanDetail({ history, match }) {
         data.sort(function(a, b) {
           return a.id - b.id;
         });
+        data.map(plan=>{
+          plan.events.sort(function(a,b){
+            return a.id - b.id;
+          })
+        })
       }
       setContents(data);
       setLoading(false);
-      console.log(data);
+      
     });
   }, []);
 
